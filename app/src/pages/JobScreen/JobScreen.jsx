@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import JobInfo from "../../components/JobInfo/JobInfo";
 
 function JobScreen() {
   return (
-    <div>JobScreen</div>
-  )
+    <div style={{ width: "100%" }}>
+      <JobInfo />
+    </div>
+  );
 }
 
-export default JobScreen
+export default JobScreen;

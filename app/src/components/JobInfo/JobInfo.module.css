@@ -1,0 +1,99 @@
+.mainJobInfo {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0.1rem;
+  width: 100%;
+  min-width: 500px;
+}
+.job {
+  display: flex;
+  width: 60%;
+}
+.fileAndProgress {
+  width: 70%;
+  margin-right: 1rem;
+}
+.progressBar {
+  width: 100%;
+  border: 1px solid;
+  margin: 0 auto;
+}
+.heading3 {
+  font-size: var(--fs-medium-small);
+  margin: 0;
+}
+.heading4 {
+  font-size: var(--fs-medium);
+  margin: 0;
+}
+.fileName {
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin: auto 0;
+  font-size: var(--fs-small);
+  text-align: center;
+}
+.remainingInfo {
+  display: flex;
+  justify-content: space-between;
+  min-width: 310px;
+}
+p {
+  margin: 0;
+}
+.pauseIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 1rem;
+  display: block;
+}
+.crossIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 1rem;
+  display: block;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: #00000000;
+  border: none;
+  margin: auto 0.25rem;
+  padding: 0.5rem 0 0;
+}
+.btn:hover.btn > p {
+  text-shadow: 0 0 2px #fff;
+}
+.btn > p {
+  margin: auto 0.25rem;
+  padding: 0.5rem 0 0;
+}
+
+.circleContainer {
+  width: 70px;
+  height: 70px;
+  position: relative;
+}
+
+.circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: green;
+  position: absolute;
+}
+
+.circleInside {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: black;
+}

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function SlicerScreen() {
-  return (
-    <div>SlicerScreen</div>
-  )
+  return <div>SlicerScreen</div>;
 }
 
-export default SlicerScreen
+export default SlicerScreen;
