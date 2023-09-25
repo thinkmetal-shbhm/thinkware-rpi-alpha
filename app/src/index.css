@@ -18,8 +18,9 @@
 
   --black:#000;
   --content-bg:#242424;
-  --border-blue:#345D71;
+  --border-blue:rgba(52, 93, 113, 0.51);
   --highlight:#485563;
+  --green: rgba(67, 226, 131, 0.83);
 }
 body{
   border: 0;
