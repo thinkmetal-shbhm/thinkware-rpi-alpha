@@ -1,7 +1,10 @@
 import React from "react";
 import SidebarCSS from "./Sidebar.module.css";
 import { NavLink } from "react-router-dom";
-import UserIcon from "../../assets/user.png";
+import UserIcon from "../../assets/Icons/user.png";
+import DashboardImage from "../../assets/Icons/dashboard.png";
+import JobImage from "../../assets/Icons/job.png";
+import SliceImage from "../../assets/Icons/slice.png";
 function Sidebar() {
   return (
     <div className={SidebarCSS.SidebarParent}>
@@ -17,6 +20,11 @@ function Sidebar() {
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
             }
           >
+            <img
+              src={DashboardImage}
+              alt="dashboard"
+              className={SidebarCSS.MenuImage}
+            />
             Dashboard
           </NavLink>
           <NavLink
@@ -25,6 +33,11 @@ function Sidebar() {
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
             }
           >
+            <img
+              src={JobImage}
+              alt="dashboard"
+              className={SidebarCSS.MenuImage}
+            />
             Job
           </NavLink>
           <NavLink
@@ -33,6 +46,11 @@ function Sidebar() {
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
             }
           >
+            <img
+              src={SliceImage}
+              alt="dashboard"
+              className={SidebarCSS.MenuImage}
+            />
             Slice
           </NavLink>
         </div>

@@ -1,5 +1,6 @@
 .parent{
     height: 99vh;
+    margin: 0 0.25rem;
 }
 .SlicerFrame{
     height: 100%;
