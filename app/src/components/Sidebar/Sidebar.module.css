@@ -2,10 +2,14 @@
     min-width: 20%;
     background-color: var(--black);
     min-block-size: 100vh;
-    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
 }
 .appname{
     border-bottom: 2px solid var(--border-blue);
+    margin-top: 1rem;
 }
 .appname h3{
     text-align: center;
@@ -51,17 +55,52 @@ font-weight: 500;
 
 
 .UserAccount{
-    position: absolute;
-    bottom: 0;
-    height: 10vh;
-    background-color: var(--highlight);
-
-}
-.UserInfo{
-    width: 98%;
+      width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    cursor: pointer;
+    background-color: var(--highlight);
+}
+/* .UserAccount:hover{
+    background-color: var(--highlight);
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.2s;
+} */
+.UserInfo{
+    width: 80%;
+    display: flex;
+    border-top-left-radius: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem auto;
 }
 .UserInfo img{
-    height: 100%;
-    width: 100%;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin: auto 0.5rem;
+}
+.UserInfo h5{
+    font-size: 1.4rem;
+}
+.Logoutbtn{
+padding: 0.75rem;
+font-size: 1.2rem;
+letter-spacing: 1px;
+font-weight: 600;
+border-radius: 0.5rem;
+border: 1px solid white;
+margin-bottom: 0.5rem;
+background-color: transparent;
+}
+.Logoutbtn:hover{
+    background-color: var(--green);
+   
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.2s;
+    color: black;
+    border: 1px solid black;
 }

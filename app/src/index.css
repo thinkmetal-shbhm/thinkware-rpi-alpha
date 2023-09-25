@@ -17,16 +17,9 @@
 
   --black: #000;
   --content-bg: #242424;
-  --border-blue: #345d71;
+  --border-blue: rgba(52, 93, 113, 0.51);
   --highlight: #485563;
-
-  /* font sizes */
-  --fs-extra-small: 0.2rem;
-  --fs-small: 0.5rem;
-  --fs-medium-small: 0.75rem;
-  --fs-medium: 1rem;
-  --fs-big: 1.5rem;
-  --fs-extra-big: 2rem;
+  --green: rgba(67, 226, 131, 0.83);
 }
 
 body {
