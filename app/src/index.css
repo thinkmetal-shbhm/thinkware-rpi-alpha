@@ -20,6 +20,16 @@
   --border-blue: rgba(52, 93, 113, 0.51);
   --highlight: #485563;
   --green: rgba(67, 226, 131, 0.83);
+  --gray: #373737;
+  --silver: #c2c2c2;
+
+  /* font sizes */
+  --fs-extra-small: 0.2rem;
+  --fs-small: 0.5rem;
+  --fs-medium-small: 0.75rem;
+  --fs-medium: 1rem;
+  --fs-large: 1.5rem;
+  --fs-extra-large: 2rem;
 }
 
 body {
