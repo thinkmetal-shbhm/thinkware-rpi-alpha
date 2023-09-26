@@ -1,6 +1,7 @@
 import React from "react";
 import JobInfo from "../../components/JobInfo/JobInfo";
 import Controller from "../../components/Controller/Controller";
+import CameraWindow from "../../components/CameraWindow/CameraWindow";
 
 function JobScreen() {
   return (
@@ -8,6 +9,7 @@ function JobScreen() {
       <JobInfo />
       <div style={{ display: "flex", margin: "3rem auto" }}>
         <Controller />
+        <CameraWindow />
       </div>
     </div>
   );

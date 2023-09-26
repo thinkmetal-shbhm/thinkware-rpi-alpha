@@ -1,0 +1,37 @@
+.mainWindow {
+  background-color: var(--highlight);
+  border-radius: 1rem;
+  width: 45%;
+  height: 332px;
+  min-width: 350px;
+  box-shadow: 0 0 10px black inset;
+  margin: 0 1em;
+  display: flex;
+  flex-direction: column;
+}
+.camFeed {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  height: 90%;
+  margin: 0;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+.options {
+  height: 10%;
+  margin: 0;
+  background-color: var(--content-bg);
+
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
