@@ -1,55 +1,54 @@
-.parent{
-    margin: 1rem 0.25rem;
-    display: flex;
-    flex-direction: row;
-    margin: 5rem 2rem;
+.parent {
+  margin: 1rem 0.25rem;
+  display: flex;
+  flex-direction: row;
+  margin: 5rem 2rem;
 }
-.importIcon{
-    margin-top: 5rem;
-    margin-left: 1rem;
-    height: 5rem;
-    width: 5rem;
-    cursor: pointer;
+.importIcon {
+  margin-top: 5rem;
+  margin-left: 1rem;
+  height: 5rem;
+  width: 5rem;
+  cursor: pointer;
 }
 
-.OptionItem{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    
-    border: 1px solid white;
-    padding: 0.5rem 1.2rem;
-    border-radius: 0.5rem;
-    background-color:transparent;
-    cursor: pointer;
-    }
-    .OptionItem:hover{
-        background-color: white;
-        opacity:80%;
-        color:black;
-        transition: all 0.5s ease 0s;
-    }
-    
-    .OptionItem img{
-        width: 5rem;
-        height: 5rem;
-        margin: 1rem auto;
-    }
-    .OptionText{
-    
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-    }
-    .OptionText p{
-        margin-top:0;
-        font-size: 0.8rem;
-        color: var(--border-gray);
-    }
-    .OptionText h5{
-        margin-bottom: 0.25rem;
-        margin-top: 0.5rem;
-        font-weight: 500;
-        font-size: 1.2rem;
-    }
+.OptionItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border: 1px solid white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  cursor: pointer;
+}
+.OptionItem:hover {
+  background-color: white;
+  opacity: 80%;
+  color: black;
+  transition: all 0.5s ease 0s;
+}
+
+.OptionItem img {
+  width: 5rem;
+  height: 5rem;
+  margin: 1rem auto;
+}
+.OptionText {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.OptionText p {
+  margin-top: 0;
+  font-size: 0.8rem;
+  color: var(--border-gray);
+}
+.OptionText h5 {
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+}

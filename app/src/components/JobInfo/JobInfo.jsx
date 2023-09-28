@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon } from "../../assets/Icons";
 
-function JobInfo() {
-  const [estimatedEnd, setEstimatedEnd] = React.useState("Completed");
+function JobInfo({}) {
+  const [estimatedEnd, setEstimatedEnd] = useState("Completed");
 
   return (
     <section className={styles.mainJobInfo}>

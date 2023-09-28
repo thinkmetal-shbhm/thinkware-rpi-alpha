@@ -28,7 +28,9 @@
   position: relative;
 }
 .options {
-  height: 10%;
+  min-height: 10%;
+  height: auto;
+  flex: 2;
   margin: 0;
   background-color: var(--content-bg);
 

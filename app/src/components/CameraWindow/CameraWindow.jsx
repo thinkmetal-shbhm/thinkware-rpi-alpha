@@ -65,7 +65,11 @@ function CameraWindow() {
   return (
     <div className={styles.mainWindow}>
       <div className={styles.imgContainer}>
-        <img id="camFeed" className={styles.camFeed} src="" ref={videoRef} />
+        {video ? (
+          <img id="camFeed" className={styles.camFeed} src="" ref={videoRef} />
+        ) : (
+          <div ref={videoRef} />
+        )}
       </div>
       <div className={styles.options}>
         <span
@@ -78,7 +82,7 @@ function CameraWindow() {
               setVideo(true);
             }
           }}
-          style={{ cursor: "pointer", padding: "0 0.5rem" }}
+          style={{ cursor: "pointer", padding: "0 0.5rem", height: "100%" }}
         >
           📹
         </span>
