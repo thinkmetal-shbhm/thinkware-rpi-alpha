@@ -1,15 +1,9 @@
-.parent {
+.Importbtn {
   margin: 1rem 0.25rem;
   display: flex;
   flex-direction: row;
   margin: 5rem 2rem;
-}
-.importIcon {
-  margin-top: 5rem;
-  margin-left: 1rem;
-  height: 5rem;
-  width: 5rem;
-  cursor: pointer;
+  position: relative;
 }
 
 .OptionItem {
@@ -17,9 +11,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+
   border: 1px solid white;
-  padding: 0.5rem 1.2rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
   background-color: transparent;
   cursor: pointer;
@@ -31,10 +25,11 @@
   transition: all 0.5s ease 0s;
 }
 
-.OptionItem img {
-  width: 5rem;
-  height: 5rem;
+.importIcon {
+  width: 4rem;
+  height: 4rem;
   margin: 1rem auto;
+  cursor: pointer;
 }
 .OptionText {
   display: flex;
@@ -51,4 +46,112 @@
   margin-top: 0.5rem;
   font-weight: 500;
   font-size: 1.2rem;
+}
+.heading {
+  margin-left: 2rem;
+}
+.recentItems {
+  margin-left: 2rem;
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 2rem;
+  width: 90%;
+  justify-content: space-between;
+}
+
+.recentItemCard {
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.recentItemImg {
+  width: fit-content;
+  margin: 0.5rem 0.5rem;
+}
+.recentItemInfo {
+  width: 40%;
+}
+.recentItemInfo h3 {
+  font-size: 1.2rem;
+}
+.recentItemInfo span {
+  font-size: 0.8rem;
+}
+
+@media only screen and (max-width: 930px) {
+  .recentItems {
+    grid-template-columns: 1fr;
+  }
+  .recentItemCard {
+    width: 70%;
+    margin: 0 auto;
+  }
+  /* canvas{
+            height: 80px !important;
+            width: 80px !important;
+        } */
+  .recentItemInfo {
+    width: 60%;
+  }
+  .recentItemInfo h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+  .recentItemInfo span {
+    font-size: 0.75rem;
+  }
+  .Importbtn {
+    margin: 0.75rem 0;
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+
+    margin: 5vh 5vh;
+  }
+  .OptionItem {
+    padding: 0.75rem;
+  }
+  .importIcon {
+    height: 3rem;
+    width: 3rem;
+    margin: 0.25rem;
+  }
+  .OptionText h5 {
+    font-size: 1rem;
+  }
+  .OptionText p {
+    font-size: 0.75rem;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .recentItemCard {
+    flex-direction: column;
+    width: 50%;
+  }
+  canvas {
+    height: 150px !important;
+    width: 150px !important;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .recentItemCard {
+    flex-direction: column;
+    width: 50%;
+  }
+  canvas {
+    height: 100px !important;
+    width: 100px !important;
+  }
+  .recentItemInfo h3 {
+    margin: 0.25rem 0;
+  }
+  .recentItemInfo span {
+    font-size: 0.55rem;
+  }
 }
