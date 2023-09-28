@@ -1,111 +1,197 @@
-.SidebarParent{
-    min-width: 20%;
-    background-color: var(--black);
-    min-block-size: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-   
+.SidebarParent {
+  min-width: 20%;
+  background-color: var(--black);
+  min-block-size: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.appname{
+.appname {
+  border-bottom: 2px solid var(--border-blue);
+  margin-top: 1rem;
+}
+.appname h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  width: 100%;
+  margin: 0.5rem auto;
+  margin-bottom: 1rem;
+}
+.appnameMobile {
+  display: none;
+}
+.pageList {
+  width: 90%;
+  margin: 0.25rem auto;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.pageItem {
+  text-decoration: none;
+  color: white;
+  width: 90%;
+  margin: 0.75rem auto;
+  display: block;
+  text-decoration: none;
+  font-weight: 500;
+  text-align: center;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  padding: 0.5rem 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.MenuImage {
+  height: 2rem;
+  width: 2rem;
+}
+.MenuText {
+  margin-left: 0.5rem;
+}
+.activeList {
+  text-decoration: none;
+  color: white;
+  width: 98%;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  padding: 0.25rem 0.15rem;
+  background-color: var(--highlight);
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserAccount {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  cursor: pointer;
+  background-color: var(--highlight);
+}
+.UserInfo {
+  width: 80%;
+  display: flex;
+  border-top-left-radius: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem auto;
+}
+.UserInfo img {
+  height: 2.5rem;
+  width: 2.5rem;
+  margin: auto 0.5rem;
+}
+.UserInfo h5 {
+  font-size: 1.4rem;
+}
+.Logoutbtn {
+  padding: 0.75rem;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: 1px solid white;
+  margin-bottom: 0.5rem;
+  background-color: transparent;
+}
+.Logoutbtn:hover {
+  background-color: var(--green);
+
+  transition-property: background-color, box-shadow;
+  transition-duration: 0.2s;
+  color: black;
+  border: 1px solid black;
+}
+
+@media only screen and (max-width: 1050px) {
+  .pageList * {
+    font-size: 1rem;
+  }
+  .UserInfo img {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+  .UserInfo h5 {
+    font-size: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .pageList * {
+    font-size: 1rem;
+  }
+  .MenuImage {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  .UserInfo img {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+  .UserInfo h5 {
+    font-size: 1rem;
+  }
+  .Logoutbtn {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .SidebarParent {
+    min-width: 12%;
+    display: flex;
+  }
+  .appname {
+    display: none;
+  }
+  .appnameMobile {
+    display: block;
     border-bottom: 2px solid var(--border-blue);
     margin-top: 1rem;
-}
-.appname h3{
+  }
+
+  .appnameMobile h3 {
     text-align: center;
-    font-size: 1.5rem;
-width: 100%;
-margin: 0.5rem auto;
-margin-bottom: 1rem;
-}
-.pageList{
-    width: 90%;
-    margin: 0.25rem auto;
-    text-align: center;
-    margin-top: 1.5rem;
-}
-.pageItem{
-    text-decoration: none;
-    color: white;
-    width: 90%;
-    margin: 0.75rem auto;
-    display: block;
-    text-decoration: none;
-    font-weight: 500;
-    text-align: center;
-    font-size: 1.4rem;
-    letter-spacing: 1px;
-    padding: 0.5rem 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.MenuImage{
+    font-size: 2rem;
+    letter-spacing: 3px;
+    width: 100%;
+    margin: 0.5rem auto;
+    margin-bottom: 1rem;
+  }
+  .pageList {
+    width: 50%;
+  }
+  .pageList * {
+    font-size: 1rem;
+  }
+  .pageList a span {
+    display: none;
+  }
+  .MenuImage {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: 0;
+  }
+  .UserInfo img {
     height: 2rem;
     width: 2rem;
-    margin-right: 0.5rem;
-}
-.activeList  {
-    text-decoration: none;
-color: white;
-width: 98%;
-margin: 0 auto;
-display: block;
-text-align: center;
-padding: 0.25rem 0.15rem;
-background-color: var(--highlight);
-border-radius: 0.5rem;
-font-size: 1.6rem;
-text-decoration: none;
-font-weight: 500;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-
-.UserAccount{
-      width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-    cursor: pointer;
-    background-color: var(--highlight);
-}
-.UserInfo{
-    width: 80%;
-    display: flex;
-    border-top-left-radius: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    margin: 0.25rem auto;
-}
-.UserInfo img{
-    height: 2.5rem;
-    width: 2.5rem;
-    margin: auto 0.5rem;
-}
-.UserInfo h5{
-    font-size: 1.4rem;
-}
-.Logoutbtn{
-padding: 0.75rem;
-font-size: 1.2rem;
-letter-spacing: 1px;
-font-weight: 600;
-border-radius: 0.5rem;
-border: 1px solid white;
-margin-bottom: 0.5rem;
-background-color: transparent;
-}
-.Logoutbtn:hover{
-    background-color: var(--green);
-   
-    transition-property: background-color, box-shadow;
-    transition-duration: 0.2s;
-    color: black;
-    border: 1px solid black;
+    margin: 0.5rem auto;
+  }
+  .UserInfo h5 {
+    display: none;
+  }
+  .Logoutbtn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
 }

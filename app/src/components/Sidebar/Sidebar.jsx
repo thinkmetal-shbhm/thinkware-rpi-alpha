@@ -12,6 +12,9 @@ function Sidebar() {
         <div className={SidebarCSS.appname}>
           <h3>thinkware</h3>
         </div>
+        <div className={SidebarCSS.appnameMobile}>
+          <h3>tw</h3>
+        </div>
 
         <div className={SidebarCSS.pageList}>
           <NavLink
@@ -25,7 +28,7 @@ function Sidebar() {
               alt="dashboard"
               className={SidebarCSS.MenuImage}
             />
-            Dashboard
+            <span className={SidebarCSS.MenuText}>Dashboard</span>
           </NavLink>
           <NavLink
             to="/job"
@@ -38,7 +41,7 @@ function Sidebar() {
               alt="dashboard"
               className={SidebarCSS.MenuImage}
             />
-            Job
+                       <span className={SidebarCSS.MenuText}>Job</span>
           </NavLink>
           <NavLink
             to="/slice"
@@ -51,7 +54,7 @@ function Sidebar() {
               alt="dashboard"
               className={SidebarCSS.MenuImage}
             />
-            Slice
+       <span className={SidebarCSS.MenuText}>Slice</span>
           </NavLink>
         </div>
       </div>

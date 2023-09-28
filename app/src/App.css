@@ -1,6 +1,6 @@
 .App {
   width: 100%;
-  min-width: 100vh;
+
   border: none;
   padding: 0;
   margin: 0;
@@ -8,3 +8,7 @@
   display: flex;
   gap: 0.75rem;
 }
+@media only screen and (max-width: 750px) {
+  .App{
+      gap:0.25rem;
+  }}
