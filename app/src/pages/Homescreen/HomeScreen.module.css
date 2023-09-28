@@ -94,10 +94,10 @@
             width: 70%;
             margin:0 auto;
         }
-        canvas{
+        /* canvas{
             height: 80px !important;
             width: 80px !important;
-        }
+        } */
         .recentItemInfo{
             width: 60%;
         }
@@ -129,5 +129,33 @@
         }
         .OptionText p{
             font-size: 0.75rem;
+        }
+    }
+
+    @media only screen and (max-width: 750px) {
+        .recentItemCard{
+            flex-direction: column;
+            width: 50%;
+        }
+        canvas{
+            height: 150px !important;
+            width: 150px !important;
+        }
+    }
+    @media only screen and (max-width: 400px) {
+        
+        .recentItemCard{
+            flex-direction: column;
+            width: 50%;
+        }
+        canvas{
+            height: 100px !important;
+            width: 100px !important;
+        }
+        .recentItemInfo h3{
+            margin: 0.25rem 0;
+        }
+        .recentItemInfo span{
+            font-size: 0.55rem;
         }
     }

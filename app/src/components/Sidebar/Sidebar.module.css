@@ -191,7 +191,13 @@
     display: none;
   }
   .Logoutbtn {
-    padding: 0.5rem;
+    padding: 0.5rem 0.25rem;
     font-size: 0.75rem;
   }
+}
+
+@media only screen and (max-width: 580px) {
+  .SidebarParent{
+    min-width: 22%;
+    }
 }
