@@ -15,7 +15,7 @@ const [isConnected,setIsConnected]=useState(false);
   useEffect(()=>{
     fetch("http://localhost:4000/api/v1/connected")
         .then((response) => response.json())
-        .then(res=>setIsConnected((res.message==="connected")?setIsConnected(true):setIsConnected(false)));
+        .then(res=>setIsConnected((res.message==="connected")?true:false));
 },[isConnected])
 
   return (
