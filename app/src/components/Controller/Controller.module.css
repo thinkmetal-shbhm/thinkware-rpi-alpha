@@ -1,9 +1,10 @@
 .mainControllerContainer {
   background-color: var(--highlight);
   padding: 1rem;
+  padding-top: 0;
   border-radius: 1rem;
   width: 50%;
-  height: 300px;
+  /* height: 40vh; */
   min-width: 350px;
   /* box-shadow: 0 0 10px black inset; */
   margin: 0 1rem;
@@ -12,11 +13,13 @@
   --translateXYNe: 100px;
 }
 .heading2 {
-  margin: 0.25rem auto 1.25rem;
+  font-weight: 500;
+  margin: 0.25remo 1.25rem;
 }
 .controls {
   display: flex;
   justify-content: space-around;
+  
 }
 .controllerButtons {
   position: absolute;
