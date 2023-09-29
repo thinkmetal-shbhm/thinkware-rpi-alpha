@@ -6,6 +6,7 @@ function JobInfo({}) {
   const [estimatedEnd, setEstimatedEnd] = useState("Completed");
 
   return (
+    <>
     <section className={styles.mainJobInfo}>
       <div className={styles.job}>
         <div className={styles.fileAndProgress}>
@@ -48,6 +49,64 @@ function JobInfo({}) {
         </div>
       </div>
     </section>
+    <section className={styles.materialInfo}>
+  
+     <div className={styles.presetChild}>
+     <div className={styles.presetItem}>
+      <span>
+        LAYER HEIGHT
+      </span>
+      <h3>200 µm</h3>
+      </div>
+      <div className={styles.presetItem}>
+      <span>
+       SPEED
+      </span>
+      <h3>100%</h3>
+   
+     </div>
+    </div>
+  
+     <div className={styles.presetChild}>
+     <div className={styles.materialName}>
+    <span>MODEL MATERIAL</span>
+      <h3>SS 316L</h3>
+      </div>
+      <div className={styles.materialName}>
+      <span>
+        SUPPORT MATERIAL
+      </span>
+      <h3>SS 316L</h3>
+     </div>
+    </div>
+   
+     <div className={styles.presetChild}>
+      <h3>HEATING</h3>
+   <div className={styles.barParent}>
+   <div className={styles.barParent2}>
+      <span>PRINTHEAD</span>
+      <div class={styles.container}>
+  <div class={styles.barcontainer}>
+    <div class={styles.barExtruder}>
+    </div>
+  </div>
+  
+</div>
+    </div>
+    <div className={styles.barParent2}>
+      <span>BED</span>
+      <div class={styles.container}>
+  <div class={styles.barcontainer}>
+    <div class={styles.barBed}>
+    </div>
+  </div>
+  
+</div>
+    </div>
+   </div>
+    </div>
+      </section>
+    </>
   );
 }
 

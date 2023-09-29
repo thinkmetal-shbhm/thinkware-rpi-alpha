@@ -4,7 +4,7 @@
   width: 45%;
   height: 332px;
   min-width: 350px;
-  box-shadow: 0 0 10px black inset;
+  /* box-shadow: 0 0 10px black inset; */
   margin: 0 1em;
   display: flex;
   flex-direction: column;
