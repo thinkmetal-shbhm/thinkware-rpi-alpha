@@ -4,8 +4,20 @@ import { NavLink } from "react-router-dom";
 import UserIcon from "../../assets/Icons/user.png";
 import DashboardImage from "../../assets/Icons/dashboard.png";
 import JobImage from "../../assets/Icons/job.png";
+import OnlineIcon from "../../assets/Icons/online.png"
+import OfflineIcon from "../../assets/Icons/offline.png"
 import SliceImage from "../../assets/Icons/slice.png";
+import { useEffect } from "react";
+import { useState } from "react";
+
 function Sidebar() {
+const [isConnected,setIsConnected]=useState(false);
+  useEffect(()=>{
+    fetch("http://localhost:4000/api/v1/connected")
+        .then((response) => response.json())
+        .then(res=>setIsConnected((res.message==="connected")?setIsConnected(true):setIsConnected(false)));
+},[isConnected])
+
   return (
     <div className={SidebarCSS.SidebarParent}>
       <div>
@@ -62,6 +74,7 @@ function Sidebar() {
         <div className={SidebarCSS.UserInfo}>
           <img src={UserIcon} alt="" />
           <h5>John Doe</h5>
+        {isConnected?<img src={OnlineIcon} alt="connected" className={SidebarCSS.badge}/>:<img src={OfflineIcon} alt="connected" className={SidebarCSS.badge}/>}
         </div>
         <button className={SidebarCSS.Logoutbtn}>Logout</button>
       </div>

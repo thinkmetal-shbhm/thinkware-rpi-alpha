@@ -104,7 +104,13 @@ font-family: 'Inter', sans-serif !important;
   margin: auto 0.5rem;
 }
 .UserInfo h5 {
-  font-size: 1.4rem;
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
+}
+.badge{
+  height: 0.75rem !important;
+  width: 0.75rem !important;
+  margin: auto 0.5rem;
 }
 .Logoutbtn {
   padding: 0.75rem;
@@ -209,6 +215,9 @@ font-family: 'Inter', sans-serif !important;
   .UserInfo h5 {
     display: none;
   }
+  .badge{
+    display: none;
+  }
   .Logoutbtn {
     padding: 0.5rem 0.25rem;
     font-size: 0.75rem;
@@ -218,5 +227,8 @@ font-family: 'Inter', sans-serif !important;
 @media only screen and (max-width: 580px) {
   .SidebarParent {
     min-width: 22%;
+  }
+  .badge{
+    display: none;
   }
 }
