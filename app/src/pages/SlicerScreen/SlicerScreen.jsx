@@ -6,7 +6,7 @@ function SlicerScreen() {
       <iframe
         src="http://13.127.238.43:8100/kiri/"
         title="slicer"
-        frameborder="0"
+        // frameBorder="0"
         className={styles.SlicerFrame}
       ></iframe>
     </div>

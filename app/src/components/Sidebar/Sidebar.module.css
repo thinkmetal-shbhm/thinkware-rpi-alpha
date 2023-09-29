@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+
+
 .SidebarParent {
   min-width: 20%;
   background-color: var(--black);
@@ -12,6 +15,8 @@
 .appname {
   border-bottom: 2px solid var(--border-blue);
   margin-top: 1rem;
+  font-family: 'Comfortaa', cursive;
+font-family: 'Inter', sans-serif;
 }
 .appname h3 {
   text-align: center;
@@ -19,9 +24,13 @@
   width: 100%;
   margin: 0.5rem auto;
   margin-bottom: 1rem;
+  font-family: 'Comfortaa', cursive !important;
+font-family: 'Inter', sans-serif !important;
 }
 .appnameMobile {
   display: none;
+  font-family: 'Comfortaa', cursive !important;
+font-family: 'Inter', sans-serif !important;
 }
 .pageList {
   width: 90%;
