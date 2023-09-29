@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./HomeScreen.module.css";
 import ImportIcon from "../../assets/Icons/import.png";
 // import RecentItems from "../../components/RecentItems/RecentItems";
@@ -8,6 +9,8 @@ import { StlViewer } from "../../components/PartPreview/StlViewer.modern";
 function HomeScreen() {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const [volume, setvolume] = useState(0);
 
@@ -59,13 +62,18 @@ function HomeScreen() {
     <>
       <div>
         <div className={styles.Importbtn}>
-          <div className={styles.OptionItem}>
+          <div
+            className={styles.OptionItem}
+            onClick={(e) => {
+              navigate("/slice", { state: { id: 1, message: "file-import" } });
+            }}
+          >
             <img src={ImportIcon} alt="import" className={styles.importIcon} />
             <div className={styles.OptionText}>
               <h5>Import Project</h5>
               <p>STL model</p>
             </div>
-            <form id="fileUploadForm">
+            {/* <form id="fileUploadForm">
               <label
                 htmlFor="fileUploadInp"
                 style={{
@@ -84,7 +92,7 @@ function HomeScreen() {
                   onInput={handleFileChange}
                 />
               </label>
-            </form>
+            </form> */}
           </div>
         </div>
       </div>

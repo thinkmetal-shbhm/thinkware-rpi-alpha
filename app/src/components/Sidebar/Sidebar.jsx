@@ -12,6 +12,7 @@ import { useState } from "react";
 
 function Sidebar() {
   const [isConnected, setIsConnected] = useState(false);
+
   useEffect(() => {
     fetch("http://localhost:4000/api/v1/connected")
       .then((response) => response.json())
