@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./CameraWindow.module.css";
 import { socket } from "../../socket";
+import { cameraIcon } from "../../assets/Icons";
 
 function CameraWindow() {
   const [connectionStatus, setConnectionStatus] = useState("notConnected");
@@ -68,7 +69,13 @@ function CameraWindow() {
         {video ? (
           <img id="camFeed" className={styles.camFeed} src="" ref={videoRef} />
         ) : (
-          <div ref={videoRef} />
+          <div ref={videoRef}>
+            <img
+              src={cameraIcon}
+              alt="cameraIcon"
+              className={styles.cameraIcon}
+            />
+          </div>
         )}
       </div>
       <div className={styles.options}>
@@ -84,7 +91,7 @@ function CameraWindow() {
           }}
           style={{ cursor: "pointer", padding: "0 0.5rem", height: "100%" }}
         >
-          📹
+          <img src={cameraIcon} alt="cameraIcon" className={styles.cameraBtn} />
         </span>
       </div>
     </div>

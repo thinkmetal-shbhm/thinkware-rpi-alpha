@@ -37,3 +37,12 @@
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
+.cameraIcon {
+  margin: 5vh;
+  height: 15rem;
+}
+.cameraBtn {
+  height: 1.75rem;
+  margin-left: 0.25rem;
+  margin-top: 0.2rem;
+}
