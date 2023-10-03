@@ -16,7 +16,7 @@ function CameraWindow() {
 
   useEffect(() => {
     if (connectionStatus === "notConnected") {
-      fetch("http://localhost:4000/api/v1/connected", { method: "POST" })
+      fetch("http://localhost:4000/api/v1/connected")
         .then((res) => {
           console.log(res);
           if (+res.status === 200) setConnectionStatus("connected");
