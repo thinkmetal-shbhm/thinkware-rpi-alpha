@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
+import { Observe, ObserveIFrame, waitForElm } from "../../utils";
 
 function SlicerScreen() {
   const [selectedElement, setSelectedElement] = useState(null);
@@ -18,12 +19,33 @@ function SlicerScreen() {
 
   useEffect(() => {
     console.log(selectedElement);
-    if (selectedElement) {
-      setTimeout(() => {
-        selectedElement.click();
-      }, 3000);
-      console.log("clicked");
+    async function initSlicer() {
+      ObserveIFrame(
+        "#curtain",
+        {
+          attributesList: ["style"], // Only the "style" attribute
+          attributeOldValue: true, // Report also the oldValue
+        },
+        (mut) => {
+          console.log(mut);
+
+          console.log(selectedElement);
+          if (location.state?.message === "file-import")
+            document
+              .querySelector("iframe")
+              .contentWindow.document.querySelector("#context-clear-workspace")
+              .click();
+
+          if (selectedElement) {
+            selectedElement.click();
+            console.log("clicked");
+          }
+        }
+      );
     }
+    initSlicer();
+
+    return () => {};
   }, [selectedElement]);
 
   return (
@@ -32,13 +54,21 @@ function SlicerScreen() {
         onLoad={(e) => {
           document.querySelector("#frame").focus();
           console.log("loaded");
+          console.log("location state", location.state);
           if (location.state?.message === "file-import") {
+            console.log(
+              document
+                .querySelector("iframe")
+                .contentWindow.document.getElementById(
+                  "context-clear-workspace"
+                )
+            );
             setSelectedElement(
               document
                 .querySelector("iframe")
                 .contentWindow.document.getElementById(location.state.message)
             );
-          }
+          } else setSelectedElement(null);
         }}
         onFocus={(e) => {
           console.log("focused");
@@ -46,7 +76,7 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
-        src="http://13.127.238.43:8100/kiri/"
+        src="http://localhost:8100/kiri/"
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>
