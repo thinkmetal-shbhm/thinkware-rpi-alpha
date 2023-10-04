@@ -13,7 +13,7 @@ function Controller() {
           <div className={styles.controllerButtons}>
             <XYBtns onClick={(e) => move("G1 Y1")} src={InnerSector}>
               +1
-            </XYBtns>{" "}
+            </XYBtns>
             <XYBtns onClick={(e) => move("G1 X1")} src={InnerSector}>
               +1
             </XYBtns>
@@ -82,8 +82,8 @@ export default Controller;
 
 function XYBtns({ onClick, src, children }) {
   return (
-    <div onClick={onClick} className={styles.btnXY}>
-      <img src={src} className={styles.svg} />
+    <div className={styles.btnXY}>
+      <img onClick={onClick} src={src} className={styles.svg} />
       <span>{children}</span>
     </div>
   );

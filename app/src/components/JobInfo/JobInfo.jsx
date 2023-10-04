@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon } from "../../assets/Icons";
+import { sendCmd } from "../../printerUtils";
 
 function JobInfo({}) {
   const [estimatedEnd, setEstimatedEnd] = useState("Completed");
@@ -19,7 +20,12 @@ function JobInfo({}) {
             <div className={styles.progressBar}></div>
           </div>
           <div className={styles.actions}>
-            <button className={styles.btn} onClick={(e) => {}}>
+            <button
+              className={styles.btn}
+              onClick={(e) => {
+                sendCmd("M76");
+              }}
+            >
               <img
                 className={styles.pauseIcon}
                 src={pauseIcon}
