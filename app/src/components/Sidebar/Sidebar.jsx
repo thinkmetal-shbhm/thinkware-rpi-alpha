@@ -48,6 +48,19 @@ function Sidebar() {
             <span className={SidebarCSS.MenuText}>Dashboard</span>
           </NavLink>
           <NavLink
+            to="/print"
+            className={({ isActive }) =>
+              isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
+            }
+          >
+            <img
+              src={SliceImage}
+              alt="dashboard"
+              className={SidebarCSS.MenuImage}
+            />
+            <span className={SidebarCSS.MenuText}>Print</span>
+          </NavLink>
+          <NavLink
             to="/job"
             className={({ isActive }) =>
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
@@ -60,19 +73,7 @@ function Sidebar() {
             />
             <span className={SidebarCSS.MenuText}>Job</span>
           </NavLink>
-          <NavLink
-            to="/slice"
-            className={({ isActive }) =>
-              isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
-            }
-          >
-            <img
-              src={SliceImage}
-              alt="dashboard"
-              className={SidebarCSS.MenuImage}
-            />
-            <span className={SidebarCSS.MenuText}>Slice</span>
-          </NavLink>
+         
         </div>
       </div>
       <div className={SidebarCSS.UserAccount}>
