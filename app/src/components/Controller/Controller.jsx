@@ -11,38 +11,30 @@ function Controller() {
       <div className={styles.controls}>
         <div className={styles.xy}>
           <div className={styles.controllerButtons}>
-            <div onClick={(e) => move("G1 Y1")} className={styles.btnXY}>
-              <img src={InnerSector} className={styles.svg} />
-              <span>+1</span>
-            </div>
-            <div onClick={(e) => move("G1 X1")} className={styles.btnXY}>
-              <img src={InnerSector} className={styles.svg} />
-              <span>+1</span>
-            </div>
-            <div onClick={(e) => move("G1 Y-1")} className={styles.btnXY}>
-              <img src={InnerSector} className={styles.svg} />
-              <span>-1</span>
-            </div>
-            <div onClick={(e) => move("G1 X-1")} className={styles.btnXY}>
-              <img src={InnerSector} className={styles.svg} />
-              <span>-1</span>
-            </div>
-            <div onClick={(e) => move("G1 Y10")} className={styles.btnXY}>
-              <img src={OuterSector} className={styles.svg} />
-              <span>+10</span>
-            </div>
-            <div onClick={(e) => move("G1 X10")} className={styles.btnXY}>
-              <img src={OuterSector} className={styles.svg} />
-              <span>+10</span>
-            </div>
-            <div onClick={(e) => move("G1 Y-10")} className={styles.btnXY}>
-              <img src={OuterSector} className={styles.svg} />
-              <span>-10</span>
-            </div>
-            <div onClick={(e) => move("G1 X-10")} className={styles.btnXY}>
-              <img src={OuterSector} className={styles.svg} />
-              <span>-10</span>
-            </div>
+            <XYBtns onClick={(e) => move("G1 Y1")} src={InnerSector}>
+              +1
+            </XYBtns>{" "}
+            <XYBtns onClick={(e) => move("G1 X1")} src={InnerSector}>
+              +1
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 Y-1")} src={InnerSector}>
+              -1
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 X-1")} src={InnerSector}>
+              -1
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 Y10")} src={OuterSector}>
+              +10
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 X10")} src={OuterSector}>
+              +10
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 Y-10")} src={OuterSector}>
+              -10
+            </XYBtns>
+            <XYBtns onClick={(e) => move("G1 X-10")} src={OuterSector}>
+              -10
+            </XYBtns>
             <button
               onClick={(e) => move("G90\nG28\nG29\nM500\nG91")}
               className={styles.btnXYHome}
@@ -87,3 +79,12 @@ function Controller() {
 }
 
 export default Controller;
+
+function XYBtns({ onClick, src, children }) {
+  return (
+    <div onClick={onClick} className={styles.btnXY}>
+      <img src={src} className={styles.svg} />
+      <span>{children}</span>
+    </div>
+  );
+}
