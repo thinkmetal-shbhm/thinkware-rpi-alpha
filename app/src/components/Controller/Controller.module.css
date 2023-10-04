@@ -19,7 +19,6 @@
 .controls {
   display: flex;
   justify-content: space-around;
-  
 }
 .controllerButtons {
   position: absolute;

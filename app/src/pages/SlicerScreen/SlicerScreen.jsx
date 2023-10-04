@@ -5,8 +5,44 @@ import { Observe, ObserveIFrame, waitForElm } from "../../utils";
 
 function SlicerScreen() {
   const [selectedElement, setSelectedElement] = useState(null);
+  const [gcode, setGcode] = useState(null);
 
   const location = useLocation();
+
+  function clicked(event) {
+    console.log("gcode print btn clicked");
+
+    setTimeout(() => {
+      console.log(
+        document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode")
+      );
+      fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode"),
+      });
+    }, 5000);
+  }
+
+  useEffect(() => {
+    if (gcode)
+      document
+        .querySelector("#frame")
+        .contentWindow.document.querySelector("#act-export")
+        .addEventListener("click", clicked);
+
+    return () => {
+      // if (gcode)
+      //   document
+      //     .querySelector("#frame")
+      //     .contentWindow.document.querySelector("#act-export")
+      //     .removeEventListener("click", clicked);
+    };
+  }, [gcode]);
 
   useEffect(() => {
     console.log(selectedElement);
@@ -60,6 +96,12 @@ function SlicerScreen() {
                 .contentWindow.document.getElementById(location.state.message)
             );
           } else setSelectedElement(null);
+
+          setGcode(
+            document
+              .querySelector("#frame")
+              .contentWindow.document.querySelector("#act-export")
+          );
         }}
         onFocus={(e) => {
           console.log("focused");
