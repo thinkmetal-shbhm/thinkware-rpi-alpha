@@ -13,7 +13,7 @@ function MainContent() {
       <Routes>
         <Route path="/" element={<HomeScreen setPartName={setPartName} />} />
         <Route path="/job" element={<JobScreen partName={partName} />} />
-        <Route path="/print" element={<SlicerScreen />} />
+        <Route path="/prepare" element={<SlicerScreen />} />
       </Routes>
     </div>
   );

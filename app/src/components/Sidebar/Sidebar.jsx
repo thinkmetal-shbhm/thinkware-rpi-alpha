@@ -6,7 +6,7 @@ import DashboardImage from "../../assets/Icons/dashboard.png";
 import JobImage from "../../assets/Icons/job.png";
 import OnlineIcon from "../../assets/Icons/online.png";
 import OfflineIcon from "../../assets/Icons/offline.png";
-import SliceImage from "../../assets/Icons/slice.png";
+import PrepareImage from "../../assets/Icons/prepare.png";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -48,17 +48,17 @@ function Sidebar() {
             <span className={SidebarCSS.MenuText}>Dashboard</span>
           </NavLink>
           <NavLink
-            to="/print"
+            to="/prepare"
             className={({ isActive }) =>
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
             }
           >
             <img
-              src={SliceImage}
-              alt="dashboard"
+              src={PrepareImage}
+              alt="prepare"
               className={SidebarCSS.MenuImage}
             />
-            <span className={SidebarCSS.MenuText}>Print</span>
+            <span className={SidebarCSS.MenuText}>Prepare</span>
           </NavLink>
           <NavLink
             to="/job"
