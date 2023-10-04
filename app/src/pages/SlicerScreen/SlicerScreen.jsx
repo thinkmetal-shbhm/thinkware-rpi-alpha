@@ -109,7 +109,7 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
-        src="http://localhost:8100/kiri/"
+        src="http://13.127.238.43:8100/kiri/"
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>
