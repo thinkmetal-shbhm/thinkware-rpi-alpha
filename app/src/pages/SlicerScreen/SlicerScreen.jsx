@@ -8,15 +8,6 @@ function SlicerScreen() {
 
   const location = useLocation();
 
-  // useEffect(() => {
-  //   const ele = document
-  //     .querySelector("iframe")
-  //     .contentWindow.document.getElementById(location.state?.message);
-  //   console.log(ele);
-  //   if (location.state?.message === "file-import")
-  //     if (ele) setSelectedElement(ele);
-  // }, []);
-
   useEffect(() => {
     console.log(selectedElement);
     async function initSlicer() {
