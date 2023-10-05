@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./JobInfo.module.css";
-import { pauseIcon, crossIcon } from "../../assets/Icons";
+import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
 import { pausePrint } from "../../printerUtils";
 
-function JobInfo({}) {
+function JobInfo({ isPaused, setIsPaused }) {
   const [estimatedEnd, setEstimatedEnd] = useState("Completed");
 
   return (
@@ -23,16 +23,30 @@ function JobInfo({}) {
             <button
               className={styles.btn}
               onClick={async (e) => {
+                setIsPaused((prev) => !prev);
                 const resp = await pausePrint();
                 console.log(resp);
               }}
             >
-              <img
-                className={styles.pauseIcon}
-                src={pauseIcon}
-                alt="pause icon"
-              />
-              <p>Pause</p>
+              {isPaused ? (
+                <React.Fragment>
+                  <img
+                    className={styles.pauseIcon}
+                    src={pauseIcon}
+                    alt="pause icon"
+                  />
+                  <p>Pause</p>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <img
+                    className={styles.pauseIcon}
+                    src={playIcon}
+                    alt="play icon"
+                  />
+                  <p>Play</p>
+                </React.Fragment>
+              )}
             </button>
             <button className={styles.btn} onClick={(e) => {}}>
               <img

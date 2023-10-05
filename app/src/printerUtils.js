@@ -15,7 +15,7 @@ export async function sendCmd(cmd) {
 }
 
 export async function pausePrint(params) {
-  return await fetch("http://localhost:4000/api/v1/", {
+  return await fetch("http://localhost:4000/api/v1/pausePrint", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   });
