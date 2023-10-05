@@ -1,0 +1,25 @@
+.jobPreviewCard{
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    margin-left: 0.25rem;
+}
+ canvas{
+    height: 200px !important;
+    width: 200px !important;
+}
+
+  .jobPreviewInfo {
+    width: 60%;
+  }
+  .jobPreviewInfo h3 {
+    font-size: 1.5rem;
+  }
+  .jobPreviewInfo span {
+    font-size: 0.8rem;
+  }
