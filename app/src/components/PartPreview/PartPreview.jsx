@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import "./PartPreview.css"
+import jobstyles from "./PartPreview.module.css"
 import styles from "../../pages/Homescreen/HomeScreen.module.css";
 import { StlViewer } from "./StlViewer.modern";
 function PartPreview({ url, name, timestamp,CSSclass }) {
   const [volume, setvolume] = useState(0);
   console.log(CSSclass);
   return (
-    <div className={CSSclass?"jobPreviewCard":styles.recentItemCard}>
+    <div className={CSSclass?jobstyles.jobPreviewCard:styles.recentItemCard}>
       <StlViewer
         width={100}
         height={100}
@@ -21,7 +21,7 @@ function PartPreview({ url, name, timestamp,CSSclass }) {
         id={`canvas${name}`}
       />
 
-      <div className={CSSclass?"jobPreviewInfo":styles.recentItemInfo}>
+      <div className={CSSclass?jobstyles.jobPreviewInfo:styles.recentItemInfo}>
       <h3>{name}.stl</h3>
             <span>Created at: 19:02 PM, 15-04-2023</span>
       </div>
