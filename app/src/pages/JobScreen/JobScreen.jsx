@@ -5,7 +5,7 @@ import CameraWindow from "../../components/CameraWindow/CameraWindow";
 import PartPreview from "../../components/PartPreview/PartPreview";
 
 function JobScreen(partName) {
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
   return (
     <div style={{ width: "100%" }}>
       <JobInfo isPaused={isPaused} setIsPaused={setIsPaused} />
