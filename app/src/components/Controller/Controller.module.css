@@ -50,6 +50,7 @@
 }
 .btnXY > span {
   position: absolute;
+  pointer-events: none;
   color: var(--silver);
   font-size: var(--fs-medium-small);
 }

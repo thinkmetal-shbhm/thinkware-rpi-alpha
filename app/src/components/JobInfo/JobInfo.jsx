@@ -28,7 +28,7 @@ function JobInfo({ isPaused, setIsPaused }) {
                 console.log(resp);
               }}
             >
-              {isPaused ? (
+              {!isPaused ? (
                 <React.Fragment>
                   <img
                     className={styles.pauseIcon}
