@@ -66,7 +66,7 @@ function HomeScreen() {
           <div
             className={styles.OptionItem}
             onClick={(e) => {
-              navigate("/slice", { state: { id: 1, message: "file-import" } });
+              navigate("/prepare", { state: { id: 1, message: "file-import" } });
             }}
           >
             <img src={ImportIcon} alt="import" className={styles.importIcon} />
