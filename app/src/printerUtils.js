@@ -13,3 +13,10 @@ export async function sendCmd(cmd) {
     body: JSON.stringify({ cmd }),
   });
 }
+
+export async function pausePrint(params) {
+  return await fetch("http://localhost:4000/api/v1/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+}

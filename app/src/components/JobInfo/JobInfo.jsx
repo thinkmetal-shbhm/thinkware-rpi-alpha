@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon } from "../../assets/Icons";
-import { sendCmd } from "../../printerUtils";
+import { pausePrint } from "../../printerUtils";
 
 function JobInfo({}) {
   const [estimatedEnd, setEstimatedEnd] = useState("Completed");
@@ -22,8 +22,9 @@ function JobInfo({}) {
           <div className={styles.actions}>
             <button
               className={styles.btn}
-              onClick={(e) => {
-                sendCmd("M76");
+              onClick={async (e) => {
+                const resp = await pausePrint();
+                console.log(resp);
               }}
             >
               <img
