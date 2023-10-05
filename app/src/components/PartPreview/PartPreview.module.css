@@ -9,7 +9,7 @@
     flex-direction: column;
     margin-left: 0.25rem;
 }
- canvas{
+ .jobPreviewCard canvas{
     height: 200px !important;
     width: 200px !important;
 }

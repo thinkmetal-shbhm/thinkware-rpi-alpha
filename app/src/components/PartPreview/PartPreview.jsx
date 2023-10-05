@@ -19,6 +19,7 @@ function PartPreview({ url, name, timestamp,CSSclass }) {
         lightColor="rgb(255, 255, 255)"
         volume={setvolume}
         id={`canvas${name}`}
+        className={CSSclass?jobstyles.jobCanvas:styles.Canvas}
       />
 
       <div className={CSSclass?jobstyles.jobPreviewInfo:styles.recentItemInfo}>
