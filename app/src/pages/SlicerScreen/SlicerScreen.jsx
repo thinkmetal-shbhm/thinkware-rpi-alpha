@@ -13,20 +13,21 @@ function SlicerScreen() {
     console.log("gcode print btn clicked");
 
     setTimeout(() => {
-      console.log(
+      // console.log(
+      //   document
+      //     .querySelector("#frame")
+      //     .contentWindow.localStorage.getItem("tw__gcode")
+      // );
+      localStorage.setItem(
+        "gcode",
         document
           .querySelector("#frame")
           .contentWindow.localStorage.getItem("tw__gcode")
       );
-      localStorage.setItem("gcode",document
-      .querySelector("#frame")
-      .contentWindow.localStorage.getItem("tw__gcode"))
       fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode"),
+        body: JSON.stringify(JSON.parse(localStorage.getItem("gcode"))),
       });
     }, 5000);
   }
@@ -112,8 +113,8 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
-         src="http://13.127.238.43:8100/kiri/"
-        //src="http://localhost:8100/kiri"
+        // src="http://13.127.238.43:8100/kiri/"
+        src="http://localhost:8100/kiri"
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>
