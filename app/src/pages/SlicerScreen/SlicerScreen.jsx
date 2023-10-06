@@ -25,22 +25,12 @@ function SlicerScreen() {
           .querySelector("#frame")
           .contentWindow.localStorage.getItem("tw__gcode")
       );
-      let gcode = null;
-      try {
-        gcode = JSON.stringify(
-          JSON.parse(
-            document
-              .querySelector("#frame")
-              .contentWindow.localStorage.getItem("tw__gcode")
-          )
-        );
-      } catch (error) {
-        console.log(error);
-        gcode = document
+      localStorage.setItem(
+        "gcode",
+        document
           .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode");
-      }
-
+          .contentWindow.localStorage.getItem("tw__gcode")
+      );
       fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
