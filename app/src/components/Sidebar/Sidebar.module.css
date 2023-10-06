@@ -130,7 +130,15 @@ font-family: 'Inter', sans-serif !important;
   color: black;
   border: 1px solid black;
 }
+.LoginBtn{
 
+/* width: 80%; */
+margin: 0 auto;
+margin-bottom: 2rem;
+}
+.LoginBtn div{
+  height: 3vh;
+}
 @media only screen and (max-width: 1050px) {
   .pageList * {
     font-size: 1rem;

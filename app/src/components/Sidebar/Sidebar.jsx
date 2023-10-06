@@ -9,9 +9,22 @@ import OfflineIcon from "../../assets/Icons/offline.png";
 import PrepareImage from "../../assets/Icons/prepare.png";
 import { useEffect } from "react";
 import { useState } from "react";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 function Sidebar() {
   const [isConnected, setIsConnected] = useState(false);
+  const [user, setUser] = useState({});
+
+  function handleCallbackResponse(res) {
+    var userObject = jwt_decode(res.credential);
+    console.log(userObject);
+    setUser(userObject);
+  }
+  function handleSignout(e) {
+    setUser({});
+    googleLogout();
+  }
 
   useEffect(() => {
     fetch("http://localhost:4000/api/v1/connected")
@@ -73,29 +86,66 @@ function Sidebar() {
             />
             <span className={SidebarCSS.MenuText}>Job</span>
           </NavLink>
-         
         </div>
       </div>
-      <div className={SidebarCSS.UserAccount}>
-        <div className={SidebarCSS.UserInfo}>
-          <img src={UserIcon} alt="" />
-          <h5>John Doe</h5>
-          {isConnected ? (
-            <img
-              src={OnlineIcon}
-              alt="connected"
-              className={SidebarCSS.badge}
+
+      {/* {user ? (*/}
+      <>
+        {/* loggedin */}
+
+        {user.name ? (
+          <div className={SidebarCSS.UserAccount}>
+            <div className={SidebarCSS.UserInfo}>
+              <img
+                referrerpolicy="no-referrer"
+                src={user ? user?.picture : UserIcon}
+                alt=""
+              />
+              <h5>{user?.given_name}</h5>
+              {isConnected ? (
+                <img
+                  src={OnlineIcon}
+                  alt="connected"
+                  className={SidebarCSS.badge}
+                />
+              ) : (
+                <img
+                  src={OfflineIcon}
+                  alt="connected"
+                  className={SidebarCSS.badge}
+                />
+              )}
+            </div>
+            <button
+              className={SidebarCSS.Logoutbtn}
+              onClick={(e) => handleSignout(e)}
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className={SidebarCSS.LoginBtn}>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                handleCallbackResponse(credentialResponse);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+              useOneTap
+              //  width={"5px"}
+              shape="circle"
+              ux_mode="popup"
             />
-          ) : (
-            <img
-              src={OfflineIcon}
-              alt="connected"
-              className={SidebarCSS.badge}
-            />
-          )}
-        </div>
-        <button className={SidebarCSS.Logoutbtn}>Logout</button>
-      </div>
+          </div>
+        )}
+      </>
+
+      {/* <button id="loginBtn" className={SidebarCSS.Logoutbtn}>
+      
+        Login
+      </button> 
+      )} */}
     </div>
   );
 }
