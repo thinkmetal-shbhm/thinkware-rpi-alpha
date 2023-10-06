@@ -1,33 +1,70 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
-import { Observe, ObserveIFrame, waitForElm } from "../../utils";
+import { ObserveIFrame } from "../../utils";
 
 function SlicerScreen() {
   const [selectedElement, setSelectedElement] = useState(null);
   const [gcode, setGcode] = useState(null);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
-  function clicked(event) {
+  function clicked() {
     console.log("gcode print btn clicked");
 
     setTimeout(() => {
-      console.log(
+      console.log({
+        data: document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode"),
+      });
+      localStorage.setItem(
+        "gcode",
         document
           .querySelector("#frame")
           .contentWindow.localStorage.getItem("tw__gcode")
       );
-      localStorage.setItem("gcode",document
-      .querySelector("#frame")
-      .contentWindow.localStorage.getItem("tw__gcode"))
+      let gcode = null;
+      try {
+        gcode = JSON.stringify(
+          JSON.parse(
+            document
+              .querySelector("#frame")
+              .contentWindow.localStorage.getItem("tw__gcode")
+          )
+        );
+      } catch (error) {
+        console.log(error);
+        gcode = document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode");
+      }
+
       fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode"),
-      });
+        body: JSON.stringify({
+          data: {
+            name: "name",
+            gcode: gcode,
+          },
+        }),
+      })
+        .then((res) => res.json())
+        .then((resp) => {
+          console.log(resp);
+          if (resp.message === "ok")
+            navigate("/job", {
+              state: {
+                id: 1,
+                message: "fileUploaded",
+                files: document
+                  .querySelector("#frame")
+                  .contentWindow.document.querySelector("#load-file").files,
+              },
+            });
+        });
     }, 5000);
   }
 
@@ -76,7 +113,7 @@ function SlicerScreen() {
     initSlicer();
 
     return () => {};
-  }, [selectedElement]);
+  }, [selectedElement, location.state?.message]);
 
   return (
     <div className={styles.parent}>
@@ -112,7 +149,7 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
-         src="http://13.127.238.43:8100/kiri/"
+        src="http://13.127.238.43:8100/kiri/"
         //src="http://localhost:8100/kiri"
         title="slicer"
         className={styles.SlicerFrame}

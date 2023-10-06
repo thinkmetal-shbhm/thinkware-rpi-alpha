@@ -17,7 +17,6 @@ function HomeScreen() {
 
   // Function to handle file input change
   function handleFileChange(event) {
-    debugger;
     const file = event.target.files[0];
     console.log(inputRef.current);
     console.log(inputRef.current.files);
@@ -36,7 +35,6 @@ function HomeScreen() {
       const formData = new FormData();
       formData.append("fileToUpload", selectedFile);
 
-      debugger;
       // Send the file to your backend endpoint using fetch or axios
       fetch("http://localhost:4000/api/v1/uploadGcodeFile", {
         method: "POST",
@@ -66,7 +64,9 @@ function HomeScreen() {
           <div
             className={styles.OptionItem}
             onClick={(e) => {
-              navigate("/prepare", { state: { id: 1, message: "file-import" } });
+              navigate("/prepare", {
+                state: { id: 1, message: "file-import" },
+              });
             }}
           >
             <img src={ImportIcon} alt="import" className={styles.importIcon} />
@@ -99,10 +99,9 @@ function HomeScreen() {
       </div>
       <h3 className={styles.heading}>Recent Items</h3>
       <div className={styles.recentItems}>
-       <PartPreview url="./benchy.stl" name="benchy-1"/>
-       <PartPreview url="./cube.stl"name="cube-1"/>
-       <PartPreview url="./cube.stl"name="cube-2"/>
-       
+        <PartPreview url="./benchy.stl" name="benchy-1" />
+        <PartPreview url="./cube.stl" name="cube-1" />
+        <PartPreview url="./cube.stl" name="cube-2" />
       </div>
     </>
   );

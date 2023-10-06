@@ -10,32 +10,32 @@ function Controller() {
       <div className={styles.controls}>
         <div className={styles.xy}>
           <div className={styles.controllerButtons}>
-            <XYBtns onClick={(e) => move("G1 Y1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 Y1")} src={"InnerSector"}>
               +1
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 X1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 X1")} src={"InnerSector"}>
               +1
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 Y-1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 Y-1")} src={"InnerSector"}>
               -1
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 X-1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 X-1")} src={"InnerSector"}>
               -1
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 Y10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 Y10")} src={"OuterSector"}>
               +10
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 X10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 X10")} src={"OuterSector"}>
               +10
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 Y-10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 Y-10")} src={"OuterSector"}>
               -10
             </XYBtns>
-            <XYBtns onClick={(e) => move("G1 X-10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 X-10")} src={"OuterSector"}>
               -10
             </XYBtns>
             <button
-              onClick={(e) => move("G90\nG28\nG29\nM500\nG91")}
+              onClick={() => move("G90\nG28\nG29\nM500\nG91")}
               className={styles.btnXYHome}
             >
               <img src={homeIcon} />
@@ -44,30 +44,30 @@ function Controller() {
         </div>
         <div style={{ display: "flex" }}>
           <div className={styles.z}>
-            <button onClick={(e) => move("G1 Z-10")}>
+            <button onClick={() => move("G1 Z-10")}>
               <span>↥</span>
               10
             </button>
-            <button onClick={(e) => move("G1 Z-1")}>
+            <button onClick={() => move("G1 Z-1")}>
               <span>↥</span>1
             </button>
-            <button onClick={(e) => move("G28 Z")}>
+            <button onClick={() => move("G28 Z")}>
               <img src={homeIcon} />
             </button>
-            <button onClick={(e) => move("G1 Z1")}>
+            <button onClick={() => move("G1 Z1")}>
               <span>↧</span>1
             </button>
-            <button onClick={(e) => move("G1 Z10")}>
+            <button onClick={() => move("G1 Z10")}>
               <span>↧</span>
               10
             </button>
           </div>
           <div className={styles.extruder}>
             <div className={styles.extruderBar}></div>
-            <button onClick={(e) => move("G1 E10")} className={styles.extrude}>
+            <button onClick={() => move("G1 E10")} className={styles.extrude}>
               ▲
             </button>
-            <button onClick={(e) => move("G1 E-10")} className={styles.retract}>
+            <button onClick={() => move("G1 E-10")} className={styles.retract}>
               ▼
             </button>
           </div>
@@ -84,14 +84,14 @@ function XYBtns({ onClick, src, children }) {
     <div className={styles.btnXY}>
       {src === "InnerSector" ? (
         <svg
-          pointer-events="none"
+          pointerEvents="none"
           className={styles.svg}
           viewBox="0 0 413 413"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            pointer-events="all"
+            pointerEvents="all"
             onClick={onClick}
             d="M260.508 413C260.508 269.126 143.874 152.492 0 152.492V317.692C52.637 317.692 95.3077 360.363 95.3077 413H260.508Z"
             fill="#373737"
@@ -99,14 +99,14 @@ function XYBtns({ onClick, src, children }) {
         </svg>
       ) : (
         <svg
-          pointer-events="none"
+          pointerEvents="none"
           className={styles.svg}
           viewBox="0 0 413 413"
           fill="#000"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            pointer-events="all"
+            pointerEvents="all"
             onClick={onClick}
             d="M0 0C228.094 0 413 184.906 413 413H266.862C266.862 265.616 147.384 146.138 0 146.138V0Z"
             fill="#000"
