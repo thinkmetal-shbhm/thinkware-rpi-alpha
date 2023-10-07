@@ -31,30 +31,37 @@ function SlicerScreen() {
           .querySelector("#frame")
           .contentWindow.localStorage.getItem("tw__gcode")
       );
-      fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: {
-            name: "name",
-            gcode: gcode,
-          },
-        }),
-      })
-        .then((res) => res.json())
-        .then((resp) => {
-          console.log(resp);
-          if (resp.message === "ok")
-            navigate("/job", {
-              state: {
-                id: 1,
-                message: "fileUploaded",
-                files: document
-                  .querySelector("#frame")
-                  .contentWindow.document.querySelector("#load-file").files,
-              },
-            });
-        });
+      if (
+        document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode")
+      )
+        fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: {
+              name: "name",
+              gcode: document
+                .querySelector("#frame")
+                .contentWindow.localStorage.getItem("tw__gcode"),
+            },
+          }),
+        })
+          .then((res) => res.json())
+          .then((resp) => {
+            console.log(resp);
+            if (resp.message === "ok")
+              navigate("/job", {
+                state: {
+                  id: 1,
+                  message: "fileUploaded",
+                  files: document
+                    .querySelector("#frame")
+                    .contentWindow.document.querySelector("#load-file").files,
+                },
+              });
+          });
     }, 5000);
   }
 

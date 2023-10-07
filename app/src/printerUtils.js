@@ -14,8 +14,14 @@ export async function sendCmd(cmd) {
   });
 }
 
-export async function pausePrint(params) {
+export async function pausePrint() {
   return await fetch("http://localhost:4000/api/v1/pausePrint", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+}
+export async function resumePrint() {
+  return await fetch("http://localhost:4000/api/v1/resumePrint", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   });

@@ -1,18 +1,60 @@
 import React, { useEffect, useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
-import { pausePrint } from "../../printerUtils";
+import { pausePrint, resumePrint } from "../../printerUtils";
+import { socket } from "../../socket";
 
-function JobInfo({ isPaused, setIsPaused, progress }) {
+function JobInfo({
+  isPaused,
+  setIsPaused,
+  progress,
+  heating,
+  setHeating,
+  prog,
+}) {
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
+  const [remainingTime, setRemainingTime] = useState("Unknown");
   const [percent, setPercent] = useState("0%");
+  const [currentRes, setCurrentRes] = useState(null);
+  const [temp, setTemp] = useState(null);
+
   useEffect(() => {
-    if (progress?.progress) {
-      const tt = +progress.progress.totalETA;
-      const ct = +progress.progress.currentTime;
-      const value = ((tt - ct) / tt) * 100;
-      setPercent(`${value.toFixed(2)}%`);
-      setEstimatedEnd(`${tt - ct}s`);
+    socket.on("printerResponse", (data) => setCurrentRes(data.data));
+  }, []);
+  useEffect(() => {
+    if (currentRes) {
+      if (currentRes.indexOf("T:") !== -1) {
+        const temp = currentRes.slice(
+          currentRes.indexOf("T:") + 2,
+          currentRes.indexOf("B:")
+        );
+        setTemp(temp);
+        const W = currentRes.split("W:")[1];
+        if (W == "0") setHeating(false);
+      }
+    }
+  }, [currentRes]);
+
+  useEffect(() => {
+    if (progress) {
+      if (!Object.keys(progress).length === 0) {
+        const tt = +progress.totalETA;
+        const ct = progress.currentTime;
+        const minutes = +ct.split("m")[0];
+        const seconds = +ct.slice(ct.indexOf("m") + 1, ct.indexOf("s")).trim();
+
+        const value = ((minutes * 60 + seconds) / tt) * 100;
+
+        setPercent(`${Math.floor(value)}%`);
+        setEstimatedEnd(`${tt}s`);
+        setRemainingTime(`${tt - minutes * 60 + seconds}s`);
+
+        setIsPaused(progress.paused);
+        console.log(
+          "🚀 ~ file: JobInfo.jsx:48 ~ useEffect ~ progress:",
+          progress
+        );
+      }
     }
   }, [progress]);
 
@@ -24,25 +66,31 @@ function JobInfo({ isPaused, setIsPaused, progress }) {
             <h3 className={styles.heading3}>JOB INFO</h3>
             <div>
               <h4 className={`${styles.fileName} ${styles.heading4}`}>
-                cube.stl<span>{percent}</span>
+                cube.stl<span>{heating ? "Heating..." : percent}</span>
               </h4>
             </div>
             <div className={styles.progressBar}></div>
           </div>
           <div className={styles.actions}>
             <button
-              disabled={progress?.progress ? false : true}
+              disabled={!prog}
               className={styles.btn}
               onClick={async () => {
-                setIsPaused((prev) => !prev);
-                const resp = await pausePrint();
-                console.log(resp);
+                if (isPaused) {
+                  const resp = await resumePrint();
+                  console.log(resp);
+                } else {
+                  const resp = await pausePrint();
+                  console.log(resp);
+                }
               }}
             >
               {!isPaused ? (
                 <React.Fragment>
                   <img
-                    style={{ opacity: progress?.progress ? "1" : "0.4" }}
+                    style={{
+                      opacity: prog ? "1" : "0.4",
+                    }}
                     className={styles.pauseIcon}
                     src={pauseIcon}
                     alt="pause icon"
@@ -52,7 +100,9 @@ function JobInfo({ isPaused, setIsPaused, progress }) {
               ) : (
                 <React.Fragment>
                   <img
-                    style={{ opacity: progress?.progress ? "1" : "0.4" }}
+                    style={{
+                      opacity: prog ? "1" : "0.4",
+                    }}
                     className={styles.pauseIcon}
                     src={playIcon}
                     alt="play icon"
@@ -61,13 +111,11 @@ function JobInfo({ isPaused, setIsPaused, progress }) {
                 </React.Fragment>
               )}
             </button>
-            <button
-              disabled={progress?.progress ? false : true}
-              className={styles.btn}
-              onClick={() => {}}
-            >
+            <button disabled={!prog} className={styles.btn} onClick={() => {}}>
               <img
-                style={{ opacity: progress?.progress ? "1" : "0.4" }}
+                style={{
+                  opacity: prog ? "1" : "0.4",
+                }}
                 className={styles.crossIcon}
                 src={crossIcon}
                 alt="cancel icon"
@@ -79,7 +127,9 @@ function JobInfo({ isPaused, setIsPaused, progress }) {
         <div className={styles.remainingInfo}>
           <div className={styles.time}>
             <h3 className={styles.heading3}>TIME</h3>
-            <h4 className={styles.heading4}>Remaining Time</h4>
+            <h4 className={styles.heading4}>
+              Remaining Time: {`${remainingTime}`}
+            </h4>
             <p>Estimated time: {estimatedEnd}</p>
           </div>
           <div className={styles.circleContainer}>
