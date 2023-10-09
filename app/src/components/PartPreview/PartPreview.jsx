@@ -4,7 +4,7 @@ import styles from "../../pages/Homescreen/HomeScreen.module.css";
 import { StlViewer } from "./StlViewer.modern";
 function PartPreview({ url, name, timestamp,CSSclass }) {
   const [volume, setvolume] = useState(0);
-  console.log(CSSclass);
+
   return (
     <div className={CSSclass?jobstyles.jobPreviewCard:styles.recentItemCard}>
       <StlViewer

@@ -9,21 +9,48 @@ import OfflineIcon from "../../assets/Icons/offline.png";
 import PrepareImage from "../../assets/Icons/prepare.png";
 import { useEffect } from "react";
 import { useState } from "react";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+
 import jwt_decode from "jwt-decode";
+import { auth, provider, signInwithGoogle } from "../../firebase";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
 function Sidebar() {
   const [isConnected, setIsConnected] = useState(false);
   const [user, setUser] = useState({});
+  
+console.log("user",user);
+  const signIn = () => {
+    signInWithPopup(auth, provider)
+      .then(({ user }) => {
+        localStorage.setItem("user", JSON.stringify(user));
+         setUser(user);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.log(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
 
-  function handleCallbackResponse(res) {
-    var userObject = jwt_decode(res.credential);
-    console.log(userObject);
-    setUser(userObject);
-  }
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
+
+
   function handleSignout(e) {
-    setUser({});
-    googleLogout();
+  
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        setUser({});
+        localStorage.setItem("user", JSON.stringify({}));
+        console.log("userSignedout");
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log("error signing out");
+      });
   }
 
   useEffect(() => {
@@ -32,10 +59,14 @@ function Sidebar() {
       .then(({ message, data }) =>
         setIsConnected(message === "connected" && data?.fd ? true : false)
       );
-
-    console.log(isConnected);
+   
+    console.log("printer connected", isConnected);
   }, [isConnected]);
 
+  useEffect(()=>{
+    setUser(JSON.parse(localStorage.getItem("user")));
+  },[user.displayName]);
+  
   return (
     <div className={SidebarCSS.SidebarParent}>
       <div>
@@ -89,19 +120,21 @@ function Sidebar() {
         </div>
       </div>
 
-      {/* {user ? (*/}
       <>
         {/* loggedin */}
 
-        {user.name ? (
+        {
+         user?.displayName ?
+       
+         (
           <div className={SidebarCSS.UserAccount}>
             <div className={SidebarCSS.UserInfo}>
               <img
-                referrerpolicy="no-referrer"
-                src={user ? user?.picture : UserIcon}
+                referrerPolicy="no-referrer"
+                src={user ? user?.photoURL : UserIcon}
                 alt=""
               />
-              <h5>{user?.given_name}</h5>
+              <h5>{user?.displayName.split(" ", 1)}</h5>
               {isConnected ? (
                 <img
                   src={OnlineIcon}
@@ -125,27 +158,12 @@ function Sidebar() {
           </div>
         ) : (
           <div className={SidebarCSS.LoginBtn}>
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                handleCallbackResponse(credentialResponse);
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-              useOneTap
-              //  width={"5px"}
-              shape="circle"
-              ux_mode="popup"
-            />
+            <button className={SidebarCSS.Logoutbtn} onClick={signIn}>
+              Login with Google
+            </button>
           </div>
         )}
       </>
-
-      {/* <button id="loginBtn" className={SidebarCSS.Logoutbtn}>
-      
-        Login
-      </button> 
-      )} */}
     </div>
   );
 }

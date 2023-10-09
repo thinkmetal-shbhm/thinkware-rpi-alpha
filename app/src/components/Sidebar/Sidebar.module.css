@@ -121,6 +121,9 @@ font-family: 'Inter', sans-serif !important;
   border: 1px solid white;
   margin-bottom: 0.5rem;
   background-color: transparent;
+} 
+.LoginBtn #container{
+padding: 0;
 }
 .Logoutbtn:hover {
   background-color: var(--green);

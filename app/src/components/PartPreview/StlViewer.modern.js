@@ -104,7 +104,7 @@ function Stl(
     scene.add(mesh);
   });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.outputEncoding = sRGBEncoding;
+  // renderer.outputEncoding = sRGBEncoding;
   renderer.shadowMap.enabled = true;
   let animate = function animate() {
     requestAnimationFrame(animate);
