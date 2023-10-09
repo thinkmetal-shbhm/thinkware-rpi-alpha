@@ -35,6 +35,7 @@ function JobScreen() {
     const printerResponseSocket = (data) => setCurrentRes(data.data);
     const progressSocket = (data) => {
       setProgress(data.data.progress);
+      if (!data.data.progress) setHeating(false);
     };
 
     socket.on("progress", progressSocket);
@@ -48,7 +49,8 @@ function JobScreen() {
 
   useEffect(() => {
     if (location.state?.message === "fileUploaded") {
-      setHeating(true);
+      console.log(location.state.files);
+      if (prog) setHeating(true);
     }
   }, [location.state?.message]);
 

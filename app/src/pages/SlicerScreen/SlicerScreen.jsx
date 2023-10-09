@@ -5,13 +5,18 @@ import { ObserveIFrame } from "../../utils";
 
 function SlicerScreen() {
   const [selectedElement, setSelectedElement] = useState(null);
-  const [gcode, setGcode] = useState(null);
+  const [printBtn, setPrintBtn] = useState(null);
+  const [btnClicked, setBtnClicked] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   function clicked() {
     console.log("gcode print btn clicked");
+    setBtnClicked(true);
+    document
+      .querySelector("#frame")
+      .contentWindow.localStorage.removeItem("tw__gcode");
 
     setTimeout(() => {
       console.log({
@@ -19,54 +24,59 @@ function SlicerScreen() {
           .querySelector("#frame")
           .contentWindow.localStorage.getItem("tw__gcode"),
       });
-      localStorage.setItem(
-        "gcode",
-        document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode")
-      );
-      localStorage.setItem(
-        "gcode",
-        document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode")
-      );
-      if (
-        document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode")
-      )
-        fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            data: {
-              name: "name",
-              gcode: document
-                .querySelector("#frame")
-                .contentWindow.localStorage.getItem("tw__gcode"),
-            },
-          }),
-        })
-          .then((res) => res.json())
-          .then((resp) => {
-            console.log(resp);
-            if (resp.message === "ok")
-              navigate("/job", {
-                state: {
-                  id: 1,
-                  message: "fileUploaded",
-                  files: document
-                    .querySelector("#frame")
-                    .contentWindow.document.querySelector("#load-file").files,
-                },
-              });
-          });
     }, 5000);
   }
 
   useEffect(() => {
-    if (gcode)
+    if (btnClicked) {
+      const gcodeInterval = setInterval(() => {
+        if (
+          document
+            .querySelector("#frame")
+            .contentWindow.localStorage.getItem("tw__gcode")
+        ) {
+          clearInterval(gcodeInterval);
+          localStorage.setItem(
+            "gcode",
+            document
+              .querySelector("#frame")
+              .contentWindow.localStorage.getItem("tw__gcode")
+          );
+
+          fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              data: {
+                name: "name",
+                gcode: document
+                  .querySelector("#frame")
+                  .contentWindow.localStorage.getItem("tw__gcode"),
+              },
+            }),
+          })
+            .then((res) => res.json())
+            .then((resp) => {
+              console.log(resp);
+              if (resp.message === "ok") {
+                navigate("/job", {
+                  state: {
+                    id: 1,
+                    message: "fileUploaded",
+                    files: document
+                      .querySelector("#frame")
+                      .contentWindow.document.querySelector("#load-file").files,
+                  },
+                });
+              }
+            });
+        }
+      }, 300);
+    }
+  }, [btnClicked]);
+
+  useEffect(() => {
+    if (printBtn)
       document
         .querySelector("#frame")
         .contentWindow.document.querySelector("#act-export")
@@ -79,7 +89,7 @@ function SlicerScreen() {
       //     .contentWindow.document.querySelector("#act-export")
       //     .removeEventListener("click", clicked);
     };
-  }, [gcode]);
+  }, [printBtn]);
 
   useEffect(() => {
     console.log(selectedElement);
@@ -134,7 +144,7 @@ function SlicerScreen() {
             );
           } else setSelectedElement(null);
 
-          setGcode(
+          setPrintBtn(
             document
               .querySelector("#frame")
               .contentWindow.document.querySelector("#act-export")

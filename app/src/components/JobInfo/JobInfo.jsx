@@ -15,7 +15,7 @@ function JobInfo({
 }) {
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
   const [remainingTime, setRemainingTime] = useState("Unknown");
-  const [percent, setPercent] = useState("0%");
+  const [percent, setPercent] = useState("");
   const [extPercent, setExtPercent] = useState("100%");
   const [bedPercent, setBedPercent] = useState("70%");
 
@@ -23,16 +23,20 @@ function JobInfo({
     console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
     if (progress) {
       if (!(Object.keys(progress).length === 0)) {
-        const tt = +progress.totalETA;
-        const ct = progress.currentTime;
-        const minutes = +ct.split("m")[0];
-        const seconds = +ct.slice(ct.indexOf("m") + 1, ct.indexOf("s")).trim();
+        if (progress.currentTime) {
+          const tt = +progress.totalETA;
+          const ct = progress.currentTime;
+          const minutes = +ct.split("m")[0];
+          const seconds = +ct
+            .slice(ct.indexOf("m") + 1, ct.indexOf("s"))
+            .trim();
 
-        const value = ((minutes * 60 + seconds) / tt) * 100;
+          const value = ((minutes * 60 + seconds) / tt) * 100;
 
-        setPercent(`${Math.floor(value)}%`);
-        setEstimatedEnd(`${tt}s`);
-        setRemainingTime(`${tt - minutes * 60 + seconds}s`);
+          setPercent(`${Math.floor(value)}%`);
+          setEstimatedEnd(`${tt}s`);
+          setRemainingTime(`${tt - minutes * 60 + seconds}s`);
+        }
 
         setIsPaused(progress.paused);
         console.log(
@@ -40,6 +44,8 @@ function JobInfo({
           progress
         );
       }
+    } else {
+      setHeating(false);
     }
   }, [progress]);
 
