@@ -11,33 +11,18 @@ function JobInfo({
   heating,
   setHeating,
   prog,
+  temp,
 }) {
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
   const [remainingTime, setRemainingTime] = useState("Unknown");
   const [percent, setPercent] = useState("0%");
-  const [currentRes, setCurrentRes] = useState(null);
-  const [temp, setTemp] = useState(null);
+  const [extPercent, setExtPercent] = useState("100%");
+  const [bedPercent, setBedPercent] = useState("70%");
 
   useEffect(() => {
-    socket.on("printerResponse", (data) => setCurrentRes(data.data));
-  }, []);
-  useEffect(() => {
-    if (currentRes) {
-      if (currentRes.indexOf("T:") !== -1) {
-        const temp = currentRes.slice(
-          currentRes.indexOf("T:") + 2,
-          currentRes.indexOf("B:")
-        );
-        setTemp(temp);
-        const W = currentRes.split("W:")[1];
-        if (W == "0") setHeating(false);
-      }
-    }
-  }, [currentRes]);
-
-  useEffect(() => {
+    console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
     if (progress) {
-      if (!Object.keys(progress).length === 0) {
+      if (!(Object.keys(progress).length === 0)) {
         const tt = +progress.totalETA;
         const ct = progress.currentTime;
         const minutes = +ct.split("m")[0];
@@ -58,6 +43,20 @@ function JobInfo({
     }
   }, [progress]);
 
+  useEffect(() => {
+    if (temp) {
+      const ext = temp.split("B:")[0].split("/");
+      const bed = temp.split("B:")[1].split("/");
+
+      setExtPercent((+ext[0].trim() / +ext[1].trim()) * 100 + "%");
+      setBedPercent((+bed[0].trim() / +bed[1].trim()) * 100 + "%");
+    }
+    if (prog && !heating) {
+      setExtPercent("100%");
+      setBedPercent("100%");
+    }
+  }, [temp, heating, prog]);
+
   return (
     <>
       <section className={styles.mainJobInfo}>
@@ -71,6 +70,7 @@ function JobInfo({
             </div>
             <div className={styles.progressBar}></div>
           </div>
+
           <div className={styles.actions}>
             <button
               disabled={!prog}
@@ -124,6 +124,7 @@ function JobInfo({
             </button>
           </div>
         </div>
+
         <div className={styles.remainingInfo}>
           <div className={styles.time}>
             <h3 className={styles.heading3}>TIME</h3>
@@ -138,6 +139,7 @@ function JobInfo({
           </div>
         </div>
       </section>
+
       <section className={styles.materialInfo}>
         <div className={styles.presetChild}>
           <div className={styles.presetItem}>
@@ -168,15 +170,22 @@ function JobInfo({
               <span>PRINTHEAD</span>
               <div className={styles.container}>
                 <div className={styles.barcontainer}>
-                  <div className={styles.barExtruder}></div>
+                  <div
+                    className={styles.barExtruder}
+                    style={{ height: extPercent }}
+                  ></div>
                 </div>
               </div>
             </div>
+
             <div className={styles.barParent2}>
               <span>BED</span>
               <div className={styles.container}>
                 <div className={styles.barcontainer}>
-                  <div className={styles.barBed}></div>
+                  <div
+                    className={styles.barBed}
+                    style={{ height: bedPercent }}
+                  ></div>
                 </div>
               </div>
             </div>

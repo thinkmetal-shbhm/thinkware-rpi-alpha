@@ -9,17 +9,41 @@ import { socket } from "../../socket";
 function JobScreen() {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
-  // const [fetchinterval, setFetchInterval] = useState(null);
   const [heating, setHeating] = useState(null);
   const [prog, setProg] = useState(null);
+
+  const [currentRes, setCurrentRes] = useState(null);
+  const [temp, setTemp] = useState(null);
 
   const location = useLocation();
 
   useEffect(() => {
-    socket.on("progress", (data) => {
-      setProgress(data);
-      console.log(data);
-    });
+    if (currentRes) {
+      if (currentRes.indexOf("T:") !== -1) {
+        const temp = currentRes.slice(
+          currentRes.indexOf("T:") + 2,
+          currentRes.indexOf("@:")
+        );
+        setTemp(temp);
+        const W = currentRes.split("W:")[1];
+        if (W == "0") setHeating(false);
+      }
+    }
+  }, [currentRes]);
+
+  useEffect(() => {
+    const printerResponseSocket = (data) => setCurrentRes(data.data);
+    const progressSocket = (data) => {
+      setProgress(data.data.progress);
+    };
+
+    socket.on("progress", progressSocket);
+    socket.on("printerResponse", printerResponseSocket);
+
+    return () => {
+      socket.off("progress", progressSocket);
+      socket.off("printerResponse", printerResponseSocket);
+    };
   }, []);
 
   useEffect(() => {
@@ -29,14 +53,13 @@ function JobScreen() {
   }, [location.state?.message]);
 
   useEffect(() => {
-    setProg(progress ? !Object.keys(progress).length === 0 : false);
-    if (progress?.finished) {
-    }
+    setProg(progress ? !(Object.keys(progress).length === 0) : false);
   }, [progress]);
 
   return (
     <div style={{ width: "100%" }}>
       <JobInfo
+        temp={temp}
         prog={prog}
         isPaused={isPaused}
         setIsPaused={setIsPaused}
