@@ -25,6 +25,7 @@ function JobScreen() {
           currentRes.indexOf("@:")
         );
         setTemp(temp);
+        setHeating(true);
         const W = currentRes.split("W:")[1];
         if (W == "0") setHeating(false);
       }
