@@ -17,13 +17,13 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 function Sidebar() {
   const [isConnected, setIsConnected] = useState(false);
   const [user, setUser] = useState({});
-  
-console.log("user",user);
+
+  console.log("user", user);
   const signIn = () => {
     signInWithPopup(auth, provider)
       .then(({ user }) => {
         localStorage.setItem("user", JSON.stringify(user));
-         setUser(user);
+        setUser(user);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -36,10 +36,7 @@ console.log("user",user);
       });
   };
 
-
-
   function handleSignout(e) {
-  
     signOut(auth)
       .then(() => {
         // Sign-out successful.
@@ -59,14 +56,14 @@ console.log("user",user);
       .then(({ message, data }) =>
         setIsConnected(message === "connected" && data?.fd ? true : false)
       );
-   
+
     console.log("printer connected", isConnected);
   }, [isConnected]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
-  },[user.displayName]);
-  
+  }, [user?.displayName]);
+
   return (
     <div className={SidebarCSS.SidebarParent}>
       <div>
@@ -123,10 +120,7 @@ console.log("user",user);
       <>
         {/* loggedin */}
 
-        {
-         user?.displayName ?
-       
-         (
+        {user?.displayName ? (
           <div className={SidebarCSS.UserAccount}>
             <div className={SidebarCSS.UserInfo}>
               <img

@@ -30,12 +30,18 @@ function SlicerScreen() {
   useEffect(() => {
     if (btnClicked) {
       const gcodeInterval = setInterval(() => {
+        console.log(
+          "interval,",
+          document
+            .querySelector("#frame")
+            .contentWindow.localStorage.getItem("tw__gcode")
+            .split("\n")
+        );
         if (
           document
             .querySelector("#frame")
             .contentWindow.localStorage.getItem("tw__gcode")
         ) {
-          clearInterval(gcodeInterval);
           localStorage.setItem(
             "gcode",
             document
@@ -71,6 +77,7 @@ function SlicerScreen() {
               }
             });
         }
+        clearInterval(gcodeInterval);
       }, 300);
     }
   }, [btnClicked]);
@@ -156,6 +163,7 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
+        // src="http://localhost:4000/kiri"
         src="http://13.127.238.43:8100/kiri/"
         //src="http://localhost:8100/kiri"
         title="slicer"
