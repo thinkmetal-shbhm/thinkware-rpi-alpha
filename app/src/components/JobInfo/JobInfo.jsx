@@ -18,7 +18,7 @@ function JobInfo({
   const [percent, setPercent] = useState("");
   const [extPercent, setExtPercent] = useState("10%");
   const [bedPercent, setBedPercent] = useState("20%");
-  const [fileName, setFileName] = useState("cube.stl");
+  const [fileName, setFileName] = useState();
 
   useEffect(() => {
     console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
