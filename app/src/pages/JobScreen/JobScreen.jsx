@@ -50,7 +50,7 @@ function JobScreen() {
 
   useEffect(() => {
     if (location.state?.message === "fileUploaded") {
-      console.log(location.state.files);
+      console.log("uploaded files",location.state.files);
       if (prog) setHeating(true);
     }
   }, [location.state?.message]);
@@ -70,7 +70,7 @@ function JobScreen() {
         heating={heating}
         setHeating={setHeating}
       />
-      <div style={{ display: "flex", margin: "3rem auto", width: "95%" }}>
+      <div style={{ display: "flex", margin: "3rem auto", width: "100%" }}>
         {isPaused ? (
           <Controller />
         ) : (
