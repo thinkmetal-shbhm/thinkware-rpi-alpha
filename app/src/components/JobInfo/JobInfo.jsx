@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
 import { pausePrint, resumePrint, stopPrint } from "../../printerUtils";
+import { socket } from "../../socket";
 
 function JobInfo({
   isPaused,
@@ -17,7 +18,20 @@ function JobInfo({
   const [percent, setPercent] = useState("");
   const [extPercent, setExtPercent] = useState("10%");
   const [bedPercent, setBedPercent] = useState("20%");
-  const [fileName, setFileName] = useState();
+  const [fileName, setFileName] = useState("Untitled");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const file = localStorage.getItem("current_files");
+      if (file) {
+        setFileName(file);
+        clearInterval(interval);
+      }
+    }, 300);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
@@ -26,19 +40,23 @@ function JobInfo({
         if (progress.currentTime) {
           const tt = +progress.totalETA;
           const ct = progress.currentTime;
-          const minutes = +ct.split("m")[0];
-          const seconds = +ct
-            .slice(ct.indexOf("m") + 1, ct.indexOf("s"))
-            .trim();
+          const minutes = +ct.split("m")[0] || 0;
+          const seconds =
+            +ct.slice(ct.indexOf("m") + 1, ct.indexOf("s")).trim() || 0;
 
-          const value = ((minutes * 60 + seconds) / tt) * 100;
+          const value = ((minutes * 60 + seconds) / tt) * 100 || 0;
 
           setPercent(`${Math.floor(value)}%`);
-          setEstimatedEnd(`${tt}s`);
-          setRemainingTime(`${tt - minutes * 60 + seconds}s`);
+          setEstimatedEnd(tt == 0 && isNaN(tt) ? "Unknown" : `${tt}s`);
+          setRemainingTime(
+            tt == 0 && isNaN(tt) ? "Unknown" : `${tt - minutes * 60 + seconds}s`
+          );
         }
 
         setIsPaused(progress.paused);
+        if (progress.finished || progress.stopped) {
+          setFileName(null);
+        }
         console.log(
           "🚀 ~ file: JobInfo.jsx:48 ~ useEffect ~ progress:",
           progress
@@ -46,11 +64,8 @@ function JobInfo({
       }
     } else {
       setHeating(false);
+      socket.emit("heated", "done");
     }
-    const file_LSlength = localStorage?.getItem("current_files")?.files.length;
-    const filename_LS =
-      localStorage.getItem("current_files")?.files[file_LSlength - 1];
-    if (filename_LS) setFileName(JSON.parse(filename_LS));
   }, [progress]);
 
   useEffect(() => {
@@ -69,7 +84,7 @@ function JobInfo({
 
   return (
     <>
-      {fileName ? (
+      {!progress?.stopped || fileName ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
@@ -89,6 +104,7 @@ function JobInfo({
                   ></div>
                 </div>
               </div>
+
               <div className={styles.actions}>
                 <button
                   disabled={!prog}

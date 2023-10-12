@@ -10,7 +10,6 @@
   margin-bottom: 2rem;
 }
 .job {
-
   width: 60%;
 }
 .fileAndProgress {
@@ -24,16 +23,14 @@
 }
 .heading3 {
   font-size: 1rem;
-font-weight: 400;
-letter-spacing: 1px;
-
+  font-weight: 400;
+  letter-spacing: 1px;
 }
-.child_JobInfo{
+.child_JobInfo {
   display: flex;
 }
-.jobConsole{
+.jobConsole {
   display: flex;
-
 }
 .heading4 {
   font-size: var(--fs-medium);
@@ -46,7 +43,7 @@ letter-spacing: 1px;
   justify-content: space-between;
 }
 .actions {
-  /* display: flex; */
+  display: flex;
   justify-content: space-between;
   margin: auto 0;
   font-size: var(--fs-small);
@@ -112,23 +109,20 @@ p {
   border-radius: 50%;
   background-color: black;
 }
-.noJobRunning{
+.noJobRunning {
   width: 96%;
   margin: 1rem auto;
   height: 10vh;
-text-align: center;
-display: flex;
-align-items: center;
-justify-content: center;
-border: 1px solid white;
-border-radius: 0.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  border-radius: 0.5rem;
 }
-.noJobRunning h3{
-font-weight: 400;
-
+.noJobRunning h3 {
+  font-weight: 400;
 }
-
-
 
 /* module 2 */
 .materialInfo {
@@ -214,7 +208,7 @@ font-weight: 400;
 }
 
 .barcontainer {
-  background: rgb(255,255,255);
+  background: rgb(255, 255, 255);
   /* background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 31%, rgba(200,200,200,1) 100%); */
   position: relative;
   transform: translateY(-50%);
@@ -229,8 +223,13 @@ font-weight: 400;
 }
 
 .barPercent {
-  background: rgb(255,240,61);
-  background: linear-gradient(0deg, rgba(255,240,61,1) 7%, rgba(172,255,61,1) 51%, rgba(0,255,34,1) 100%);
+  background: rgb(255, 240, 61);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 240, 61, 1) 7%,
+    rgba(172, 255, 61, 1) 51%,
+    rgba(0, 255, 34, 1) 100%
+  );
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -241,11 +240,8 @@ font-weight: 400;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
-
-
-
 .progress {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   justify-content: flex-start;
   border-radius: 100px;
   align-items: center;
@@ -265,6 +261,10 @@ font-weight: 400;
 }
 
 @keyframes load {
-  0% { width: 0; }
-  100% { width:var(--percent-done) }
+  0% {
+    width: 0;
+  }
+  100% {
+    width: var(--percent-done);
+  }
 }

@@ -1,3 +1,11 @@
+export function post(endpoint, body) {
+  return fetch(`http://localhost:4000/api/v1${endpoint}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : null,
+  });
+}
+
 export function waitForElm(selector) {
   return new Promise((resolve) => {
     if (document.querySelector(selector)) {

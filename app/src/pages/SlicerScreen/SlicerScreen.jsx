@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
-import { ObserveIFrame } from "../../utils";
+import { ObserveIFrame, post } from "../../utils";
 
 function SlicerScreen() {
   const [selectedElement, setSelectedElement] = useState(null);
@@ -12,58 +12,52 @@ function SlicerScreen() {
   const navigate = useNavigate();
 
   function clicked() {
+    const frameLS = document.querySelector("#frame").contentWindow.localStorage;
     console.log("gcode print btn clicked");
+
     setBtnClicked(true);
-    document
-      .querySelector("#frame")
-      .contentWindow.localStorage.removeItem("tw__gcode");
+    frameLS.removeItem("tw__gcode");
 
     setTimeout(() => {
       console.log({
-        data: document
-          .querySelector("#frame")
-          .contentWindow.localStorage.getItem("tw__gcode"),
+        data: frameLS.getItem("tw__gcode"),
       });
     }, 5000);
   }
 
   useEffect(() => {
+    let gcodeInterval = null;
+    let fileNameInterval = null;
     if (btnClicked) {
-      const gcodeInterval = setInterval(() => {
-        console.log(
-          "interval,",
-          document
-            .querySelector("#frame")
-            .contentWindow.localStorage.getItem("tw__gcode")
-            .split("\n")
-        );
-        if (
-          document
-            .querySelector("#frame")
-            .contentWindow.localStorage.getItem("tw__gcode")
-        ) {
-          localStorage.setItem(
-            "gcode",
-            document
-              .querySelector("#frame")
-              .contentWindow.localStorage.getItem("tw__gcode")
-          );
+      fileNameInterval = setInterval(() => {
+        const file = document
+          .querySelector("#frame")
+          .contentWindow?.localStorage.getItem("current_files");
+        if (file) {
+          localStorage.setItem("current_files", file);
+          clearInterval(fileNameInterval);
+        }
+      }, 300);
 
-          fetch("http://localhost:4000/api/v1/uploadGcodeArray", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              data: {
-                name: "name",
-                gcode: document
-                  .querySelector("#frame")
-                  .contentWindow.localStorage.getItem("tw__gcode"),
-              },
-            }),
+      gcodeInterval = setInterval(() => {
+        const gcodeLS = document
+          .querySelector("#frame")
+          .contentWindow.localStorage.getItem("tw__gcode");
+        console.log("interval,", gcodeLS.split("\n"));
+
+        if (gcodeLS) {
+          localStorage.setItem("gcode", gcodeLS);
+
+          post("/uploadGcodeArray", {
+            data: {
+              name: "name",
+              gcode: document
+                .querySelector("#frame")
+                .contentWindow.localStorage.getItem("tw__gcode"),
+            },
           })
             .then((res) => res.json())
             .then((resp) => {
-              console.log(resp);
               if (resp.message === "ok") {
                 navigate("/job", {
                   state: {
@@ -77,6 +71,11 @@ function SlicerScreen() {
         clearInterval(gcodeInterval);
       }, 300);
     }
+
+    return () => {
+      clearInterval(gcodeInterval);
+      clearInterval(fileNameInterval);
+    };
   }, [btnClicked]);
 
   useEffect(() => {
