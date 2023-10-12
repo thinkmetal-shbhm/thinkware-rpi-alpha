@@ -69,7 +69,7 @@ function JobScreen() {
         heating={heating}
         setHeating={setHeating}
       />
-      <div style={{ display: "flex", margin: "3rem auto", width: "95%" }}>
+      <div style={{ display: "flex", margin: "3rem auto", width: "100%" }}>
         {isPaused ? (
           <Controller />
         ) : (

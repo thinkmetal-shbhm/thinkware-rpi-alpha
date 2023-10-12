@@ -3,12 +3,14 @@
   display: flex;
   justify-content: space-between;
   padding: 0.25rem 0.1rem;
-  width: 100%;
+  width: 96%;
+  margin: 0.5rem auto;
   min-width: 500px;
-  padding: 1rem;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
 }
 .job {
-  display: flex;
+
   width: 60%;
 }
 .fileAndProgress {
@@ -21,12 +23,22 @@
   margin: 0 auto;
 }
 .heading3 {
-  font-size: var(--fs-medium-small);
-  margin: 0;
+  font-size: 1rem;
+font-weight: 400;
+letter-spacing: 1px;
+
+}
+.child_JobInfo{
+  display: flex;
+}
+.jobConsole{
+  display: flex;
+
 }
 .heading4 {
   font-size: var(--fs-medium);
   margin: 0;
+  margin-bottom: 0.5rem;
 }
 .fileName {
   margin: 0.5rem 0;
@@ -34,7 +46,7 @@
   justify-content: space-between;
 }
 .actions {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
   margin: auto 0;
   font-size: var(--fs-small);
@@ -44,6 +56,7 @@
   display: flex;
   justify-content: space-between;
   min-width: 310px;
+  align-items: center;
 }
 p {
   margin: 0;
@@ -99,6 +112,25 @@ p {
   border-radius: 50%;
   background-color: black;
 }
+.noJobRunning{
+  width: 96%;
+  margin: 1rem auto;
+  height: 10vh;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid white;
+border-radius: 0.5rem;
+}
+.noJobRunning h3{
+font-weight: 400;
+
+}
+
+
+
+/* module 2 */
 .materialInfo {
   display: flex;
   width: 96%;
@@ -178,11 +210,12 @@ p {
   position: relative;
   /* margin:3rem auto; */
   margin-top: 0.55rem;
+  border-radius: 0.25rem;
 }
 
 .barcontainer {
-  /* background-color: #181818; */
-  background-color: #d9d9d9;
+  background: rgb(255,255,255);
+  /* background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 31%, rgba(200,200,200,1) 100%); */
   position: relative;
   transform: translateY(-50%);
   top: 50%;
@@ -195,8 +228,9 @@ p {
   /* border darken(#98AFC7, 40%) 3px solid */
 }
 
-.barExtruder {
-  background-color: rgb(0, 195, 0);
+.barPercent {
+  background: rgb(255,240,61);
+  background: linear-gradient(0deg, rgba(255,240,61,1) 7%, rgba(172,255,61,1) 51%, rgba(0,255,34,1) 100%);
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -206,14 +240,31 @@ p {
   transform-origin: bottom;
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
 }
-.barBed {
-  background-color: #fbff3d;
-  position: absolute;
-  bottom: 0;
+
+
+
+
+.progress {
+  background: rgba(255,255,255,0.1);
+  justify-content: flex-start;
+  border-radius: 100px;
+  align-items: center;
+  position: relative;
+  display: flex;
+  height: 2vh;
   width: 100%;
-  height: 70%;
-  box-sizing: border-box;
-  animation: grow 1.5s ease-out forwards;
-  transform-origin: bottom;
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.progressvalue {
+  animation: load 3s normal forwards;
+  box-shadow: 0 10px 40px -10px #fff;
+  border-radius: 100px;
+  background: #fff;
+  height: 2vh;
+  width: 0;
+}
+
+@keyframes load {
+  0% { width: 0; }
+  100% { width:var(--percent-done) }
 }

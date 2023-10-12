@@ -15,8 +15,9 @@ function JobInfo({
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
   const [remainingTime, setRemainingTime] = useState("Unknown");
   const [percent, setPercent] = useState("");
-  const [extPercent, setExtPercent] = useState("100%");
-  const [bedPercent, setBedPercent] = useState("70%");
+  const [extPercent, setExtPercent] = useState("10%");
+  const [bedPercent, setBedPercent] = useState("20%");
+  const [fileName, setFileName] = useState();
 
   useEffect(() => {
     console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
@@ -46,6 +47,10 @@ function JobInfo({
     } else {
       setHeating(false);
     }
+    const file_LSlength = localStorage?.getItem("current_files")?.files.length;
+    const filename_LS =
+      localStorage.getItem("current_files")?.files[file_LSlength - 1];
+    if (filename_LS) setFileName(JSON.parse(filename_LS));
   }, [progress]);
 
   useEffect(() => {
@@ -64,99 +69,114 @@ function JobInfo({
 
   return (
     <>
-      <section className={styles.mainJobInfo}>
-        <div className={styles.job}>
-          <div className={styles.fileAndProgress}>
+      {fileName ? (
+        <section className={styles.mainJobInfo}>
+          <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
-            <div>
-              <h4 className={`${styles.fileName} ${styles.heading4}`}>
-                cube.stl<span>{heating ? "Heating..." : percent}</span>
-              </h4>
+            <div className={styles.jobConsole}>
+              <div className={styles.fileAndProgress}>
+                <div>
+                  <h4 className={`${styles.fileName} ${styles.heading4}`}>
+                    {fileName}
+                    <span>{heating ? "Heating..." : percent}</span>
+                  </h4>
+                </div>
+
+                <div className={styles.progress}>
+                  <div
+                    className={styles.progressvalue}
+                    style={{ "--percent-done": `${percent}%` }}
+                  ></div>
+                </div>
+              </div>
+              <div className={styles.actions}>
+                <button
+                  disabled={!prog}
+                  className={styles.btn}
+                  onClick={async () => {
+                    if (isPaused) {
+                      const resp = await resumePrint();
+                      console.log(resp);
+                    } else {
+                      const resp = await pausePrint();
+                      console.log(resp);
+                    }
+                  }}
+                >
+                  {!isPaused ? (
+                    <React.Fragment>
+                      <img
+                        style={{
+                          opacity: prog ? "1" : "0.4",
+                        }}
+                        className={styles.pauseIcon}
+                        src={pauseIcon}
+                        alt="pause icon"
+                      />
+                      <p>Pause</p>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <img
+                        style={{
+                          opacity: prog ? "1" : "0.4",
+                        }}
+                        className={styles.pauseIcon}
+                        src={playIcon}
+                        alt="play icon"
+                      />
+                      <p>Play</p>
+                    </React.Fragment>
+                  )}
+                </button>
+                <button
+                  disabled={!prog}
+                  className={styles.btn}
+                  onClick={async () => {
+                    const res = await stopPrint();
+
+                    if (res.status == 200) {
+                      console.log(res);
+                      setPercent("");
+                      setRemainingTime("Unknown");
+                      setEstimatedEnd("Unknown");
+                    }
+                  }}
+                >
+                  <img
+                    style={{
+                      opacity: prog ? "1" : "0.4",
+                    }}
+                    className={styles.crossIcon}
+                    src={crossIcon}
+                    alt="cancel icon"
+                  />
+                  <p>Cancel</p>
+                </button>
+              </div>
             </div>
-            <div className={styles.progressBar}></div>
           </div>
 
-          <div className={styles.actions}>
-            <button
-              disabled={!prog}
-              className={styles.btn}
-              onClick={async () => {
-                if (isPaused) {
-                  const resp = await resumePrint();
-                  console.log(resp);
-                } else {
-                  const resp = await pausePrint();
-                  console.log(resp);
-                }
-              }}
-            >
-              {!isPaused ? (
-                <React.Fragment>
-                  <img
-                    style={{
-                      opacity: prog ? "1" : "0.4",
-                    }}
-                    className={styles.pauseIcon}
-                    src={pauseIcon}
-                    alt="pause icon"
-                  />
-                  <p>Pause</p>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <img
-                    style={{
-                      opacity: prog ? "1" : "0.4",
-                    }}
-                    className={styles.pauseIcon}
-                    src={playIcon}
-                    alt="play icon"
-                  />
-                  <p>Play</p>
-                </React.Fragment>
-              )}
-            </button>
-            <button
-              disabled={!prog}
-              className={styles.btn}
-              onClick={async () => {
-                const res = await stopPrint();
+          <div className={styles.remainingInfo}>
+            <div className={styles.time}>
+              <h3 className={styles.heading3}>TIME</h3>
+              <h4 className={styles.heading4}>
+                Remaining Time: {`${remainingTime}`}
+              </h4>
+              <p>Estimated time: {estimatedEnd}</p>
+            </div>
 
-                if (res.status == 200) {
-                  console.log(res);
-                  setPercent("");
-                  setRemainingTime("Unknown");
-                  setEstimatedEnd("Unknown");
-                }
-              }}
-            >
-              <img
-                style={{
-                  opacity: prog ? "1" : "0.4",
-                }}
-                className={styles.crossIcon}
-                src={crossIcon}
-                alt="cancel icon"
-              />
-              <p>Cancel</p>
-            </button>
+            <div className={styles.circleContainer}>
+              <div className={styles.circle}></div>
+              <div className={styles.circleInside}></div>
+            </div>
           </div>
+        </section>
+      ) : (
+        <div className={styles.noJobRunning}>
+          <h3>No Job Running!</h3>
         </div>
-
-        <div className={styles.remainingInfo}>
-          <div className={styles.time}>
-            <h3 className={styles.heading3}>TIME</h3>
-            <h4 className={styles.heading4}>
-              Remaining Time: {`${remainingTime}`}
-            </h4>
-            <p>Estimated time: {estimatedEnd}</p>
-          </div>
-          <div className={styles.circleContainer}>
-            <div className={styles.circle}></div>
-            <div className={styles.circleInside}></div>
-          </div>
-        </div>
-      </section>
+      )}
 
       <section className={styles.materialInfo}>
         <div className={styles.presetChild}>
@@ -189,7 +209,7 @@ function JobInfo({
               <div className={styles.container}>
                 <div className={styles.barcontainer}>
                   <div
-                    className={styles.barExtruder}
+                    className={styles.barPercent}
                     style={{ height: extPercent }}
                   ></div>
                 </div>
@@ -201,7 +221,7 @@ function JobInfo({
               <div className={styles.container}>
                 <div className={styles.barcontainer}>
                   <div
-                    className={styles.barBed}
+                    className={styles.barPercent}
                     style={{ height: bedPercent }}
                   ></div>
                 </div>
