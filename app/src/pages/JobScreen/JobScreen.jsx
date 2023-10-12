@@ -50,7 +50,6 @@ function JobScreen() {
 
   useEffect(() => {
     if (location.state?.message === "fileUploaded") {
-      console.log(location.state.files);
       if (prog) setHeating(true);
     }
   }, [location.state?.message]);

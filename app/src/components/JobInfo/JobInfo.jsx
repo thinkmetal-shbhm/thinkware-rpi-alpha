@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
-import { pausePrint, resumePrint } from "../../printerUtils";
-import { socket } from "../../socket";
+import { pausePrint, resumePrint, stopPrint } from "../../printerUtils";
 
 function JobInfo({
   isPaused,
@@ -117,7 +116,20 @@ function JobInfo({
                 </React.Fragment>
               )}
             </button>
-            <button disabled={!prog} className={styles.btn} onClick={() => {}}>
+            <button
+              disabled={!prog}
+              className={styles.btn}
+              onClick={async () => {
+                const res = await stopPrint();
+
+                if (res.status == 200) {
+                  console.log(res);
+                  setPercent("");
+                  setRemainingTime("Unknown");
+                  setEstimatedEnd("Unknown");
+                }
+              }}
+            >
               <img
                 style={{
                   opacity: prog ? "1" : "0.4",

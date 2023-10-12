@@ -69,9 +69,6 @@ function SlicerScreen() {
                   state: {
                     id: 1,
                     message: "fileUploaded",
-                    files: document
-                      .querySelector("#frame")
-                      .contentWindow.document.querySelector("#load-file").files,
                   },
                 });
               }
@@ -163,8 +160,8 @@ function SlicerScreen() {
         }}
         autoFocus
         id="frame"
-        src="https://kiri.thinkmetal.co.in/kiri/"
-        // src="http://localhost:8100/kiri"
+        // src="https://kiri.thinkmetal.co.in/kiri/"
+        src="http://localhost:8100/kiri"
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>
