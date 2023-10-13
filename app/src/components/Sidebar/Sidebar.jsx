@@ -126,6 +126,7 @@ function Sidebar({user,setUser}) {
               <img
                 referrerPolicy="no-referrer"
                 src={user ? user?.photoURL : UserIcon}
+                style={user?{borderRadius:"50%"}:""}
                 alt=""
               />
               <h5>{user?.displayName.split(" ", 1)}</h5>
