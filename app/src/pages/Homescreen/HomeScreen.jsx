@@ -7,14 +7,14 @@ import ImportIcon from "../../assets/Icons/import.png";
 import { StlViewer } from "../../components/PartPreview/StlViewer.modern";
 import PartPreview from "../../components/PartPreview/PartPreview";
 
-function HomeScreen() {
+function HomeScreen({user,setUser}) {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
 
   const [volume, setvolume] = useState(0);
-
+  console.log("user",user);
   // Function to handle file input change
   function handleFileChange(event) {
     const file = event.target.files[0];
@@ -74,35 +74,15 @@ function HomeScreen() {
               <h5>Import Project</h5>
               <p>STL model</p>
             </div>
-            {/* <form id="fileUploadForm">
-              <label
-                htmlFor="fileUploadInp"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                }}
-              >
-                <input
-                  ref={inputRef}
-                  id="fileUploadInp"
-                  type="file"
-                  accept=".gcode,.stl"
-                  onInput={handleFileChange}
-                />
-              </label>
-            </form> */}
           </div>
         </div>
-      </div>
+      </div>{user?.displayName?<div>
       <h3 className={styles.heading}>Recent Items</h3>
       <div className={styles.recentItems}>
         <PartPreview url="./benchy.stl" name="benchy-1" />
         <PartPreview url="./cube.stl" name="cube-1" />
         <PartPreview url="./cube.stl" name="cube-2" />
-      </div>
+      </div></div>:""}
     </>
   );
 }

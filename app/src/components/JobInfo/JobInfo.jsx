@@ -18,7 +18,7 @@ function JobInfo({
   const [percent, setPercent] = useState("");
   const [extPercent, setExtPercent] = useState("10%");
   const [bedPercent, setBedPercent] = useState("20%");
-  const [fileName, setFileName] = useState("Untitled");
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -84,7 +84,9 @@ function JobInfo({
 
   return (
     <>
-      {!progress?.stopped || fileName ? (
+      {
+      //  !progress?.stopped || 
+      fileName ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>

@@ -14,9 +14,9 @@ import jwt_decode from "jwt-decode";
 import { auth, provider, signInwithGoogle } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
-function Sidebar() {
+function Sidebar({user,setUser}) {
   const [isConnected, setIsConnected] = useState(false);
-  const [user, setUser] = useState({});
+ 
 
   console.log("user", user);
   const signIn = () => {
@@ -40,7 +40,7 @@ function Sidebar() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        setUser({});
+        setUser();
         localStorage.setItem("user", JSON.stringify({}));
         console.log("userSignedout");
       })
@@ -109,7 +109,7 @@ function Sidebar() {
           >
             <img
               src={JobImage}
-              alt="dashboard"
+              alt="job"
               className={SidebarCSS.MenuImage}
             />
             <span className={SidebarCSS.MenuText}>Job</span>
