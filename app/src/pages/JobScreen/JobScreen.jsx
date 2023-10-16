@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { socket } from "../../socket";
 import { post } from "../../utils";
 
+import styles from "./JobScreen.module.css";
 function JobScreen() {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
@@ -120,7 +121,7 @@ function JobScreen() {
         setFileName={setFileName}
         setCreatedTime={setCreatedTime}
       />
-      <div style={{ display: "flex", margin: "3rem auto", width: "96%" }}>
+      <div className={styles.row}>
         {isPaused ? (
           <Controller />
         ) : (
