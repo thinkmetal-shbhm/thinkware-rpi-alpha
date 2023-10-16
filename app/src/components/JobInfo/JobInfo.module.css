@@ -110,7 +110,20 @@ p {
   border-radius: 50%;
   background-color: black;
 }
-
+.noJobRunning {
+  width: 96%;
+  margin: 1rem auto;
+  height: 10vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+}
+.noJobRunning h3 {
+  font-weight: 400;
+}
 
 /* module 2 */
 .materialInfo {
@@ -138,6 +151,7 @@ p {
 
 }
 .noJob h3{
+  font-weight: 400;
   letter-spacing: 1px;
 }
 .presetChild {

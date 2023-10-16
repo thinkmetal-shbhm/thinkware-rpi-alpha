@@ -111,7 +111,7 @@ function JobInfo({
 
   return (
     <>
-      
+      {heating || (!progress?.stopped && prog) ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
@@ -223,9 +223,9 @@ function JobInfo({
               <div className={styles.circleInside}></div>
             </div> */}
           </div>
-          {heating || (!progress?.stopped && prog) ? "":  
-          
-          <div className={styles.noJob}>
+        </section>
+      ) : (
+        <div className={styles.noJobRunning}>
           <h3>No Job Running!</h3>
           <button
             // disabled={!prog}
@@ -251,10 +251,8 @@ function JobInfo({
             />
             <p>Cancel</p>
           </button>
-        </div>}
-        </section>
-     
-     
+        </div>
+      )}
 {/* material info */}
 <section className={styles.materialInfo}>
 
