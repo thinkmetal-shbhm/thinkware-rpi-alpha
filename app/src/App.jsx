@@ -6,18 +6,13 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import { signInwithGoogle } from "./firebase";
 
 function App() {
-  const [user, setUser] = useState({});
-  const login = () => {
-    console.log("clicked login");
-setUser({"name":"Prashant"})
-console.log( localStorage.getItem("name"));
-     signInwithGoogle();
-  };
+  const [user, setUser] = useState();
+
   return (
    
       <div className="App">
-         <Sidebar />
-        <MainContent />
+         <Sidebar user={user} setUser={setUser}/>
+        <MainContent user={user} setUser={setUser}/>
   
       </div>
    

@@ -5,13 +5,22 @@ import JobScreen from "../../pages/JobScreen/JobScreen";
 import HomeScreen from "../../pages/Homescreen/HomeScreen";
 import SlicerScreen from "../../pages/SlicerScreen/SlicerScreen";
 
-function MainContent() {
+function MainContent({user,setUser}) {
   const [partName, setPartName] = useState("cube.stl");
-
+  
   return (
     <div className={MainContentCSS.ContentParent}>
       <Routes>
-        <Route path="/" element={<HomeScreen setPartName={setPartName} />} />
+        <Route
+          path="/"
+          element={
+            <HomeScreen
+              setPartName={setPartName}
+              user={user}
+              setUser={setUser}
+            />
+          }
+        />
         <Route path="/job" element={<JobScreen partName={partName} />} />
         <Route path="/prepare" element={<SlicerScreen />} />
       </Routes>
