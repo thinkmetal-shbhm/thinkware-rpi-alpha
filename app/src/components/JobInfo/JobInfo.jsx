@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
 import { pausePrint, resumePrint, stopPrint } from "../../printerUtils";
-import { socket } from "../../socket";
+import { secondsToDDHHMM } from "../../utils";
 
 function JobInfo({
   isPaused,
@@ -12,20 +12,25 @@ function JobInfo({
   setHeating,
   prog,
   temp,
+  fileName,
+  setFileName,
+  setCreatedTime,
 }) {
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
   const [remainingTime, setRemainingTime] = useState("Unknown");
   const [percent, setPercent] = useState("");
   const [extPercent, setExtPercent] = useState("10%");
   const [bedPercent, setBedPercent] = useState("20%");
-  const [fileName, setFileName] = useState("Untitled");
 
   useEffect(() => {
     const interval = setInterval(() => {
       const file = localStorage.getItem("current_files");
+
       if (file) {
         setFileName(file);
         clearInterval(interval);
+      } else {
+        setFileName(null);
       }
     }, 300);
     return () => {
@@ -34,10 +39,11 @@ function JobInfo({
   }, []);
 
   useEffect(() => {
-    console.log("🚀 ~ file: JobInfo.jsx:21 ~ useEffect ~ progress:", progress);
+    console.log("🚀 ~ file: JobInfo.jsx:42 ~ useEffect ~ progress:", progress);
     if (progress) {
       if (!(Object.keys(progress).length === 0)) {
         if (progress.currentTime) {
+          setHeating(false);
           const tt = +progress.totalETA;
           const ct = progress.currentTime;
           const minutes = +ct.split("m")[0] || 0;
@@ -45,11 +51,22 @@ function JobInfo({
             +ct.slice(ct.indexOf("m") + 1, ct.indexOf("s")).trim() || 0;
 
           const value = ((minutes * 60 + seconds) / tt) * 100 || 0;
+          const remaining = tt - (minutes * 60 + seconds);
 
           setPercent(`${Math.floor(value)}%`);
-          setEstimatedEnd(tt == 0 && isNaN(tt) ? "Unknown" : `${tt}s`);
+          setEstimatedEnd(
+            tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(tt)}`
+          );
           setRemainingTime(
-            tt == 0 && isNaN(tt) ? "Unknown" : `${tt - minutes * 60 + seconds}s`
+            tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(remaining)}`
+          );
+          console.log(
+            "🚀 ~ file: JobInfo.jsx:58 ~ useEffect ~ tt:",
+            tt,
+            ct,
+            minutes,
+            seconds,
+            value
           );
         }
 
@@ -58,13 +75,23 @@ function JobInfo({
           setFileName(null);
         }
         console.log(
-          "🚀 ~ file: JobInfo.jsx:48 ~ useEffect ~ progress:",
+          "🚀 ~ file: JobInfo.jsx:71 ~ useEffect ~ progress:",
           progress
         );
+        setCreatedTime(progress.createdTime);
+        console.log(progress.createdTime);
+      }
+
+      if (progress?.stopped) {
+        localStorage.removeItem("current_files");
+        localStorage.removeItem("plate_preview");
+        localStorage.removeItem("tw__gcode");
       }
     } else {
       setHeating(false);
-      socket.emit("heated", "done");
+      // localStorage.removeItem("current_files");
+      // localStorage.removeItem("plate_preview");
+      // localStorage.removeItem("gcode");
     }
   }, [progress]);
 
@@ -84,25 +111,34 @@ function JobInfo({
 
   return (
     <>
-      {!progress?.stopped || fileName ? (
+      {heating || (!progress?.stopped && prog) ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
             <div className={styles.jobConsole}>
               <div className={styles.fileAndProgress}>
                 <div>
-                  <h4 className={`${styles.fileName} ${styles.heading4}`}>
-                    {fileName}
-                    <span>{heating ? "Heating..." : percent}</span>
+                  <h4
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                    className={`${styles.fileName} ${styles.heading4}`}
+                  >
+                    <span>{fileName}</span>
+                    <span style={{ margin: "auto", marginLeft: "1rem" }}>
+                      {heating ? "Heating..." : percent}
+                    </span>
                   </h4>
                 </div>
-
-                <div className={styles.progress}>
+                <progress
+                  className={styles.progress}
+                  max={100}
+                  value={percent.split("%")[0]}
+                ></progress>
+                {/* <div className={styles.progress}>
                   <div
                     className={styles.progressvalue}
                     style={{ "--percent-done": `${percent}%` }}
                   ></div>
-                </div>
+                </div> */}
               </div>
 
               <div className={styles.actions}>
@@ -182,15 +218,39 @@ function JobInfo({
               <p>Estimated time: {estimatedEnd}</p>
             </div>
 
-            <div className={styles.circleContainer}>
+            {/* <div className={styles.circleContainer}>
               <div className={styles.circle}></div>
               <div className={styles.circleInside}></div>
-            </div>
+            </div> */}
           </div>
         </section>
       ) : (
         <div className={styles.noJobRunning}>
           <h3>No Job Running!</h3>
+          <button
+            // disabled={!prog}
+            className={styles.btn}
+            onClick={async () => {
+              const res = await stopPrint();
+
+              if (res.status == 200) {
+                console.log(res);
+                setPercent("");
+                setRemainingTime("Unknown");
+                setEstimatedEnd("Unknown");
+              }
+            }}
+          >
+            <img
+              style={{
+                opacity: prog ? "1" : "0.4",
+              }}
+              className={styles.crossIcon}
+              src={crossIcon}
+              alt="cancel icon"
+            />
+            <p>Cancel</p>
+          </button>
         </div>
       )}
 

@@ -66,3 +66,21 @@ export function ObserveIFrame(sel, opt, cb) {
 // To watch for all attributes changes, instead of the attributesList Array use :
 
 // attributes: true
+
+export function secondsToDDHHMM(seconds) {
+  // Calculate the number of days, hours, and minutes
+  let minutes = Math.floor(seconds / 60);
+  seconds %= 60;
+  let hours = Math.floor(minutes / 60);
+  minutes %= 60;
+  const days = Math.floor(hours / 24);
+  hours %= 24;
+  let result;
+  if (days > 0) {
+    // Format the result as "DDd HHh MMm"
+    result = `${days}d ${hours}h ${minutes}m`;
+  } else {
+    result = `${hours}h ${minutes}m`;
+  }
+  return result;
+}

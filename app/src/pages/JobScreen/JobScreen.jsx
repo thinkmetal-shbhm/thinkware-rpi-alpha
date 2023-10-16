@@ -3,17 +3,26 @@ import JobInfo from "../../components/JobInfo/JobInfo";
 import Controller from "../../components/Controller/Controller";
 import CameraWindow from "../../components/CameraWindow/CameraWindow";
 import PartPreview from "../../components/PartPreview/PartPreview";
+
+import jobstyles from "../../components/PartPreview/PartPreview.module.css";
+
 import { useLocation } from "react-router-dom";
 import { socket } from "../../socket";
+import { post } from "../../utils";
 
 function JobScreen() {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
   const [prog, setProg] = useState(null);
+  const [fileName, setFileName] = useState(null);
 
   const [currentRes, setCurrentRes] = useState(null);
   const [temp, setTemp] = useState(null);
+
+  const [createdTime, setCreatedTime] = useState(null);
+
+  const [preview, setPreview] = useState(null);
 
   const location = useLocation();
 
@@ -27,20 +36,49 @@ function JobScreen() {
         setTemp(temp);
         setHeating(true);
         const W = currentRes.split("W:")[1];
-        if (W == "0") setHeating(false);
+        if (W == "0") {
+          setHeating(false);
+          socket.emit("heated", "done");
+        }
       }
+    } else {
+      setHeating(false);
     }
   }, [currentRes]);
 
   useEffect(() => {
-    const printerResponseSocket = (data) => setCurrentRes(data.data);
+    const printerResponseSocket = (data) => setCurrentRes(data);
     const progressSocket = (data) => {
-      setProgress(data.data.progress);
-      if (!data.data.progress) setHeating(false);
+      setProgress(JSON.parse(data).data.progress);
+      if (!JSON.parse(data).data.progress) setHeating(false);
     };
 
     socket.on("progress", progressSocket);
     socket.on("printerResponse", printerResponseSocket);
+
+    post("/progress")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
+        if (
+          res.data?.progress?.stopped ||
+          Object.keys(res.data?.progress ? res.data?.progress : {}).length === 0
+        ) {
+          // localStorage.removeItem("current_files");
+          // localStorage.removeItem("plate_preview");
+          // localStorage.removeItem("tw__gcode");
+        }
+      });
+    const previewInterval = setInterval(() => {
+      console.log("int");
+      const partLS = localStorage.getItem("plate_preview");
+
+      if (partLS) {
+        setPreview(partLS);
+        clearInterval(previewInterval);
+      }
+    }, 500);
 
     return () => {
       socket.off("progress", progressSocket);
@@ -49,9 +87,19 @@ function JobScreen() {
   }, []);
 
   useEffect(() => {
+    const printingStartedSocket = () => {
+      console.log("printingStarted");
+      setHeating(true);
+    };
     if (location.state?.message === "fileUploaded") {
-      if (prog) setHeating(true);
+      socket.on("printingStarted", printingStartedSocket);
+      setIsPaused(false);
     }
+    return () => {
+      setTimeout(() => {
+        socket.off("printingStarted", printingStartedSocket);
+      }, 30000);
+    };
   }, [location.state?.message]);
 
   useEffect(() => {
@@ -68,12 +116,37 @@ function JobScreen() {
         progress={progress}
         heating={heating}
         setHeating={setHeating}
+        fileName={fileName}
+        setFileName={setFileName}
+        setCreatedTime={setCreatedTime}
       />
-      <div style={{ display: "flex", margin: "3rem auto", width: "100%" }}>
+      <div style={{ display: "flex", margin: "3rem auto", width: "96%" }}>
         {isPaused ? (
           <Controller />
         ) : (
-          <PartPreview url="./benchy.stl" name="benchy-3" CSSclass />
+          <div
+            className={jobstyles.jobPreviewCard}
+            style={{ textAlign: "center" }}
+          >
+            <div className={jobstyles.previewContainer}>
+              <img
+                className={jobstyles.previewImg}
+                src={preview}
+                alt="preview"
+                width={"100%"}
+                // height={"100%"}
+              />
+            </div>
+            <div className={jobstyles.jobPreviewInfo}>
+              <h3 style={{ textAlign: "center" }}>
+                {fileName ? fileName.split(".")[0] : `${name}`}
+              </h3>
+              <span>
+                Created at:{" "}
+                {createdTime ? Date(createdTime).toLocaleString() : "Unknown"}
+              </span>
+            </div>
+          </div>
         )}
         <CameraWindow />
       </div>
