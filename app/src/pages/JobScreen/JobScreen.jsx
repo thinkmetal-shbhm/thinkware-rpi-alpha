@@ -10,7 +10,9 @@ import { useLocation } from "react-router-dom";
 import { socket } from "../../socket";
 import { get, post } from "../../utils";
 
-function JobScreen() {
+import styles from "./JobScreen.module.css";
+
+function JobScreen({ setIsConnected }) {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
