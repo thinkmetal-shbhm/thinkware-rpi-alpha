@@ -18,8 +18,10 @@
   --black: #000;
   --content-bg: #242424;
   --border-blue: #345d7182;
+  --dark-blue:#18313d;
   /* --highlight: #485563; */
   --highlight:#345d7182;
+  --highlight-base:#345d71;
   --green: rgba(67, 226, 131, 0.831);
   --gray: #373737;
   --true-gray:#808080;

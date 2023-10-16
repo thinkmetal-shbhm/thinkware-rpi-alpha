@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 import { socket } from "../../socket";
 import { get, post } from "../../utils";
 
-function JobScreen({ setIsConnected }) {
+function JobScreen() {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
@@ -79,7 +79,7 @@ function JobScreen({ setIsConnected }) {
         }
       });
     const previewInterval = setInterval(() => {
-      console.log("int");
+      // console.log("int");
       const partLS = localStorage.getItem("plate_preview");
 
       if (partLS) {
@@ -136,7 +136,7 @@ function JobScreen({ setIsConnected }) {
         setFileName={setFileName}
         setCreatedTime={setCreatedTime}
       />
-      <div style={{ display: "flex", margin: "3rem auto", width: "96%" }}>
+      <div className={styles.row}>
         {isPaused ? (
           <Controller />
         ) : (

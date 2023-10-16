@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./CameraWindow.module.css";
 import { socket } from "../../socket";
 import { cameraIcon } from "../../assets/Icons";
-
+import fullScreenIcon from "../../assets/Icons/fullscreen.png";
 function CameraWindow() {
   const [video, setVideo] = useState(false);
-
+  const [fullScreen,setFullScreen]=useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -52,12 +52,23 @@ function CameraWindow() {
   }, []);
 
   return (
-    <div className={styles.mainWindow}>
-      <div className={styles.imgContainer}>
+    <div className={fullScreen?styles.fullScreen__parent:styles.parent}>
+    <div
+     className={
+      fullScreen?styles.mainWindow__fullscreen:
+      styles.mainWindow}
+     >
+      <div 
+       className={
+        fullScreen?styles.imgContainer__fullscreen:
+        styles.imgContainer}
+      >
         {video ? (
-          <img id="camFeed" className={styles.camFeed} src="" ref={videoRef} />
+          <img id="camFeed" className={fullScreen?styles.camFeed__fullscreen:styles.camFeed} src="" ref={videoRef} />
         ) : (
-          <div ref={videoRef}>
+          <div ref={videoRef} 
+           className={fullScreen?styles.camIcon__fullscreen:""}
+          >
             <img
               src={cameraIcon}
               alt="cameraIcon"
@@ -66,7 +77,9 @@ function CameraWindow() {
           </div>
         )}
       </div>
-      <div className={styles.options}>
+      <div className={
+       fullScreen?styles.options__fullscreen:
+        styles.options}>
         <span
           onClick={(e) => {
             if (video) {
@@ -81,7 +94,11 @@ function CameraWindow() {
         >
           <img src={cameraIcon} alt="cameraIcon" className={styles.cameraBtn} />
         </span>
+        <span onClick={()=>{setFullScreen(!fullScreen) }} style={{ cursor: "pointer", padding: "0 0.5rem", height: "100%" }} >
+          <img src={fullScreenIcon} alt="fullScreen" className={styles.cameraBtn} />
+        </span>
       </div>
+    </div>
     </div>
   );
 }

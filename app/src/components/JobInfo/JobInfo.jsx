@@ -255,8 +255,9 @@ function JobInfo({
           </button>
         </div>
       )}
+{/* material info */}
+<section className={styles.materialInfo}>
 
-      <section className={styles.materialInfo}>
         <div className={styles.presetChild}>
           <div className={styles.presetItem}>
             <span>LAYER HEIGHT</span>
@@ -307,8 +308,18 @@ function JobInfo({
             </div>
           </div>
         </div>
+        {heating || (!progress?.stopped && prog) ? 
+""
+    :
+ 
+
+    
+
+<div className={styles.noJob}> <h3>No Job Running!</h3></div>
+}
       </section>
-    </>
+
+</>
   );
 }
 
