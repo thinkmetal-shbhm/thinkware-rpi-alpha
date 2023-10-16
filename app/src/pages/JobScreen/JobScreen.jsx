@@ -72,7 +72,7 @@ function JobScreen() {
         }
       });
     const previewInterval = setInterval(() => {
-      console.log("int");
+      // console.log("int");
       const partLS = localStorage.getItem("plate_preview");
 
       if (partLS) {

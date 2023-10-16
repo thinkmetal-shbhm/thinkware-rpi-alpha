@@ -1,5 +1,7 @@
 .row{
     display: flex;
-    width: 95%;
+    width: 96%;
     height: 40vh;
+    margin-top: 3rem;
+    justify-content: space-between;
 }
