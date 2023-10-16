@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
-import { ObserveIFrame, post } from "../../utils";
+import { ObserveIFrame, get, post } from "../../utils";
 
-function SlicerScreen() {
+function SlicerScreen({ setIsConnected }) {
   const [selectedElement, setSelectedElement] = useState(null);
   const [kiriLS, setKiriLS] = useState(null);
   const [printBtn, setPrintBtn] = useState(null);
@@ -18,6 +18,16 @@ function SlicerScreen() {
     setBtnClicked(true);
     kiriLS.removeItem("tw__gcode");
   }
+
+  useEffect(() => {
+    get("/connectionStatus")
+      .then((res) => res.json())
+      .then((res) =>
+        res.message === "printer connection found"
+          ? setIsConnected(true)
+          : setIsConnected(false)
+      );
+  }, []);
 
   useEffect(() => {
     let gcodeInterval = null;
@@ -56,7 +66,7 @@ function SlicerScreen() {
         if (gcodeLS) {
           localStorage.setItem("gcode", gcodeLS);
 
-          post("/uploadGcodeArray", {
+          post("/fileUpload/uploadGcodeArray", {
             data: {
               name: "name",
               gcode: document

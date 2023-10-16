@@ -5,9 +5,9 @@ import JobScreen from "../../pages/JobScreen/JobScreen";
 import HomeScreen from "../../pages/Homescreen/HomeScreen";
 import SlicerScreen from "../../pages/SlicerScreen/SlicerScreen";
 
-function MainContent({user,setUser}) {
+function MainContent({ user, setUser, setIsconnected }) {
   const [partName, setPartName] = useState("cube.stl");
-  
+
   return (
     <div className={MainContentCSS.ContentParent}>
       <Routes>
@@ -18,11 +18,20 @@ function MainContent({user,setUser}) {
               setPartName={setPartName}
               user={user}
               setUser={setUser}
+              setIsconnected={setIsconnected}
             />
           }
         />
-        <Route path="/job" element={<JobScreen partName={partName} />} />
-        <Route path="/prepare" element={<SlicerScreen />} />
+        <Route
+          path="/job"
+          element={
+            <JobScreen partName={partName} setIsconnected={setIsconnected} />
+          }
+        />
+        <Route
+          path="/prepare"
+          element={<SlicerScreen setIsconnected={setIsconnected} />}
+        />
       </Routes>
     </div>
   );

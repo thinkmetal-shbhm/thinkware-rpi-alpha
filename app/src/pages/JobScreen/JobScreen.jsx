@@ -8,9 +8,9 @@ import jobstyles from "../../components/PartPreview/PartPreview.module.css";
 
 import { useLocation } from "react-router-dom";
 import { socket } from "../../socket";
-import { post } from "../../utils";
+import { get, post } from "../../utils";
 
-function JobScreen() {
+function JobScreen({ setIsConnected }) {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
@@ -37,7 +37,13 @@ function JobScreen() {
         setHeating(true);
         const W = currentRes.split("W:")[1];
         if (W == "0") {
-          setHeating(false);
+          post("/heated", { message: "heated" })
+            .then((res) => res.json())
+            .then((res) => {
+              if (res.message === "heated") {
+                setHeating(false);
+              }
+            });
           socket.emit("heated", "done");
         }
       }
@@ -55,7 +61,9 @@ function JobScreen() {
 
     socket.on("progress", progressSocket);
     socket.on("printerResponse", printerResponseSocket);
-
+    get("/connectionStatus").then((res) => {
+      if (res.message === "connected");
+    });
     post("/progress")
       .then((res) => res.json())
       .then((res) => {
@@ -79,6 +87,14 @@ function JobScreen() {
         clearInterval(previewInterval);
       }
     }, 500);
+
+    get("/connectionStatus")
+      .then((res) => res.json())
+      .then((res) =>
+        res.message === "printer connection found"
+          ? setIsConnected(true)
+          : setIsConnected(false)
+      );
 
     return () => {
       socket.off("progress", progressSocket);

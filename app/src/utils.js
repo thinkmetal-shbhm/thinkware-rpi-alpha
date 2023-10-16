@@ -1,3 +1,6 @@
+export function get(endpoint) {
+  return fetch(`http://localhost:4000/api/v1${endpoint}`);
+}
 export function post(endpoint, body) {
   return fetch(`http://localhost:4000/api/v1${endpoint}`, {
     method: "POST",

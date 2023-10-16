@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomeScreen.module.css";
 import ImportIcon from "../../assets/Icons/import.png";
@@ -6,15 +6,27 @@ import ImportIcon from "../../assets/Icons/import.png";
 // import PartPreview from "../../components/PartPreview/PartPreview";
 import { StlViewer } from "../../components/PartPreview/StlViewer.modern";
 import PartPreview from "../../components/PartPreview/PartPreview";
+import { get, post } from "../../utils";
 
-function HomeScreen({user,setUser}) {
+function HomeScreen({ user, setUser, setIsConnected }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
 
   const [volume, setvolume] = useState(0);
-  console.log("user",user);
+  console.log("user", user);
+
+  useEffect(() => {
+    get("/connectionStatus")
+      .then((res) => res.json())
+      .then((res) =>
+        res.message === "printer connection found"
+          ? setIsConnected(true)
+          : setIsConnected(false)
+      );
+  }, []);
+
   // Function to handle file input change
   function handleFileChange(event) {
     const file = event.target.files[0];
@@ -36,10 +48,7 @@ function HomeScreen({user,setUser}) {
       formData.append("fileToUpload", selectedFile);
 
       // Send the file to your backend endpoint using fetch or axios
-      fetch("http://localhost:4000/api/v1/uploadGcodeFile", {
-        method: "POST",
-        body: formData,
-      })
+      post("http://localhost:4000/api/v1/fileUpload/uploadGcodeFile", formData)
         .then((response) => response.json())
         .then((data) => {
           // Handle the response from the server
@@ -76,13 +85,19 @@ function HomeScreen({user,setUser}) {
             </div>
           </div>
         </div>
-      </div>{user?.displayName?<div>
-      <h3 className={styles.heading}>Recent Items</h3>
-      <div className={styles.recentItems}>
-        <PartPreview url="./benchy.stl" name="benchy-1" />
-        <PartPreview url="./cube.stl" name="cube-1" />
-        <PartPreview url="./cube.stl" name="cube-2" />
-      </div></div>:""}
+      </div>
+      {user?.displayName ? (
+        <div>
+          <h3 className={styles.heading}>Recent Items</h3>
+          <div className={styles.recentItems}>
+            <PartPreview url="./benchy.stl" name="benchy-1" />
+            <PartPreview url="./cube.stl" name="cube-1" />
+            <PartPreview url="./cube.stl" name="cube-2" />
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 }

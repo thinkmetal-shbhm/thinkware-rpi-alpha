@@ -123,8 +123,10 @@ function JobInfo({
                     className={`${styles.fileName} ${styles.heading4}`}
                   >
                     <span>{fileName}</span>
-                    <span style={{ margin: "auto", marginLeft: "1rem" }}>
-                      {heating ? "Heating..." : percent}
+                    <span style={{ margin: "auto", textAlign: "end" }}>
+                      <span style={{ marginLeft: "auto" }}>
+                        {heating ? "Heating..." : percent}
+                      </span>
                     </span>
                   </h4>
                 </div>

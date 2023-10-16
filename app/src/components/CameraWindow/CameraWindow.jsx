@@ -4,7 +4,6 @@ import { socket } from "../../socket";
 import { cameraIcon } from "../../assets/Icons";
 
 function CameraWindow() {
-  const [connectionStatus, setConnectionStatus] = useState("notConnected");
   const [video, setVideo] = useState(false);
 
   const videoRef = useRef(null);
@@ -13,17 +12,6 @@ function CameraWindow() {
     if (!video)
       console.log((videoRef.current.src = ""), "-------------------------");
   }, [video]);
-
-  useEffect(() => {
-    if (connectionStatus === "notConnected") {
-      fetch("http://localhost:4000/api/v1/connected")
-        .then((res) => {
-          console.log(res);
-          if (+res.status === 200) setConnectionStatus("connected");
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
 
   useEffect(() => {
     function onConnect() {
