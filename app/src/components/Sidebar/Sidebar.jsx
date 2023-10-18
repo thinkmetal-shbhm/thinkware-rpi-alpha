@@ -16,7 +16,7 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { get } from "../../utils";
 
 function Sidebar({ user, setUser, isConnected, setIsConnected }) {
-  console.log("user", user);
+  // console.log("user", user);
   const signIn = () => {
     signInWithPopup(auth, provider)
       .then(({ user }) => {

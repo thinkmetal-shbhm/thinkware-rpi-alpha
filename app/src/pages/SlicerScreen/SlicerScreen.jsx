@@ -6,18 +6,11 @@ import { ObserveIFrame, get, post } from "../../utils";
 function SlicerScreen({ setIsConnected }) {
   const [selectedElement, setSelectedElement] = useState(null);
   const [kiriLS, setKiriLS] = useState(null);
-  const [printBtn, setPrintBtn] = useState(null);
+  const [ready, setReady] = useState(false);
   const [btnClicked, setBtnClicked] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  function clicked() {
-    console.log("gcode print btn clicked");
-
-    setBtnClicked(true);
-    kiriLS.removeItem("tw__gcode");
-  }
 
   useEffect(() => {
     get("/connectionStatus")
@@ -27,7 +20,31 @@ function SlicerScreen({ setIsConnected }) {
           ? setIsConnected(true)
           : setIsConnected(false)
       );
+    let temp = setInterval(() => {
+      document.querySelector("#frame").contentWindow.postMessage("check", "*");
+    }, 500);
+
+    window.addEventListener("message", (e) => {
+      console.log("receiver msg ---------------", e);
+      if (e.data == "ok") {
+        clearInterval(temp);
+        setReady(true);
+        setKiriLS(document.querySelector("#frame").contentWindow.localStorage);
+      } else if (e.data == "print") {
+        exportIntervals();
+      }
+    });
+    return () => {
+      clearInterval(temp);
+    };
   }, []);
+  useEffect(() => {
+    console.log(ready);
+    if (ready && location.state.message === "file-import") {
+      document.querySelector("#frame").contentWindow.postMessage("import", "*");
+      console.log("import file");
+    }
+  }, [ready]);
 
   useEffect(() => {
     let gcodeInterval = null;
@@ -118,21 +135,71 @@ function SlicerScreen({ setIsConnected }) {
     };
   }, [btnClicked]);
 
-  useEffect(() => {
-    if (printBtn)
-      document
-        .querySelector("#frame")
-        .contentWindow.document.querySelector("#act-export")
-        .addEventListener("click", clicked);
+  function exportIntervals() {
+    const fileNameInterval = setInterval(() => {
+      const file = kiriLS.getItem("current_files");
+      if (file) {
+        sessionStorage.setItem("current_files", file);
 
-    return () => {
-      // if (gcode)
-      //   document
-      //     .querySelector("#frame")
-      //     .contentWindow.document.querySelector("#act-export")
-      //     .removeEventListener("click", clicked);
-    };
-  }, [printBtn]);
+        post("/uploadPrintData/name", { name: file })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.message === "uploaded") kiriLS.removeItem("current_files");
+          });
+        clearInterval(fileNameInterval);
+      }
+    }, 300);
+
+    const previewInterval = setInterval(() => {
+      const partPreview = kiriLS.getItem("plate_preview");
+
+      if (partPreview) {
+        sessionStorage.setItem("plate_preview", partPreview);
+
+        post("/uploadPrintData/preview", { img: partPreview })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.message === "uploaded") kiriLS.removeItem("plate_preview");
+          });
+        clearInterval(previewInterval);
+      }
+    }, 300);
+
+    const gcodeInterval = setInterval(() => {
+      const gcodeLS = kiriLS.getItem("tw__gcode");
+      console.log("interval,", gcodeLS.split("\n"));
+
+      if (gcodeLS) {
+        sessionStorage.setItem("gcode", gcodeLS);
+
+        post("/fileUpload/uploadGcodeArray", {
+          data: {
+            name: "name",
+            gcode: document
+              .querySelector("#frame")
+              .contentWindow.localStorage.getItem("tw__gcode"),
+          },
+        })
+          .then((res) => res.json())
+          .then((resp) => {
+            setBtnClicked(false);
+            if (resp.message === "ok") {
+              kiriLS.removeItem("tw__gcode");
+              navigate("/job", {
+                state: {
+                  id: 1,
+                  message: "fileUploaded",
+                  createdTime: resp.createdTime,
+                },
+              });
+            } else {
+              alert(`Error: ${resp.message}`);
+            }
+          });
+      }
+      clearInterval(gcodeInterval);
+    }, 300);
+  }
 
   useEffect(() => {
     console.log(selectedElement);
@@ -148,10 +215,16 @@ function SlicerScreen({ setIsConnected }) {
 
           console.log(selectedElement);
           if (location.state?.message === "file-import")
-            document
-              .querySelector("iframe")
-              .contentWindow.document.querySelector("#context-clear-workspace")
-              .click();
+            // document
+            //   .querySelector("iframe")
+            //   .contentWindow.document.querySelector("#context-clear-workspace")
+            //   .click();
+            setTimeout(() => {
+              console.log("sent message");
+              document
+                .querySelector("iframe")
+                .contentWindow.postMessage("import", "*");
+            }, 3000);
 
           if (selectedElement) {
             selectedElement.click();
@@ -168,38 +241,6 @@ function SlicerScreen({ setIsConnected }) {
   return (
     <div className={styles.parent}>
       <iframe
-        onLoad={(e) => {
-          document.querySelector("#frame").focus();
-          setKiriLS(
-            document.querySelector("#frame").contentWindow?.localStorage
-          );
-          console.log("loaded");
-          console.log("location state", location.state);
-          if (location.state?.message === "file-import") {
-            console.log(
-              document
-                .querySelector("iframe")
-                .contentWindow.document.getElementById(
-                  "context-clear-workspace"
-                )
-            );
-            setSelectedElement(
-              document
-                .querySelector("iframe")
-                .contentWindow.document.getElementById(location.state.message)
-            );
-          } else setSelectedElement(null);
-
-          setPrintBtn(
-            document
-              .querySelector("#frame")
-              .contentWindow.document.querySelector("#act-export")
-          );
-        }}
-        onFocus={(e) => {
-          console.log("focused");
-          console.log(selectedElement);
-        }}
         autoFocus
         id="frame"
         // src="https://kiri.thinkmetal.co.in/kiri/"

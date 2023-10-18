@@ -15,7 +15,7 @@ function HomeScreen({ user, setUser, setIsConnected }) {
   const navigate = useNavigate();
 
   const [volume, setvolume] = useState(0);
-  console.log("user", user);
+  // console.log("user", user);
 
   useEffect(() => {
     get("/connectionStatus")
