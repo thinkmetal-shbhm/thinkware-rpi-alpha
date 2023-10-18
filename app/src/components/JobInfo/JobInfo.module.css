@@ -135,7 +135,7 @@ p {
   border-radius: 0.5rem;
   position: relative;
 }
-.noJob{
+.noJob {
   position: absolute;
   z-index: 999;
   left: 0;
@@ -148,9 +148,8 @@ p {
   align-items: center;
   border: 1px solid gray;
   border-radius: 0.5rem;
-
 }
-.noJob h3{
+.noJob h3 {
   font-weight: 400;
   letter-spacing: 1px;
 }
@@ -243,11 +242,17 @@ p {
 
 .barPercent {
   background: rgb(255, 240, 61);
-  background: linear-gradient(
+  /* background: linear-gradient(
     0deg,
     rgba(255, 240, 61, 1) 7%,
     rgba(172, 255, 61, 1) 51%,
     rgba(0, 255, 34, 1) 100%
+  ); */
+  background: linear-gradient(
+    0deg,
+    rgb(233 198 35) 7%,
+    rgb(203 190 24) 20%,
+    rgb(255 102 0) 100%
   );
   position: absolute;
   bottom: 0;

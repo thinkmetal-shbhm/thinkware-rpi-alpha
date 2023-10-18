@@ -28,48 +28,46 @@ function JobScreen({ setIsConnected }) {
 
   const location = useLocation();
 
-  useEffect(() => {
-    if (currentRes) {
-      if (currentRes.indexOf("T:") !== -1) {
-        const temp = currentRes.slice(
-          currentRes.indexOf("T:") + 2,
-          currentRes.indexOf("@:")
-        );
-        setTemp(temp);
-        setHeating(true);
-        const W = currentRes.split("W:")[1];
-        if (W == "0") {
-          post("/heated", { message: "heated" })
-            .then((res) => res.json())
-            .then((res) => {
-              if (res.message === "heated") {
-                setHeating(false);
-              }
-            });
-          socket.emit("heated", "done");
-        }
-      }
-    } else {
-      setHeating(false);
-    }
-  }, [currentRes]);
+  // useEffect(() => {
+  // if (currentRes) {
+  //   if (currentRes.indexOf("T:") !== -1) {
+  //     const temp = currentRes.slice(
+  //       currentRes.indexOf("T:") + 2,
+  //       currentRes.indexOf("@:")
+  //     );
+  //     setTemp(temp);
+  //     setHeating(true);
+  //     const W = currentRes.split("W:")[1];
+  //     if (W == "0") {
+  //       post("/heated", { message: "heated" })
+  //         .then((res) => res.json())
+  //         .then((res) => {
+  //           if (res.message === "heated") {
+  //             setHeating(false);
+  //           }
+  //         });
+  //       socket.emit("heated", "done");
+  //     }
+  //   }
+  // } else {
+  //   setHeating(false);
+  // }
+  // }, [currentRes]);
 
   useEffect(() => {
+    const tempSocket = (data) => setTemp(data);
     const printerResponseSocket = (data) => setCurrentRes(data);
     const progressSocket = (data) => {
-      setProgress(JSON.parse(data).data.progress);
-      if (!JSON.parse(data).data.progress) setHeating(false);
+      setProgress(JSON.parse(data).data?.progress);
     };
 
+    socket.on("tempReport", tempSocket);
     socket.on("progress", progressSocket);
     socket.on("printerResponse", printerResponseSocket);
-    get("/connectionStatus").then((res) => {
-      if (res.message === "connected");
-    });
-    post("/progress")
+
+    get("/progress")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
         if (
           res.data?.progress?.stopped ||
@@ -107,7 +105,7 @@ function JobScreen({ setIsConnected }) {
   useEffect(() => {
     const printingStartedSocket = () => {
       console.log("printingStarted");
-      setHeating(true);
+      // setHeating(true);
     };
     if (location.state?.message === "fileUploaded") {
       socket.on("printingStarted", printingStartedSocket);

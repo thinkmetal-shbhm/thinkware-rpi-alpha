@@ -43,7 +43,7 @@ function JobInfo({
     if (progress) {
       if (!(Object.keys(progress).length === 0)) {
         if (progress.currentTime) {
-          setHeating(false);
+          // setHeating(false);
           const tt = +progress.totalETA;
           const ct = progress.currentTime;
           const minutes = +ct.split("m")[0] || 0;
@@ -71,6 +71,12 @@ function JobInfo({
         }
 
         setIsPaused(progress.paused);
+        setHeating(progress.heating);
+        console.log(
+          "🚀 ~ file: JobInfo.jsx:75 ~ useEffect ~ progress.heating:",
+          progress.heating
+        );
+
         if (progress.finished || progress.stopped) {
           setFileName(null);
         }
@@ -88,7 +94,7 @@ function JobInfo({
         localStorage.removeItem("tw__gcode");
       }
     } else {
-      setHeating(false);
+      // setHeating(false);
       // localStorage.removeItem("current_files");
       // localStorage.removeItem("plate_preview");
       // localStorage.removeItem("gcode");
@@ -122,7 +128,7 @@ function JobInfo({
                     style={{ display: "flex", justifyContent: "space-between" }}
                     className={`${styles.fileName} ${styles.heading4}`}
                   >
-                    <span>{fileName}</span>
+                    <small style={{ marginRight: "0.5rem" }}>{fileName}</small>
                     <span style={{ margin: "auto", textAlign: "end" }}>
                       <span style={{ marginLeft: "auto" }}>
                         {heating ? "Heating..." : percent}
@@ -255,9 +261,8 @@ function JobInfo({
           </button>
         </div>
       )}
-{/* material info */}
-<section className={styles.materialInfo}>
-
+      {/* material info */}
+      <section className={styles.materialInfo}>
         <div className={styles.presetChild}>
           <div className={styles.presetItem}>
             <span>LAYER HEIGHT</span>
@@ -308,18 +313,16 @@ function JobInfo({
             </div>
           </div>
         </div>
-        {heating || (!progress?.stopped && prog) ? 
-""
-    :
- 
-
-    
-
-<div className={styles.noJob}> <h3>No Job Running!</h3></div>
-}
+        {heating || (!progress?.stopped && prog) ? (
+          ""
+        ) : (
+          <div className={styles.noJob}>
+            {" "}
+            <h3>No Job Running!</h3>
+          </div>
+        )}
       </section>
-
-</>
+    </>
   );
 }
 

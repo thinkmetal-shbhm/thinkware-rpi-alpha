@@ -45,7 +45,14 @@ function SlicerScreen({ setIsConnected }) {
       fileNameInterval = setInterval(() => {
         const file = kiriLS.getItem("current_files");
         if (file) {
-          localStorage.setItem("current_files", file);
+          sessionStorage.setItem("current_files", file);
+
+          post("/uploadPrintData/name", { name: file })
+            .then((res) => res.json())
+            .then((res) => {
+              if (res.message === "uploaded")
+                kiriLS.removeItem("current_files");
+            });
           clearInterval(fileNameInterval);
         }
       }, 300);
@@ -54,7 +61,14 @@ function SlicerScreen({ setIsConnected }) {
         const partPreview = kiriLS.getItem("plate_preview");
 
         if (partPreview) {
-          localStorage.setItem("plate_preview", partPreview);
+          sessionStorage.setItem("plate_preview", partPreview);
+
+          post("/uploadPrintData/preview", { img: partPreview })
+            .then((res) => res.json())
+            .then((res) => {
+              if (res.message === "uploaded")
+                kiriLS.removeItem("plate_preview");
+            });
           clearInterval(previewInterval);
         }
       }, 300);
@@ -64,7 +78,7 @@ function SlicerScreen({ setIsConnected }) {
         console.log("interval,", gcodeLS.split("\n"));
 
         if (gcodeLS) {
-          localStorage.setItem("gcode", gcodeLS);
+          sessionStorage.setItem("gcode", gcodeLS);
 
           post("/fileUpload/uploadGcodeArray", {
             data: {
@@ -78,6 +92,7 @@ function SlicerScreen({ setIsConnected }) {
             .then((resp) => {
               setBtnClicked(false);
               if (resp.message === "ok") {
+                kiriLS.removeItem("tw__gcode");
                 navigate("/job", {
                   state: {
                     id: 1,
