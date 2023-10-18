@@ -30,8 +30,45 @@ function SlicerScreen({ setIsConnected, backend }) {
         clearInterval(temp);
         setReady(true);
         setKiriLS(document.querySelector("#frame").contentWindow.localStorage);
-      } else if (e.data == "print") {
-        exportIntervals();
+      } else if (e.data?.gcode) {
+        post("/fileUpload/uploadGcodeArray", {
+          data: {
+            name: "name",
+            gcode: e.data?.gcode,
+          },
+        })
+          .then((res) => res.json())
+          .then((resp) => {
+            setBtnClicked(false);
+            if (resp.message === "ok") {
+              // kiriLS.removeItem("tw__gcode");
+              navigate("/job", {
+                state: {
+                  id: 1,
+                  message: "fileUploaded",
+                  createdTime: resp.createdTime,
+                },
+              });
+            } else {
+              alert(`Error: ${resp.message}`);
+            }
+          });
+      } else if (e.data?.plate_preview) {
+        post("/uploadPrintData/preview", { img: e.data?.plate_preview })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.message === "uploaded")
+              console.log("plate preview file uploaded", e.data?.plate_preview);
+            // kiriLS.removeItem("plate_preview");
+          });
+      } else if (e.data?.current_files) {
+        post("/uploadPrintData/name", { name: e.data?.current_files })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.message === "uploaded")
+              console.log("uploaded", e.data?.current_files);
+            //  kiriLS.removeItem("current_files");
+          });
       }
     });
     return () => {
