@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
 import { ObserveIFrame, get, post } from "../../utils";
 
-function SlicerScreen({ setIsConnected }) {
+function SlicerScreen({ setIsConnected, backend }) {
   const [selectedElement, setSelectedElement] = useState(null);
   const [kiriLS, setKiriLS] = useState(null);
   const [printBtn, setPrintBtn] = useState(null);
@@ -20,7 +20,7 @@ function SlicerScreen({ setIsConnected }) {
   }
 
   useEffect(() => {
-    get("/connectionStatus")
+    get(backend, "/connectionStatus")
       .then((res) => res.json())
       .then((res) =>
         res.message === "printer connection found"
@@ -47,7 +47,7 @@ function SlicerScreen({ setIsConnected }) {
         if (file) {
           sessionStorage.setItem("current_files", file);
 
-          post("/uploadPrintData/name", { name: file })
+          post(backend, "/uploadPrintData/name", { name: file })
             .then((res) => res.json())
             .then((res) => {
               if (res.message === "uploaded")
@@ -63,7 +63,7 @@ function SlicerScreen({ setIsConnected }) {
         if (partPreview) {
           sessionStorage.setItem("plate_preview", partPreview);
 
-          post("/uploadPrintData/preview", { img: partPreview })
+          post(backend, "/uploadPrintData/preview", { img: partPreview })
             .then((res) => res.json())
             .then((res) => {
               if (res.message === "uploaded")
@@ -80,7 +80,7 @@ function SlicerScreen({ setIsConnected }) {
         if (gcodeLS) {
           sessionStorage.setItem("gcode", gcodeLS);
 
-          post("/fileUpload/uploadGcodeArray", {
+          post(backend, "/fileUpload/uploadGcodeArray", {
             data: {
               name: "name",
               gcode: document

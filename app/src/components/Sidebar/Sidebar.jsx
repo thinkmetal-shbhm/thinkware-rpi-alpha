@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children, useRef } from "react";
 import SidebarCSS from "./Sidebar.module.css";
 import { NavLink } from "react-router-dom";
 import UserIcon from "../../assets/Icons/user.png";
@@ -15,7 +15,15 @@ import { auth, provider, signInwithGoogle } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { get } from "../../utils";
 
-function Sidebar({ user, setUser, isConnected, setIsConnected }) {
+function Sidebar({
+  user,
+  setUser,
+  isConnected,
+  setIsConnected,
+  backend,
+  setBackend,
+}) {
+  const inpRef = useRef(null);
   console.log("user", user);
   const signIn = () => {
     signInWithPopup(auth, provider)
@@ -44,9 +52,21 @@ function Sidebar({ user, setUser, isConnected, setIsConnected }) {
       })
       .catch((error) => {
         // An error happened.
-        console.log("error signing out");
+        console.log("error signing out:", error);
       });
   }
+
+  function connectionButtonHandler(e) {
+    console.log(e);
+
+    get(backend, "/connectionStatus")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.message === "printer connection found") setIsConnected(true);
+      });
+  }
+
+  useEffect(() => {}, [backend]);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -131,15 +151,7 @@ function Sidebar({ user, setUser, isConnected, setIsConnected }) {
                 onMouseLeave={(e) =>
                   (e.target.firstChild.style["box-shadow"] = "none")
                 }
-                onClick={(e) => {
-                  console.log(e.target);
-                  get("/connectionStatus")
-                    .then((res) => res.json())
-                    .then((res) => {
-                      if (res.message === "printer connection found")
-                        setIsConnected(true);
-                    });
-                }}
+                onClick={connectionButtonHandler}
               >
                 {isConnected ? (
                   <img
@@ -158,6 +170,25 @@ function Sidebar({ user, setUser, isConnected, setIsConnected }) {
                 )}
               </button>
             </div>
+            {!isConnected && (
+              <input
+                // value={backend}
+                ref={inpRef}
+                onChange={(e) => {
+                  setBackend("http://" + e.target.value + ".local:4000");
+                  inpRef.current.value = e.target.value;
+                  get(
+                    "http://" + e.target.value + ".local:4000",
+                    "/connectionStatus"
+                  )
+                    .then((res) => res.json())
+                    .then((res) => {
+                      if (res.message === "printer connection found")
+                        setIsConnected(true);
+                    });
+                }}
+              />
+            )}
             <button
               className={SidebarCSS.Logoutbtn}
               onClick={(e) => handleSignout(e)}

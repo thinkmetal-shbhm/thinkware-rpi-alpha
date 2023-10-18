@@ -12,7 +12,7 @@ import { get, post } from "../../utils";
 
 import styles from "./JobScreen.module.css";
 
-function JobScreen({ setIsConnected }) {
+function JobScreen({ setIsConnected, backend }) {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
@@ -65,7 +65,7 @@ function JobScreen({ setIsConnected }) {
     socket.on("progress", progressSocket);
     socket.on("printerResponse", printerResponseSocket);
 
-    get("/progress")
+    get(backend, "/progress")
       .then((res) => res.json())
       .then((res) => {
         console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
@@ -88,7 +88,7 @@ function JobScreen({ setIsConnected }) {
       }
     }, 500);
 
-    get("/connectionStatus")
+    get(backend, "/connectionStatus")
       .then((res) => res.json())
       .then((res) =>
         res.message === "printer connection found"
@@ -125,6 +125,7 @@ function JobScreen({ setIsConnected }) {
   return (
     <div style={{ width: "100%" }}>
       <JobInfo
+        backend={backend}
         temp={temp}
         prog={prog}
         isPaused={isPaused}

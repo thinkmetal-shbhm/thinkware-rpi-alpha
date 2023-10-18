@@ -3,39 +3,45 @@ import styles from "./Controller.module.css";
 import { move } from "../../printerUtils";
 import { homeIcon } from "../../assets/Icons";
 
-function Controller() {
+function Controller({ backend }) {
   return (
     <div className={styles.mainControllerContainer}>
       <h2 className={styles.heading2}>CONTROLS</h2>
       <div className={styles.controls}>
         <div className={styles.xy}>
           <div className={styles.controllerButtons}>
-            <XYBtns onClick={() => move("G1 Y1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 Y1", backend)} src={"InnerSector"}>
               +1
             </XYBtns>
-            <XYBtns onClick={() => move("G1 X1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 X1", backend)} src={"InnerSector"}>
               +1
             </XYBtns>
-            <XYBtns onClick={() => move("G1 Y-1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 Y-1", backend)} src={"InnerSector"}>
               -1
             </XYBtns>
-            <XYBtns onClick={() => move("G1 X-1")} src={"InnerSector"}>
+            <XYBtns onClick={() => move("G1 X-1", backend)} src={"InnerSector"}>
               -1
             </XYBtns>
-            <XYBtns onClick={() => move("G1 Y10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 Y10", backend)} src={"OuterSector"}>
               +10
             </XYBtns>
-            <XYBtns onClick={() => move("G1 X10")} src={"OuterSector"}>
+            <XYBtns onClick={() => move("G1 X10", backend)} src={"OuterSector"}>
               +10
             </XYBtns>
-            <XYBtns onClick={() => move("G1 Y-10")} src={"OuterSector"}>
+            <XYBtns
+              onClick={() => move("G1 Y-10", backend)}
+              src={"OuterSector"}
+            >
               -10
             </XYBtns>
-            <XYBtns onClick={() => move("G1 X-10")} src={"OuterSector"}>
+            <XYBtns
+              onClick={() => move("G1 X-10", backend)}
+              src={"OuterSector"}
+            >
               -10
             </XYBtns>
             <button
-              onClick={() => move("G90\nG28\nG29\nM500\nG91")}
+              onClick={() => move("G90\nG28\nG29\nM500\nG91", backend)}
               className={styles.btnXYHome}
             >
               <img src={homeIcon} />
@@ -44,30 +50,36 @@ function Controller() {
         </div>
         <div style={{ display: "flex" }}>
           <div className={styles.z}>
-            <button onClick={() => move("G1 Z-10")}>
+            <button onClick={() => move("G1 Z-10", backend)}>
               <span>↥</span>
               10
             </button>
-            <button onClick={() => move("G1 Z-1")}>
+            <button onClick={() => move("G1 Z-1", backend)}>
               <span>↥</span>1
             </button>
-            <button onClick={() => move("G28 Z")}>
+            <button onClick={() => move("G28 Z", backend)}>
               <img src={homeIcon} />
             </button>
-            <button onClick={() => move("G1 Z1")}>
+            <button onClick={() => move("G1 Z1", backend)}>
               <span>↧</span>1
             </button>
-            <button onClick={() => move("G1 Z10")}>
+            <button onClick={() => move("G1 Z10", backend)}>
               <span>↧</span>
               10
             </button>
           </div>
           <div className={styles.extruder}>
             <div className={styles.extruderBar}></div>
-            <button onClick={() => move("G1 E10")} className={styles.extrude}>
+            <button
+              onClick={() => move("G1 E10", backend)}
+              className={styles.extrude}
+            >
               ▲
             </button>
-            <button onClick={() => move("G1 E-10")} className={styles.retract}>
+            <button
+              onClick={() => move("G1 E-10", backend)}
+              className={styles.retract}
+            >
               ▼
             </button>
           </div>

@@ -5,7 +5,7 @@ import JobScreen from "../../pages/JobScreen/JobScreen";
 import HomeScreen from "../../pages/Homescreen/HomeScreen";
 import SlicerScreen from "../../pages/SlicerScreen/SlicerScreen";
 
-function MainContent({ user, setUser, setIsConnected }) {
+function MainContent({ user, setUser, setIsConnected, backend }) {
   const [partName, setPartName] = useState("cube.stl");
 
   return (
@@ -15,6 +15,7 @@ function MainContent({ user, setUser, setIsConnected }) {
           path="/"
           element={
             <HomeScreen
+              backend={backend}
               setPartName={setPartName}
               user={user}
               setUser={setUser}
@@ -25,12 +26,18 @@ function MainContent({ user, setUser, setIsConnected }) {
         <Route
           path="/job"
           element={
-            <JobScreen partName={partName} setIsConnected={setIsConnected} />
+            <JobScreen
+              partName={partName}
+              setIsConnected={setIsConnected}
+              backend={backend}
+            />
           }
         />
         <Route
           path="/prepare"
-          element={<SlicerScreen setIsConnected={setIsConnected} />}
+          element={
+            <SlicerScreen setIsConnected={setIsConnected} backend={backend} />
+          }
         />
       </Routes>
     </div>
