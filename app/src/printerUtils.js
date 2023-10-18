@@ -1,20 +1,20 @@
 import { post } from "./utils";
 
-export async function move(cmd) {
-  return await post("/cmd", { cmd });
+export async function move(cmd, backend) {
+  return await post(backend, "/cmd", { cmd });
 }
 
-export async function sendCmd(cmd) {
-  return await post("/cmd", { cmd });
+export async function sendCmd(cmd, backend) {
+  return await post(backend, "/cmd", { cmd });
 }
 
-export async function pausePrint() {
-  return await post("/pausePrint");
+export async function pausePrint(backend) {
+  return await post(backend, "/pausePrint");
 }
-export async function resumePrint() {
-  return await post("/resumePrint");
+export async function resumePrint(backend) {
+  return await post(backend, "/resumePrint");
 }
 
-export async function stopPrint() {
-  return await post("/stopPrint");
+export async function stopPrint(backend) {
+  return await post(backend, "/stopPrint");
 }

@@ -1,8 +1,10 @@
-export function get(endpoint) {
-  return fetch(`http://localhost:4000/api/v1${endpoint}`);
+export function get(backend, endpoint) {
+  // return fetch(`http://localhost:4000/api/v1${endpoint}`);
+  return fetch(`${backend}/api/v1${endpoint}`);
 }
-export function post(endpoint, body) {
-  return fetch(`http://localhost:4000/api/v1${endpoint}`, {
+export function post(backend, endpoint, body) {
+  // return fetch(`http://localhost:4000/api/v1${endpoint}`, {
+  return fetch(`${backend}/api/v1${endpoint}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : null,

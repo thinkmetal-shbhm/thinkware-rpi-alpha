@@ -15,6 +15,7 @@ function JobInfo({
   fileName,
   setFileName,
   setCreatedTime,
+  backend,
 }) {
   const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
   const [remainingTime, setRemainingTime] = useState("Unknown");
@@ -155,10 +156,10 @@ function JobInfo({
                   className={styles.btn}
                   onClick={async () => {
                     if (isPaused) {
-                      const resp = await resumePrint();
+                      const resp = await resumePrint(backend);
                       console.log(resp);
                     } else {
-                      const resp = await pausePrint();
+                      const resp = await pausePrint(backend);
                       console.log(resp);
                     }
                   }}
@@ -193,7 +194,7 @@ function JobInfo({
                   disabled={!prog}
                   className={styles.btn}
                   onClick={async () => {
-                    const res = await stopPrint();
+                    const res = await stopPrint(backend);
 
                     if (res.status == 200) {
                       console.log(res);
@@ -239,7 +240,7 @@ function JobInfo({
             // disabled={!prog}
             className={styles.btn}
             onClick={async () => {
-              const res = await stopPrint();
+              const res = await stopPrint(backend);
 
               if (res.status == 200) {
                 console.log(res);

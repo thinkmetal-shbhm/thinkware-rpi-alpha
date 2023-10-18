@@ -8,7 +8,7 @@ import { StlViewer } from "../../components/PartPreview/StlViewer.modern";
 import PartPreview from "../../components/PartPreview/PartPreview";
 import { get, post } from "../../utils";
 
-function HomeScreen({ user, setUser, setIsConnected }) {
+function HomeScreen({ user, setUser, setIsConnected, backend }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputRef = useRef(null);
 
@@ -18,7 +18,7 @@ function HomeScreen({ user, setUser, setIsConnected }) {
   // console.log("user", user);
 
   useEffect(() => {
-    get("/connectionStatus")
+    get(backend, "/connectionStatus")
       .then((res) => res.json())
       .then((res) =>
         res.message === "printer connection found"

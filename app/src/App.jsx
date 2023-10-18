@@ -7,18 +7,22 @@ import { signInwithGoogle } from "./firebase";
 
 function App() {
   const [user, setUser] = useState();
+  const [backend, setBackend] = useState("");
 
   const [isConnected, setIsConnected] = useState(false);
 
   return (
     <div className="App">
       <Sidebar
+        backend={backend}
+        setBackend={setBackend}
         user={user}
         setUser={setUser}
         isConnected={isConnected}
         setIsConnected={setIsConnected}
       />
       <MainContent
+        backend={backend}
         user={user}
         setUser={setUser}
         setIsConnected={setIsConnected}
