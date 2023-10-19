@@ -31,7 +31,7 @@ function SlicerScreen({ setIsConnected, backend }) {
         setReady(true);
         setKiriLS(document.querySelector("#frame").contentWindow.localStorage);
       } else if (e.data?.gcode) {
-        post("/fileUpload/uploadGcodeArray", {
+        post(backend, "/fileUpload/uploadGcodeArray", {
           data: {
             name: "name",
             gcode: e.data?.gcode,
@@ -54,7 +54,9 @@ function SlicerScreen({ setIsConnected, backend }) {
             }
           });
       } else if (e.data?.plate_preview) {
-        post("/uploadPrintData/preview", { img: e.data?.plate_preview })
+        post(backend, "/uploadPrintData/preview", {
+          img: e.data?.plate_preview,
+        })
           .then((res) => res.json())
           .then((res) => {
             if (res.message === "uploaded")
@@ -62,7 +64,7 @@ function SlicerScreen({ setIsConnected, backend }) {
             // kiriLS.removeItem("plate_preview");
           });
       } else if (e.data?.current_files) {
-        post("/uploadPrintData/name", { name: e.data?.current_files })
+        post(backend, "/uploadPrintData/name", { name: e.data?.current_files })
           .then((res) => res.json())
           .then((res) => {
             if (res.message === "uploaded")
@@ -178,7 +180,7 @@ function SlicerScreen({ setIsConnected, backend }) {
       if (file) {
         sessionStorage.setItem("current_files", file);
 
-        post("/uploadPrintData/name", { name: file })
+        post(backend, "/uploadPrintData/name", { name: file })
           .then((res) => res.json())
           .then((res) => {
             if (res.message === "uploaded") kiriLS.removeItem("current_files");
@@ -193,7 +195,7 @@ function SlicerScreen({ setIsConnected, backend }) {
       if (partPreview) {
         sessionStorage.setItem("plate_preview", partPreview);
 
-        post("/uploadPrintData/preview", { img: partPreview })
+        post(backend, "/uploadPrintData/preview", { img: partPreview })
           .then((res) => res.json())
           .then((res) => {
             if (res.message === "uploaded") kiriLS.removeItem("plate_preview");
@@ -209,7 +211,7 @@ function SlicerScreen({ setIsConnected, backend }) {
       if (gcodeLS) {
         sessionStorage.setItem("gcode", gcodeLS);
 
-        post("/fileUpload/uploadGcodeArray", {
+        post(backend, "/fileUpload/uploadGcodeArray", {
           data: {
             name: "name",
             gcode: document
