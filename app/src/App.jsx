@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import MainContent from "./components/MainContent/MainContent";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -10,6 +10,10 @@ function App() {
   const [backend, setBackend] = useState("");
 
   const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    console.log("+++++++++++++++++", backend, "\n+++++++++++++++");
+  }, [backend]);
 
   return (
     <div className="App">

@@ -66,7 +66,7 @@ function Sidebar({
       });
   }
 
-  useEffect(() => {}, [backend]);
+  // useEffect(() => {}, [backend]);
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
@@ -171,14 +171,12 @@ function Sidebar({
               </button>
             </div>
             {!isConnected && (
-              <input
-                // value={backend}
-                ref={inpRef}
-                onChange={(e) => {
-                  setBackend("http://" + e.target.value + ".local:4000");
-                  inpRef.current.value = e.target.value;
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  localStorage.setItem("backend", inpRef.current.value);
                   get(
-                    "http://" + e.target.value + ".local:4000",
+                    "http://" + inpRef.current.value + ".local:4000",
                     "/connectionStatus"
                   )
                     .then((res) => res.json())
@@ -187,7 +185,33 @@ function Sidebar({
                         setIsConnected(true);
                     });
                 }}
-              />
+              >
+                <input
+                  // value={backend}
+
+                  ref={inpRef}
+                  onChange={(e) => {
+                    console.log(backend, "[[[[[[[[[[[[[[[[[[[");
+                    inpRef.current.value = "raspberrypi";
+                    setBackend("http://" + "raspberrypi" + ".local:4000");
+                    // setBackend("http://" + e.target.value + ".local:4000");
+                    // inpRef.current.value = e.target.value;
+                    console.log(
+                      "🚀 ~ file: Sidebar.jsx:181 ~ inpRef.current.value:",
+                      inpRef.current.value
+                    );
+                    // get(
+                    //   "http://" + e.target.value + ".local:4000",
+                    //   "/connectionStatus"
+                    // )
+                    //   .then((res) => res.json())
+                    //   .then((res) => {
+                    //     if (res.message === "printer connection found")
+                    //       setIsConnected(true);
+                    //   });
+                  }}
+                />
+              </form>
             )}
             <button
               className={SidebarCSS.Logoutbtn}

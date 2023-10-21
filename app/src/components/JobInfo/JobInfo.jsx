@@ -24,22 +24,6 @@ function JobInfo({
   const [bedPercent, setBedPercent] = useState("20%");
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const file = localStorage.getItem("current_files");
-
-      if (file) {
-        setFileName(file);
-        clearInterval(interval);
-      } else {
-        setFileName(null);
-      }
-    }, 300);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
     console.log("🚀 ~ file: JobInfo.jsx:42 ~ useEffect ~ progress:", progress);
     if (progress) {
       if (!(Object.keys(progress).length === 0)) {
@@ -79,7 +63,7 @@ function JobInfo({
         );
 
         if (progress.finished || progress.stopped) {
-          setFileName(null);
+          // setFileName(null);
         }
         console.log(
           "🚀 ~ file: JobInfo.jsx:71 ~ useEffect ~ progress:",
@@ -103,13 +87,13 @@ function JobInfo({
   }, [progress]);
 
   useEffect(() => {
-    if (temp) {
-      const ext = temp.split("B:")[0].split("/");
-      const bed = temp.split("B:")[1].split("/");
+    // if (temp) {
+    //   const ext = temp.split("B:")[0].split("/");
+    //   const bed = temp.split("B:")[1].split("/");
 
-      setExtPercent((+ext[0].trim() / +ext[1].trim()) * 100 + "%");
-      setBedPercent((+bed[0].trim() / +bed[1].trim()) * 100 + "%");
-    }
+    //   setExtPercent((+ext[0].trim() / +ext[1].trim()) * 100 + "%");
+    //   setBedPercent((+bed[0].trim() / +bed[1].trim()) * 100 + "%");
+    // }
     if (prog && !heating) {
       setExtPercent("100%");
       setBedPercent("100%");

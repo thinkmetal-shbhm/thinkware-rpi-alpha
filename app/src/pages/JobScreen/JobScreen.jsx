@@ -17,7 +17,7 @@ function JobScreen({ setIsConnected, backend }) {
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
   const [prog, setProg] = useState(null);
-  const [fileName, setFileName] = useState(null);
+  const [fileName, setFileName] = useState("Something...?");
 
   const [currentRes, setCurrentRes] = useState(null);
   const [temp, setTemp] = useState(null);
@@ -78,15 +78,30 @@ function JobScreen({ setIsConnected, backend }) {
           // localStorage.removeItem("tw__gcode");
         }
       });
-    const previewInterval = setInterval(() => {
-      // console.log("int");
-      const partLS = localStorage.getItem("plate_preview");
 
-      if (partLS) {
-        setPreview(partLS);
-        clearInterval(previewInterval);
-      }
-    }, 500);
+    get(backend, "/getPrintData/preview")
+      .then((res) => res.json())
+      .then((res) => {
+        setPreview(res.data);
+      });
+    get(backend, "/getPrintData/name")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(
+          "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
+          res.data
+        );
+        setFileName(res.data);
+      });
+    // const previewInterval = setInterval(() => {
+    //   // console.log("int");
+    //   const partLS = localStorage.getItem("plate_preview");
+
+    //   if (partLS) {
+    //     setPreview(partLS);
+    //     clearInterval(previewInterval);
+    //   }
+    // }, 500);
 
     get(backend, "/connectionStatus")
       .then((res) => res.json())
@@ -103,6 +118,7 @@ function JobScreen({ setIsConnected, backend }) {
   }, []);
 
   useEffect(() => {
+    const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
     const printingStartedSocket = () => {
       console.log("printingStarted");
       // setHeating(true);
@@ -110,6 +126,16 @@ function JobScreen({ setIsConnected, backend }) {
     if (location.state?.message === "fileUploaded") {
       socket.on("printingStarted", printingStartedSocket);
       setIsPaused(false);
+      get(backend, "/getPrintData/preview")
+        .then((res) => res.json())
+        .then((res) => {
+          setPreview(res.data);
+        });
+      get(backend, "/getPrintData/name")
+        .then((res) => res.json())
+        .then((res) => {
+          setFileName(res.data);
+        });
     }
     return () => {
       setTimeout(() => {
@@ -141,29 +167,11 @@ function JobScreen({ setIsConnected, backend }) {
         {isPaused ? (
           <Controller />
         ) : (
-          <div
-            className={jobstyles.jobPreviewCard}
-            style={{ textAlign: "center" }}
-          >
-            <div className={jobstyles.previewContainer}>
-              <img
-                className={jobstyles.previewImg}
-                src={preview}
-                alt="preview"
-                width={"100%"}
-                // height={"100%"}
-              />
-            </div>
-            <div className={jobstyles.jobPreviewInfo}>
-              <h3 style={{ textAlign: "center" }}>
-                {fileName ? fileName.split(".")[0] : `${name}`}
-              </h3>
-              <span>
-                Created at:{" "}
-                {createdTime ? Date(createdTime).toLocaleString() : "Unknown"}
-              </span>
-            </div>
-          </div>
+          <PreviewSection
+            createdTime={createdTime}
+            fileName={fileName}
+            preview={preview}
+          />
         )}
         <CameraWindow />
       </div>
@@ -172,3 +180,25 @@ function JobScreen({ setIsConnected, backend }) {
 }
 
 export default JobScreen;
+
+function PreviewSection({ createdTime, fileName, preview }) {
+  return (
+    <div className={jobstyles.jobPreviewCard} style={{ textAlign: "center" }}>
+      <div className={jobstyles.previewContainer}>
+        <img
+          className={jobstyles.previewImg}
+          src={preview}
+          alt="preview"
+          width={"100%"}
+          // height={"100%"}
+        />
+      </div>
+      <div className={jobstyles.jobPreviewInfo}>
+        <h3 style={{ textAlign: "center" }}>
+          {fileName ? fileName.split(".")[0] : `Something...?`}
+        </h3>
+        <span>Created at: {createdTime}</span>
+      </div>
+    </div>
+  );
+}
