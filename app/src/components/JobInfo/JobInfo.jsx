@@ -63,7 +63,7 @@ function JobInfo({
         );
 
         if (progress.finished || progress.stopped) {
-          // setFileName(null);
+          setFileName(null);
         }
         console.log(
           "🚀 ~ file: JobInfo.jsx:71 ~ useEffect ~ progress:",
