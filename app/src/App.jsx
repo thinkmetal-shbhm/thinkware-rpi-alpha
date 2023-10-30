@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import { signInwithGoogle } from "./firebase";
 import { createPortal } from "react-dom";
 import InfoPortal from "./components/InfoPortal";
+import { stopPrint } from "./printerUtils";
 
 function App() {
   const [user, setUser] = useState();
@@ -18,8 +19,16 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (currentRes && currentRes?.indexOf("cold extrusion prevented") !== -1) {
-      setModal(currentRes + ", Please Restart the printer.");
+    if (currentRes) {
+      if (currentRes?.indexOf("cold extrusion prevented") !== -1) {
+        setModal(currentRes + ", Please Restart the printer.");
+        stopPrint(backend);
+      } else if (currentRes?.indexOf("Error:") !== -1) {
+        if (currentRes?.indexOf("Printer halted. kill() called!") !== -1)
+          setModal(currentRes + " Please Restart the printer.");
+        else setModal(currentRes);
+        stopPrint(backend);
+      }
     }
   }, [currentRes]);
 

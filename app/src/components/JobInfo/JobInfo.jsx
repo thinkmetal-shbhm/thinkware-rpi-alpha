@@ -71,6 +71,8 @@ function JobInfo({
         );
         setCreatedTime(progress.createdTime);
         console.log(progress.createdTime);
+      } else {
+        setIsPaused(true);
       }
 
       if (progress?.stopped) {
@@ -79,6 +81,7 @@ function JobInfo({
         localStorage.removeItem("tw__gcode");
       }
     } else {
+      setIsPaused(true);
       // setHeating(false);
       // localStorage.removeItem("current_files");
       // localStorage.removeItem("plate_preview");

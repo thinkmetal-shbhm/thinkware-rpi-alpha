@@ -9,12 +9,12 @@ export async function sendCmd(cmd, backend) {
 }
 
 export async function pausePrint(backend) {
-  return await post(backend, "/pausePrint");
+  return await post(backend, "/printAction/pausePrint");
 }
 export async function resumePrint(backend) {
-  return await post(backend, "/resumePrint");
+  return await post(backend, "/printAction/resumePrint");
 }
 
 export async function stopPrint(backend) {
-  return await post(backend, "/stopPrint");
+  return await post(backend, "/printAction/stopPrint");
 }
