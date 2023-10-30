@@ -11,6 +11,7 @@ function InfoPortal({ msg, closeCb }) {
         height: "100%",
         background: "#00000090",
         transition: "all 0.3s linear",
+        zIndex: 100,
       }}
       onClick={(e) => {
         closeCb(e);
@@ -34,8 +35,27 @@ function InfoPortal({ msg, closeCb }) {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <div>Info:</div>
-        {msg}
+        <button
+          onClick={(e) => closeCb(e)}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            padding: "auto",
+            margin: "1rem",
+            border: "none",
+            width: "2rem",
+            height: "2rem",
+            boxShadow: "0 0 5px #000",
+            borderRadius: "50%",
+            fontSize: "1rem",
+            color: "#ddd",
+          }}
+        >
+          X
+        </button>
+        <div style={{ fontSize: msg.length > 35 && "2.5rem" }}>Info:</div>
+        <p style={{ fontSize: msg.length > 35 && "1.5rem" }}>{`${msg}`}</p>
       </div>
     </div>
   );

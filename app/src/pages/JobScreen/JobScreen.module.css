@@ -1,7 +1,43 @@
-.row{
-    display: flex;
-    width: 96%;
-    height: 40vh;
-    margin-top: 3rem;
-    justify-content: space-between;
+.cameraAndControls {
+  display: flex;
+  width: 96%;
+  height: 40vh;
+  margin-top: 3rem;
+  justify-content: space-between;
 }
+
+/* @media only screen and (max-width: 2000px) {
+  .cameraAndControls {
+    flex-direction: row;
+  }
+}
+@media only screen and (max-width: 1500px) {
+  .cameraAndControls {
+    flex-direction: row;
+  }
+}
+@media only screen and (max-width: 1400px) {
+  .cameraAndControls {
+    flex-direction: row;
+  }
+}
+@media only screen and (max-width: 1300px) {
+  .cameraAndControls {
+    flex-direction: row;
+  }
+} */
+/* @media only screen and (max-width: 1100px) {
+  .cameraAndControls {
+    flex-direction: row;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .cameraAndControls {
+    flex-direction: column;
+  }
+}
+@media only screen and (max-width: 660px) {
+  .cameraAndControls {
+    flex-direction: column;
+  }
+} */

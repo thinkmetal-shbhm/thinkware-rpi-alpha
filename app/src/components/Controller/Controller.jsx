@@ -1,14 +1,7 @@
 import React from "react";
 import styles from "./Controller.module.css";
 import { move } from "../../printerUtils";
-import {
-  bed,
-  extruderIcon,
-  extruderSvg,
-  homeIcon,
-  xyB,
-  xyT,
-} from "../../assets/Icons";
+import { extruderSvg, homeIcon, xyWebp } from "../../assets/Icons";
 
 function Controller({ backend }) {
   return (
@@ -67,17 +60,16 @@ function Controller({ backend }) {
                 }}
               /> */}
               <img
-                src={xyB}
+                src={xyWebp}
                 style={{
                   position: "absolute",
-                  bottom: 0,
-                  right: -10,
                   borderRadius: "50%",
                   // boxShadow: "0 0 15px #aaa",
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%,-50%)",
-                  opacity: 0,
+                  opacity: 0.7,
+                  marginTop: "-1px",
                 }}
                 width={35}
               />
@@ -109,15 +101,15 @@ function Controller({ backend }) {
             <button onClick={() => move("G1 Z-1", backend)}>
               <span>↥</span>1
             </button>
-            {/* <button
+            <button
               className={styles.zHome}
               onClick={() => move("G28 Z", backend)}
             >
               <img src={homeIcon} width={25} height={25} />
-            
-              <span>Z</span>
-            </button> */}
-            <img
+
+              <sub>Z</sub>
+            </button>
+            {/* <img
               src={bed}
               style={{
                 // position: "absolute",
@@ -127,7 +119,7 @@ function Controller({ backend }) {
                 margin: "0.25rem auto",
               }}
               width={45}
-            />
+            /> */}
             <button onClick={() => move("G1 Z1", backend)}>
               <span>↧</span>1
             </button>

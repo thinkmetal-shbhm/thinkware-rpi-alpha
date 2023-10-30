@@ -12,14 +12,13 @@ import { get, post } from "../../utils";
 
 import styles from "./JobScreen.module.css";
 
-function JobScreen({ setIsConnected, backend }) {
+function JobScreen({ setIsConnected, backend, setCurrentRes }) {
   const [isPaused, setIsPaused] = useState(true);
   const [progress, setProgress] = useState(null);
   const [heating, setHeating] = useState(null);
   const [prog, setProg] = useState(null);
   const [fileName, setFileName] = useState("Something...?");
 
-  const [currentRes, setCurrentRes] = useState(null);
   const [temp, setTemp] = useState(null);
 
   const [createdTime, setCreatedTime] = useState(null);
@@ -163,7 +162,7 @@ function JobScreen({ setIsConnected, backend }) {
         setFileName={setFileName}
         setCreatedTime={setCreatedTime}
       />
-      <div className={styles.row}>
+      <div className={styles.cameraAndControls}>
         {isPaused ? (
           <Controller />
         ) : (

@@ -8,6 +8,7 @@
   /* min-width: 350px; */
   /* box-shadow: 0 0 10px black inset; */
   margin: 0 1rem;
+  min-width: 390px;
 
   --translateXY: -40px;
   --translateXYNe: 100px;

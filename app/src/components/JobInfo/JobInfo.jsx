@@ -27,7 +27,7 @@ function JobInfo({
     console.log("🚀 ~ file: JobInfo.jsx:42 ~ useEffect ~ progress:", progress);
     if (progress) {
       if (!(Object.keys(progress).length === 0)) {
-        if (progress.currentTime) {
+        if (progress.currentTime && progress.running) {
           // setHeating(false);
           const tt = +progress.totalETA;
           const ct = progress.currentTime;
@@ -298,11 +298,8 @@ function JobInfo({
             </div>
           </div>
         </div>
-        {heating || (!progress?.stopped && prog) ? (
-          ""
-        ) : (
+        {!(heating || (!progress?.stopped && prog)) && (
           <div className={styles.noJob}>
-            {" "}
             <h3>No Job Running!</h3>
           </div>
         )}

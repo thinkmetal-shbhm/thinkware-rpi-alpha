@@ -8,3 +8,4 @@ export { default as extruderSvg } from "./ext.svg";
 export { default as bed } from "./bed.svg";
 export { default as xyB } from "./xyB.png";
 export { default as xyT } from "./xyT.png";
+export { default as xyWebp } from "./xy.webp";
