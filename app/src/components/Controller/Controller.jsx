@@ -11,7 +11,10 @@ function Controller({ backend }) {
       </h2>
       <div className={styles.controls}>
         <div className={styles.xy}>
-          <div className={styles.controllerButtons}>
+          <div
+            className={styles.controllerButtons}
+            // style={{ transform: "scale(1.2)" }}
+          >
             <XYBtns onClick={() => move("G1 Y1", backend)} src={"InnerSector"}>
               +1
             </XYBtns>
