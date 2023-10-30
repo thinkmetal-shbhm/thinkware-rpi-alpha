@@ -18,15 +18,17 @@
   --black: #000;
   --content-bg: #242424;
   --border-blue: #345d7182;
-  --dark-blue:#18313d;
+  --dark-blue: #18313d;
   /* --highlight: #485563; */
-  --highlight:#345d7182;
-  --highlight-base:#345d71;
+  --highlight: #345d7182;
+  --highlight: #1f1d2c95;
+  --highlight: #121212;
+  --highlight-base: #345d71;
   --green: rgba(67, 226, 131, 0.831);
   --gray: #373737;
-  --true-gray:#808080;
+  --true-gray: #808080;
   --silver: #c2c2c2;
-  --highlight-black:#262626;
+  --highlight-black: #262626;
 
   /* font sizes */
   --fs-extra-small: 0.2rem;

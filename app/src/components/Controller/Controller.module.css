@@ -61,49 +61,74 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  border-right: 2px solid rgb(144, 144, 144);
+  padding-right: 2rem;
+  position: relative;
 }
 .z > button {
   width: 50px;
   margin: auto;
-  padding: 0.25rem;
+  padding: 0.5rem 0.25rem;
   border: none;
   background-color: var(--gray);
-  box-shadow: 1px 3px 5px black;
+  background-color: #000;
+  /* box-shadow: 1px 3px 5px black; */
+  box-shadow: 0 0 1px black;
+  color: var(--silver);
+
   cursor: pointer;
   font-size: var(--fs-medium);
-  font-weight: 700;
+  /* font-weight: 700; */
+  font-size: var(--fs-medium-small);
   vertical-align: baseline;
+  background-color: #ffffff10;
+  border: 1px solid #fff10;
 }
 .z > button > span {
-  font-size: var(--fs-large);
+  /* font-size: var(--fs-large); */
+  font-size: var(--fs-medium);
+
+  color: var(--silver);
+}
+.zHome {
+  background-color: var(--highlight);
 }
 .extruder {
-  width: 50px;
+  width: 58px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 0 0.25rem;
+  justify-content: space-between;
+  margin: 0.25rem;
+  margin-left: 1.25rem;
   position: relative;
 }
 .extrude,
 .retract {
   border: none;
   background-color: var(--gray);
-  box-shadow: 1px 3px 5px black;
+  background-color: #000;
+  /* box-shadow: 1px 3px 5px black; */
+  box-shadow: 0 0 1px black;
+
+  color: var(--silver);
+
   border-radius: 0.25rem;
   z-index: 1;
   margin: 0.25rem auto;
-  width: 30px;
-  height: 60px;
+  width: 40px;
+  height: 50px;
   cursor: pointer;
+  background-color: #ffffff10;
 }
 .extruderBar {
+  display: none;
   position: absolute;
   height: 90%;
   left: 50%;
   top: 5%;
   z-index: 0;
-  border: 1px solid white;
+  /* border: 1px solid #fff; */
+  border: 1px solid var(--silver);
 }
 .btnXY:hover .svg {
   transform: scale(2);
