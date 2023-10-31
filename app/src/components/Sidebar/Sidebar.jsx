@@ -76,14 +76,14 @@ function Sidebar({
     <div className={SidebarCSS.SidebarParent}>
       <div>
         <div className={SidebarCSS.appname}>
-          <h3>thinkware</h3>
+          <h3>Thinkware</h3>
         </div>
         <div className={SidebarCSS.appnameMobile}>
           <h3>tw</h3>
         </div>
 
         <div className={SidebarCSS.pageList}>
-          <NavLink
+          {/* <NavLink
             to="/"
             className={({ isActive }) =>
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
@@ -95,9 +95,9 @@ function Sidebar({
               className={SidebarCSS.MenuImage}
             />
             <span className={SidebarCSS.MenuText}>Dashboard</span>
-          </NavLink>
+          </NavLink> */}
           <NavLink
-            to="/prepare"
+            to="/"
             className={({ isActive }) =>
               isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
             }

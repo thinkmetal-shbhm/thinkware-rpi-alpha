@@ -20,13 +20,14 @@ function MainContent({
         <Route
           path="/"
           element={
-            <HomeScreen
-              backend={backend}
-              setPartName={setPartName}
-              user={user}
-              setUser={setUser}
-              setIsConnected={setIsConnected}
-            />
+            // <HomeScreen
+            //   backend={backend}
+            //   setPartName={setPartName}
+            //   user={user}
+            //   setUser={setUser}
+            //   setIsConnected={setIsConnected}
+            // />
+            <SlicerScreen setIsConnected={setIsConnected} backend={backend} />
           }
         />
         <Route
