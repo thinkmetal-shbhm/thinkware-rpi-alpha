@@ -132,8 +132,7 @@ function SlicerScreen({ setIsConnected, backend }) {
       <iframe
         autoFocus
         id="frame"
-        // src="https://kiri.thinkmetal.co.in/kiri/"
-        src="http://raspberrypi.local:8100/kiri"
+        src={import.meta.env.KIRI_URL}
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>
