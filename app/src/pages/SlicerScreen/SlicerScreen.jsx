@@ -27,7 +27,9 @@ function SlicerScreen({ setIsConnected, backend }) {
   }, [slicerModal]);
   const DataForBackend = (e, temp) => {
     const backend =
-      "http://" + localStorage.getItem("backend") + import.meta.env.NODE_ENV ===
+      "http://" +
+        localStorage.getItem("backend") +
+        import.meta.env.VITE_NODE_ENV ===
       "production"
         ? ".local:4000"
         : "";
@@ -120,6 +122,8 @@ function SlicerScreen({ setIsConnected, backend }) {
   }, []);
 
   useEffect(() => {
+    console.log(import.meta.env.VITE_KIRI_URL);
+    console.log(import.meta.env.VITE_BACKEND_URL);
     console.log(ready);
     if (ready && location.state?.message === "file-import") {
       document.querySelector("#frame").contentWindow.postMessage("import", "*");
@@ -132,7 +136,7 @@ function SlicerScreen({ setIsConnected, backend }) {
       <iframe
         autoFocus
         id="frame"
-        src={import.meta.env.KIRI_URL}
+        src={import.meta.env.VITE_KIRI_URL}
         title="slicer"
         className={styles.SlicerFrame}
       ></iframe>

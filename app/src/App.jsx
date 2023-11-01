@@ -10,7 +10,7 @@ import { stopPrint } from "./printerUtils";
 
 function App() {
   const [user, setUser] = useState();
-  const [backend, setBackend] = useState(import.meta.env.BACKEND_URL);
+  const [backend, setBackend] = useState(import.meta.env.VITE_BACKEND_URL);
 
   const [modal, setModal] = useState(null);
 

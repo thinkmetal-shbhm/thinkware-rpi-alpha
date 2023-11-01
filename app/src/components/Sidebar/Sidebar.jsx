@@ -72,9 +72,9 @@ function Sidebar({
   }, [user?.displayName]);
 
   useEffect(() => {
-    if (import.meta.env.NODE_ENV === "production") {
-      localStorage.setItem("backend", import.meta.env.BACKEND_URL);
-      get(`${import.meta.env.BACKEND_URL}`, "/connectionStatus")
+    if (import.meta.env.VITE_NODE_ENV === "production") {
+      localStorage.setItem("backend", import.meta.env.VITE_BACKEND_URL);
+      get(`${import.meta.env.VITE_BACKEND_URL}`, "/connectionStatus")
         .then((res) => res.json())
         .then((res) => {
           if (res.status !== 404) {
@@ -189,7 +189,7 @@ function Sidebar({
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (import.meta.env.NODE_ENV === "production") {
+                  if (import.meta.env.VITE_NODE_ENV === "production") {
                     localStorage.setItem("backend", inpRef.current.value);
                     get(
                       "http://" + inpRef.current.value + ".local:4000",
@@ -223,7 +223,7 @@ function Sidebar({
                   onChange={(e) => {
                     inpRef.current.value = e.target.value;
 
-                    if (import.meta.env.NODE_ENV === "production") {
+                    if (import.meta.env.VITE_NODE_ENV === "production") {
                       setBackend("http://" + e.target.value + ".local:4000");
                     } else {
                       setBackend("http://" + e.target.value);

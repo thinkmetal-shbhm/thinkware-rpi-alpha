@@ -3,9 +3,9 @@ version: "3"
 services:
   thinkware_build_and_deploy:
     environment:
-      - BACKEND_URL=${BACKEND_URL}
-      - NODE_ENV=${NODE_ENV}
-      - KIRI_URL=${KIRI_URL}
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+      - VITE_NODE_ENV=${VITE_NODE_ENV}
+      - VITE_KIRI_URL=${VITE_KIRI_URL}
     build:
       context: .
       dockerfile: Dockerfile
