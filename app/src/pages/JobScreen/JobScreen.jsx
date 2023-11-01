@@ -7,8 +7,8 @@ import PartPreview from "../../components/PartPreview/PartPreview";
 import jobstyles from "../../components/PartPreview/PartPreview.module.css";
 
 import { useLocation } from "react-router-dom";
-import { socket } from "../../socket";
-import { get, post } from "../../utils";
+import { getSocket } from "../../socket";
+import { get } from "../../utils";
 
 import styles from "./JobScreen.module.css";
 
@@ -45,7 +45,7 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
   //             setHeating(false);
   //           }
   //         });
-  //       socket.emit("heated", "done");
+  //       getSocket().emit("heated", "done");
   //     }
   //   }
   // } else {
@@ -60,9 +60,9 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
       setProgress(JSON.parse(data).data?.progress);
     };
 
-    socket.on("tempReport", tempSocket);
-    socket.on("progress", progressSocket);
-    socket.on("printerResponse", printerResponseSocket);
+    getSocket().on("tempReport", tempSocket);
+    getSocket().on("progress", progressSocket);
+    getSocket().on("printerResponse", printerResponseSocket);
 
     get(backend, "/progress")
       .then((res) => res.json())
@@ -111,8 +111,8 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
       );
 
     return () => {
-      socket.off("progress", progressSocket);
-      socket.off("printerResponse", printerResponseSocket);
+      getSocket().off("progress", progressSocket);
+      getSocket().off("printerResponse", printerResponseSocket);
     };
   }, []);
 
@@ -123,7 +123,7 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
       // setHeating(true);
     };
     if (location.state?.message === "fileUploaded") {
-      socket.on("printingStarted", printingStartedSocket);
+      getSocket().on("printingStarted", printingStartedSocket);
       setIsPaused(false);
       get(backend, "/getPrintData/preview")
         .then((res) => res.json())
@@ -138,7 +138,7 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
     }
     return () => {
       setTimeout(() => {
-        socket.off("printingStarted", printingStartedSocket);
+        getSocket().off("printingStarted", printingStartedSocket);
       }, 30000);
     };
   }, [location.state?.message]);

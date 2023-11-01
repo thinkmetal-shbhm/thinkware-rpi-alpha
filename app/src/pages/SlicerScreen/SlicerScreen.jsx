@@ -26,7 +26,11 @@ function SlicerScreen({ setIsConnected, backend }) {
     );
   }, [slicerModal]);
   const DataForBackend = (e, temp) => {
-    const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
+    const backend =
+      "http://" + localStorage.getItem("backend") + import.meta.env.NODE_ENV ===
+      "production"
+        ? ".local:4000"
+        : "";
 
     console.log("receiver msg ---------------", e);
     if (e.data == "ok") {

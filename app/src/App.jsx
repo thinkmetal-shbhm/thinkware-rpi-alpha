@@ -10,7 +10,7 @@ import { stopPrint } from "./printerUtils";
 
 function App() {
   const [user, setUser] = useState();
-  const [backend, setBackend] = useState("");
+  const [backend, setBackend] = useState(import.meta.env.BACKEND_URL);
 
   const [modal, setModal] = useState(null);
 
@@ -31,10 +31,6 @@ function App() {
       }
     }
   }, [currentRes]);
-
-  useEffect(() => {
-    console.log("+++++++++++++++++", backend, "\n+++++++++++++++");
-  }, [backend]);
 
   return (
     <div className="App">

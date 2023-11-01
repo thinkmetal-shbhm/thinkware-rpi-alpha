@@ -1,9 +1,15 @@
 import { io } from "socket.io-client";
 
-// "undefined" means the URL will be computed from the `window.location` object
-const URL =
-  process.env.NODE_ENV === "production"
-    ? undefined
-    : "http://raspberrypi.local:4000";
+let socket;
 
-export const socket = io(URL);
+const URL =
+  process.env.NODE_ENV === "production" ? undefined : "http://localhost:4000";
+
+setIO(URL);
+
+export function getSocket() {
+  return socket;
+}
+export function setSocket(url) {
+  socket = io(url);
+}

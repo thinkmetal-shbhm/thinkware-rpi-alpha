@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./CameraWindow.module.css";
-import { socket } from "../../socket";
+import { getSocket } from "../../socket";
 import { cameraIcon } from "../../assets/Icons";
 import fullScreenIcon from "../../assets/Icons/fullscreen.png";
 function CameraWindow() {
@@ -40,16 +40,16 @@ function CameraWindow() {
     }
 
     async function fetchVideoStream() {
-      socket.on("connection/connected", onConnect);
-      socket.on("disconnect", onDisconnect);
-      socket.on("video/frame", onFrame);
+      getSocket().on("connection/connected", onConnect);
+      getSocket().on("disconnect", onDisconnect);
+      getSocket().on("video/frame", onFrame);
     }
 
     fetchVideoStream();
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off("video/frame", onFrame);
+      getSocket().off("connect", onConnect);
+      getSocket().off("disconnect", onDisconnect);
+      getSocket().off("video/frame", onFrame);
     };
   }, []);
 
@@ -93,10 +93,10 @@ function CameraWindow() {
           <span
             onClick={(e) => {
               if (video) {
-                socket.emit("video/stop", "stop");
+                getSocket().emit("video/stop", "stop");
                 setVideo(false);
               } else {
-                socket.emit("video/start", "start");
+                getSocket().emit("video/start", "start");
                 setVideo(true);
               }
             }}

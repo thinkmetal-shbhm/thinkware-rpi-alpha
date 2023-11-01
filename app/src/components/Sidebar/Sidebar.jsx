@@ -1,4 +1,4 @@
-import React, { Children, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import SidebarCSS from "./Sidebar.module.css";
 import { NavLink } from "react-router-dom";
 import UserIcon from "../../assets/Icons/user.png";
@@ -7,13 +7,12 @@ import JobImage from "../../assets/Icons/job.png";
 import OnlineIcon from "../../assets/Icons/online.png";
 import OfflineIcon from "../../assets/Icons/offline.png";
 import PrepareImage from "../../assets/Icons/prepare.png";
-import { useEffect } from "react";
-import { useState } from "react";
 
 import jwt_decode from "jwt-decode";
 import { auth, provider, signInwithGoogle } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { get } from "../../utils";
+import { setSocket } from "../../socket";
 
 function Sidebar({
   user,
@@ -71,6 +70,22 @@ function Sidebar({
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user")));
   }, [user?.displayName]);
+
+  useEffect(() => {
+    if (import.meta.env.NODE_ENV === "production") {
+      localStorage.setItem("backend", import.meta.env.BACKEND_URL);
+      get(`${import.meta.env.BACKEND_URL}`, "/connectionStatus")
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status !== 404) {
+            setSocket(backend);
+          }
+          if (res.message === "printer connection found") {
+            setIsConnected(true);
+          }
+        });
+    }
+  }, []);
 
   return (
     <div className={SidebarCSS.SidebarParent}>
@@ -174,41 +189,49 @@ function Sidebar({
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  localStorage.setItem("backend", inpRef.current.value);
-                  get(
-                    "http://" + inpRef.current.value + ".local:4000",
-                    "/connectionStatus"
-                  )
-                    .then((res) => res.json())
-                    .then((res) => {
-                      if (res.message === "printer connection found")
-                        setIsConnected(true);
-                    });
+                  if (import.meta.env.NODE_ENV === "production") {
+                    localStorage.setItem("backend", inpRef.current.value);
+                    get(
+                      "http://" + inpRef.current.value + ".local:4000",
+                      "/connectionStatus"
+                    )
+                      .then((res) => res.json())
+                      .then((res) => {
+                        if (res.status !== 404) {
+                          setSocket(backend);
+                        }
+                        if (res.message === "printer connection found") {
+                          setIsConnected(true);
+                        }
+                      });
+                  } else {
+                    localStorage.setItem("backend", inpRef.current.value);
+                    get("http://" + inpRef.current.value, "/connectionStatus")
+                      .then((res) => res.json())
+                      .then((res) => {
+                        if (res.status !== 404) {
+                          setSocket(backend);
+                        }
+                        if (res.message === "printer connection found")
+                          setIsConnected(true);
+                      });
+                  }
                 }}
               >
                 <input
-                  // value={backend}
-
                   ref={inpRef}
                   onChange={(e) => {
-                    console.log(backend, "[[[[[[[[[[[[[[[[[[[");
-                    inpRef.current.value = "raspberrypi";
-                    setBackend("http://" + "raspberrypi" + ".local:4000");
-                    // setBackend("http://" + e.target.value + ".local:4000");
-                    // inpRef.current.value = e.target.value;
+                    inpRef.current.value = e.target.value;
+
+                    if (import.meta.env.NODE_ENV === "production") {
+                      setBackend("http://" + e.target.value + ".local:4000");
+                    } else {
+                      setBackend("http://" + e.target.value);
+                    }
                     console.log(
-                      "🚀 ~ file: Sidebar.jsx:181 ~ inpRef.current.value:",
+                      "🚀 ~ file: Sidebar.jsx:210 ~ inpRef.current.value:",
                       inpRef.current.value
                     );
-                    // get(
-                    //   "http://" + e.target.value + ".local:4000",
-                    //   "/connectionStatus"
-                    // )
-                    //   .then((res) => res.json())
-                    //   .then((res) => {
-                    //     if (res.message === "printer connection found")
-                    //       setIsConnected(true);
-                    //   });
                   }}
                 />
               </form>
