@@ -5,6 +5,7 @@ services:
     environment:
       - BACKEND_URL=${BACKEND_URL}
       - NODE_ENV=${NODE_ENV}
+      - KIRI_URL=${KIRI_URL}
     build:
       context: .
       dockerfile: Dockerfile
