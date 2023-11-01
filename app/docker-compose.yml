@@ -18,23 +18,43 @@
 # networks:
 #   nginx-proxy-manager_default:
 #     external: true
+
+# version: "3"
+
+# services:
+#   builder:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: builder
+#     working_dir: /app
+
+#     command: sh -c "npm ci && npm run build"
+
+#   thinkware:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: thinkware
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - nginx-proxy-manager_default
+
+# networks:
+#   nginx-proxy-manager_default:
+#     external: true
+
 version: "3"
 
 services:
-  builder:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: builder
-    working_dir: /app
-
-    command: sh -c "npm ci && npm run build"
-
-  thinkware:
+  thinkware_build_and_deploy:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: thinkware
+    working_dir: /app
+
     ports:
       - "8080:8080"
     networks:

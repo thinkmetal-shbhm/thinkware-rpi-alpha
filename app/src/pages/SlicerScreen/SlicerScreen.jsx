@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./SlicerScreen.module.css";
-import { ObserveIFrame, get, post } from "../../utils";
+import { get, post } from "../../utils";
 import InfoPortal from "../../components/InfoPortal";
 import PartPreview from "../../components/PartPreview/PartPreview";
 
