@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-let socket;
+let socket = null;
 
 // const URL =
 //   process.env.VITE_NODE_ENV === "production"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import JobInfo from "../../components/JobInfo/JobInfo";
 import Controller from "../../components/Controller/Controller";
 import CameraWindow from "../../components/CameraWindow/CameraWindow";
@@ -6,22 +6,8 @@ import PartPreview from "../../components/PartPreview/PartPreview";
 
 import jobstyles from "../../components/PartPreview/PartPreview.module.css";
 
-import { useLocation } from "react-router-dom";
-import { getSocket } from "../../socket";
-import { get } from "../../utils";
-
 import styles from "./JobScreen.module.css";
 import { Context, DispatchCtx } from "../../Context";
-import {
-  CONNECTED,
-  CURRENT_RES,
-  FILE_NAME,
-  IS_PAUSED,
-  PREVIEW,
-  PROG,
-  PROGRESS,
-  TEMP,
-} from "../../constants/actions";
 
 function JobScreen() {
   // const [isPaused, setIsPaused] = useState(true);
@@ -36,10 +22,9 @@ function JobScreen() {
 
   // const [preview, setPreview] = useState(null);
 
-  const location = useLocation();
+  // const location = useLocation();
 
   const state = useContext(Context);
-  const dispatch = useContext(DispatchCtx);
 
   // useEffect(() => {
   // if (currentRes) {
@@ -67,129 +52,133 @@ function JobScreen() {
   // }
   // }, [currentRes]);
 
-  useEffect(() => {
-    const tempSocket = (data) => dispatch({ type: TEMP, payload: data });
-    const printerResponseSocket = (data) =>
-      dispatch({ type: CURRENT_RES, payload: data });
-    // const tempSocket = (data) => setTemp(data);
-    // const printerResponseSocket = (data) => setCurrentRes(data);
-    const progressSocket = (data) => {
-      dispatch({ type: PROGRESS, payload: JSON.parse(data).data?.progress });
-      // setProgress(JSON.parse(data).data?.progress);
-    };
+  // useEffect(() => {
+  //   const tempSocket = (data) => dispatch({ type: TEMP, payload: data });
+  //   const printerResponseSocket = (data) =>
+  //     dispatch({ type: CURRENT_RES, payload: data });
+  //   // const tempSocket = (data) => setTemp(data);
+  //   // const printerResponseSocket = (data) => setCurrentRes(data);
+  //   const progressSocket = (data) => {
+  //     dispatch({ type: PROGRESS, payload: JSON.parse(data).data?.progress });
+  //     // setProgress(JSON.parse(data).data?.progress);
+  //   };
 
-    getSocket().on("tempReport", tempSocket);
-    getSocket().on("progress", progressSocket);
-    getSocket().on("printerResponse", printerResponseSocket);
+  //   getSocket().on("tempReport", tempSocket);
+  //   getSocket().on("progress", progressSocket);
+  //   getSocket().on("printerResponse", printerResponseSocket);
 
-    get(state.backend, "/progress")
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
-        if (
-          res.data?.progress?.stopped ||
-          Object.keys(res.data?.progress ? res.data?.progress : {}).length === 0
-        ) {
-          // localStorage.removeItem("current_files");
-          // localStorage.removeItem("plate_preview");
-          // localStorage.removeItem("tw__gcode");
-        }
-      });
+  //   get(state.backend, "/progress")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
+  //       // if (
+  //       //   res.data?.progress?.stopped ||
+  //       //   Object.keys(res.data?.progress ? res.data?.progress : {}).length === 0
+  //       // ) {
+  //       // localStorage.removeItem("current_files");
+  //       // localStorage.removeItem("plate_preview");
+  //       // localStorage.removeItem("tw__gcode");
+  //       // }
+  //     });
 
-    get(state.backend, "/getPrintData/preview")
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch({ type: PREVIEW, payload: res.data });
+  //   get(state.backend, "/getPrintData/preview")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       dispatch({ type: PREVIEW, payload: res.data });
 
-        // setPreview(res.data);
-      });
-    get(state.backend, "/getPrintData/name")
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
-          res.data
-        );
+  //       // setPreview(res.data);
+  //     });
+  //   get(state.backend, "/getPrintData/name")
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log(
+  //         "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
+  //         res.data
+  //       );
 
-        dispatch({ type: FILE_NAME, payload: res.data });
-        // setFileName(res.data);
-      });
-    // const previewInterval = setInterval(() => {
-    //   // console.log("int");
-    //   const partLS = localStorage.getItem("plate_preview");
+  //       dispatch({ type: FILE_NAME, payload: res.data });
+  //       // setFileName(res.data);
+  //     });
+  //   // const previewInterval = setInterval(() => {
+  //   //   // console.log("int");
+  //   //   const partLS = localStorage.getItem("plate_preview");
 
-    //   if (partLS) {
-    //     setPreview(partLS);
-    //     clearInterval(previewInterval);
-    //   }
-    // }, 500);
+  //   //   if (partLS) {
+  //   //     setPreview(partLS);
+  //   //     clearInterval(previewInterval);
+  //   //   }
+  //   // }, 500);
 
-    get(state.backend, "/connectionStatus")
-      .then((res) => res.json())
-      .then(
-        (res) =>
-          res.message === "printer connection found"
-            ? dispatch({ type: CONNECTED, payload: true })
-            : dispatch({ type: CONNECTED, payload: false })
+  //   get(state.backend, "/connectionStatus")
+  //     .then((res) => res.json())
+  //     .then(
+  //       (res) =>
+  //         res.message === "printer connection found"
+  //           ? dispatch({ type: CONNECTED, payload: true })
+  //           : dispatch({ type: CONNECTED, payload: false })
 
-        // ? setIsConnected(true)
-        // : setIsConnected(false)
-      );
+  //       // ? setIsConnected(true)
+  //       // : setIsConnected(false)
+  //     );
 
-    return () => {
-      getSocket().off("progress", progressSocket);
-      getSocket().off("printerResponse", printerResponseSocket);
-    };
-  }, []);
+  //   return () => {
+  //     getSocket().off("progress", progressSocket);
+  //     getSocket().off("printerResponse", printerResponseSocket);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
-    const printingStartedSocket = () => {
-      console.log("printingStarted");
-      // setHeating(true);
-    };
-    if (location.state?.message === "fileUploaded") {
-      getSocket().on("printingStarted", printingStartedSocket);
+  // useEffect(() => {
+  //   const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
+  //   const printingStartedSocket = () => {
+  //     console.log("printingStarted");
+  //     // setHeating(true);
+  //   };
+  //   if (location.state?.message === "fileUploaded") {
+  //     getSocket().on("printingStarted", printingStartedSocket);
 
-      dispatch({ type: IS_PAUSED, payload: false });
-      // setIsPaused(false);
-      get(backend, "/getPrintData/preview")
-        .then((res) => res.json())
-        .then((res) => {
-          dispatch({ type: PREVIEW, payload: res.data });
+  //     dispatch({ type: IS_PAUSED, payload: false });
+  //     // setIsPaused(false);
+  //     get(backend, "/getPrintData/preview")
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         dispatch({ type: PREVIEW, payload: res.data });
 
-          // setPreview(res.data);
-        });
-      get(backend, "/getPrintData/name")
-        .then((res) => res.json())
-        .then((res) => {
-          dispatch({ type: FILE_NAME, payload: res.data });
+  //         // setPreview(res.data);
+  //       });
+  //     get(backend, "/getPrintData/name")
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         dispatch({ type: FILE_NAME, payload: res.data });
 
-          // setFileName(res.data);
-        });
-    }
-    return () => {
-      setTimeout(() => {
-        getSocket().off("printingStarted", printingStartedSocket);
-      }, 30000);
-    };
-  }, [location.state?.message]);
+  //         // setFileName(res.data);
+  //       });
+  //   }
+  //   return () => {
+  //     setTimeout(() => {
+  //       getSocket().off("printingStarted", printingStartedSocket);
+  //     }, 30000);
+  //   };
+  // }, [location.state?.message]);
 
-  useEffect(() => {
-    dispatch({
-      type: PROG,
-      payload: state.progress
-        ? !(Object.keys(state.progress).length === 0)
-        : false,
-    });
-    // setProg(progress ? !(Object.keys(progress).length === 0) : false);
-  }, [state.progress]);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: PROG,
+  //     payload: state.progress
+  //       ? !(Object.keys(state.progress).length === 0)
+  //       : false,
+  //   });
+  //   // setProg(progress ? !(Object.keys(progress).length === 0) : false);
+  // }, [state.progress]);
 
   return (
     <div style={{ width: "100%" }}>
       <JobInfo />
       <div className={styles.cameraAndControls}>
-        {state.isPaused ? <Controller /> : <PreviewSection />}
+        {state.isPaused ? (
+          <Controller backend={state.backend} />
+        ) : (
+          <PreviewSection />
+        )}
         <CameraWindow />
       </div>
     </div>
