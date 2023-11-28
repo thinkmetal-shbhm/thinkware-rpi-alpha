@@ -18,43 +18,30 @@ function App() {
 
   const [modal, setModal] = useState(null);
 
-  const [currentRes, setCurrentRes] = useState(null);
+  // const [currentRes, setCurrentRes] = useState(null);
 
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (currentRes) {
-      if (currentRes?.indexOf("cold extrusion prevented") !== -1) {
-        setModal(currentRes + ", Please Restart the printer.");
-        stopPrint(backend);
-      } else if (currentRes?.indexOf("Error:") !== -1) {
-        if (currentRes?.indexOf("Printer halted. kill() called!") !== -1)
-          setModal(currentRes + " Please Restart the printer.");
-        else setModal(currentRes);
-        stopPrint(backend);
+    if (state.currentRes) {
+      if (state.currentRes?.indexOf("cold extrusion prevented") !== -1) {
+        setModal(state.currentRes + ", Please Restart the printer.");
+        stopPrint(state.backend);
+      } else if (state.currentRes?.indexOf("Error:") !== -1) {
+        if (state.currentRes?.indexOf("Printer halted. kill() called!") !== -1)
+          setModal(state.currentRes + " Please Restart the printer.");
+        else setModal(state.currentRes);
+        stopPrint(state.backend);
       }
     }
-  }, [currentRes]);
+  }, [state.currentRes]);
 
   return (
     <Context.Provider value={state}>
       <DispatchCtx.Provider value={dispatch}>
         <div className="App">
-          <Sidebar
-            backend={backend}
-            setBackend={setBackend}
-            user={user}
-            setUser={setUser}
-            isConnected={isConnected}
-            setIsConnected={setIsConnected}
-          />
-          <MainContent
-            setCurrentRes={setCurrentRes}
-            backend={backend}
-            user={user}
-            setUser={setUser}
-            setIsConnected={setIsConnected}
-          />
+          <Sidebar user={user} setUser={setUser} />
+          <MainContent backend={backend} setIsConnected={setIsConnected} />
           {modal &&
             createPortal(
               <InfoPortal msg={modal} closeCb={(e) => setModal(null)} />,
