@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import JobInfo from "../../components/JobInfo/JobInfo";
 import Controller from "../../components/Controller/Controller";
 import CameraWindow from "../../components/CameraWindow/CameraWindow";
@@ -11,21 +11,35 @@ import { getSocket } from "../../socket";
 import { get } from "../../utils";
 
 import styles from "./JobScreen.module.css";
+import { Context, DispatchCtx } from "../../Context";
+import {
+  CONNECTED,
+  CURRENT_RES,
+  FILE_NAME,
+  IS_PAUSED,
+  PREVIEW,
+  PROG,
+  PROGRESS,
+  TEMP,
+} from "../../constants/actions";
 
-function JobScreen({ setIsConnected, backend, setCurrentRes }) {
-  const [isPaused, setIsPaused] = useState(true);
-  const [progress, setProgress] = useState(null);
-  const [heating, setHeating] = useState(null);
-  const [prog, setProg] = useState(null);
-  const [fileName, setFileName] = useState("Something...?");
+function JobScreen() {
+  // const [isPaused, setIsPaused] = useState(true);
+  // const [progress, setProgress] = useState(null);
+  // const [heating, setHeating] = useState(null);
+  // const [prog, setProg] = useState(null);
+  // const [fileName, setFileName] = useState("Something...?");
 
-  const [temp, setTemp] = useState(null);
+  // const [temp, setTemp] = useState(null);
 
-  const [createdTime, setCreatedTime] = useState(null);
+  // const [createdTime, setCreatedTime] = useState(null);
 
-  const [preview, setPreview] = useState(null);
+  // const [preview, setPreview] = useState(null);
 
   const location = useLocation();
+
+  const state = useContext(Context);
+  const dispatch = useContext(DispatchCtx);
 
   // useEffect(() => {
   // if (currentRes) {
@@ -54,17 +68,21 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
   // }, [currentRes]);
 
   useEffect(() => {
-    const tempSocket = (data) => setTemp(data);
-    const printerResponseSocket = (data) => setCurrentRes(data);
+    const tempSocket = (data) => dispatch({ type: TEMP, payload: data });
+    const printerResponseSocket = (data) =>
+      dispatch({ type: CURRENT_RES, payload: data });
+    // const tempSocket = (data) => setTemp(data);
+    // const printerResponseSocket = (data) => setCurrentRes(data);
     const progressSocket = (data) => {
-      setProgress(JSON.parse(data).data?.progress);
+      dispatch({ type: PROGRESS, payload: JSON.parse(data).data?.progress });
+      // setProgress(JSON.parse(data).data?.progress);
     };
 
     getSocket().on("tempReport", tempSocket);
     getSocket().on("progress", progressSocket);
     getSocket().on("printerResponse", printerResponseSocket);
 
-    get(backend, "/progress")
+    get(state.backend, "/progress")
       .then((res) => res.json())
       .then((res) => {
         console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
@@ -78,19 +96,23 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
         }
       });
 
-    get(backend, "/getPrintData/preview")
+    get(state.backend, "/getPrintData/preview")
       .then((res) => res.json())
       .then((res) => {
-        setPreview(res.data);
+        dispatch({ type: PREVIEW, payload: res.data });
+
+        // setPreview(res.data);
       });
-    get(backend, "/getPrintData/name")
+    get(state.backend, "/getPrintData/name")
       .then((res) => res.json())
       .then((res) => {
         console.log(
           "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
           res.data
         );
-        setFileName(res.data);
+
+        dispatch({ type: FILE_NAME, payload: res.data });
+        // setFileName(res.data);
       });
     // const previewInterval = setInterval(() => {
     //   // console.log("int");
@@ -102,12 +124,16 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
     //   }
     // }, 500);
 
-    get(backend, "/connectionStatus")
+    get(state.backend, "/connectionStatus")
       .then((res) => res.json())
-      .then((res) =>
-        res.message === "printer connection found"
-          ? setIsConnected(true)
-          : setIsConnected(false)
+      .then(
+        (res) =>
+          res.message === "printer connection found"
+            ? dispatch({ type: CONNECTED, payload: true })
+            : dispatch({ type: CONNECTED, payload: false })
+
+        // ? setIsConnected(true)
+        // : setIsConnected(false)
       );
 
     return () => {
@@ -124,16 +150,22 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
     };
     if (location.state?.message === "fileUploaded") {
       getSocket().on("printingStarted", printingStartedSocket);
-      setIsPaused(false);
+
+      dispatch({ type: IS_PAUSED, payload: false });
+      // setIsPaused(false);
       get(backend, "/getPrintData/preview")
         .then((res) => res.json())
         .then((res) => {
-          setPreview(res.data);
+          dispatch({ type: PREVIEW, payload: res.data });
+
+          // setPreview(res.data);
         });
       get(backend, "/getPrintData/name")
         .then((res) => res.json())
         .then((res) => {
-          setFileName(res.data);
+          dispatch({ type: FILE_NAME, payload: res.data });
+
+          // setFileName(res.data);
         });
     }
     return () => {
@@ -144,34 +176,20 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
   }, [location.state?.message]);
 
   useEffect(() => {
-    setProg(progress ? !(Object.keys(progress).length === 0) : false);
-  }, [progress]);
+    dispatch({
+      type: PROG,
+      payload: state.progress
+        ? !(Object.keys(state.progress).length === 0)
+        : false,
+    });
+    // setProg(progress ? !(Object.keys(progress).length === 0) : false);
+  }, [state.progress]);
 
   return (
     <div style={{ width: "100%" }}>
-      <JobInfo
-        backend={backend}
-        temp={temp}
-        prog={prog}
-        isPaused={isPaused}
-        setIsPaused={setIsPaused}
-        progress={progress}
-        heating={heating}
-        setHeating={setHeating}
-        fileName={fileName}
-        setFileName={setFileName}
-        setCreatedTime={setCreatedTime}
-      />
+      <JobInfo />
       <div className={styles.cameraAndControls}>
-        {isPaused ? (
-          <Controller />
-        ) : (
-          <PreviewSection
-            createdTime={createdTime}
-            fileName={fileName}
-            preview={preview}
-          />
-        )}
+        {state.isPaused ? <Controller /> : <PreviewSection />}
         <CameraWindow />
       </div>
     </div>
@@ -180,13 +198,14 @@ function JobScreen({ setIsConnected, backend, setCurrentRes }) {
 
 export default JobScreen;
 
-function PreviewSection({ createdTime, fileName, preview }) {
+function PreviewSection() {
+  const state = useContext(Context);
   return (
     <div className={jobstyles.jobPreviewCard} style={{ textAlign: "center" }}>
       <div className={jobstyles.previewContainer}>
         <img
           className={jobstyles.previewImg}
-          src={preview}
+          src={state.preview}
           alt="preview"
           width={"100%"}
           // height={"100%"}
@@ -194,9 +213,9 @@ function PreviewSection({ createdTime, fileName, preview }) {
       </div>
       <div className={jobstyles.jobPreviewInfo}>
         <h3 style={{ textAlign: "center" }}>
-          {fileName ? fileName.split(".")[0] : `Something...?`}
+          {state.fileName ? state.fileName.split(".")[0] : `Something...?`}
         </h3>
-        <span>Created at: {createdTime}</span>
+        <span>Created at: {state.createdTime}</span>
       </div>
     </div>
   );

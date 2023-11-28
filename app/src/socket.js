@@ -13,5 +13,6 @@ export function getSocket() {
   return socket;
 }
 export function setSocket(url) {
+  if (socket) socket.disconnect();
   socket = io(url);
 }

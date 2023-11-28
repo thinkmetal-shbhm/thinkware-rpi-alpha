@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useContext } from "react";
 import SidebarCSS from "./Sidebar.module.css";
 import { NavLink } from "react-router-dom";
 import UserIcon from "../../assets/Icons/user.png";
@@ -13,16 +13,15 @@ import { auth, provider, signInwithGoogle } from "../../firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { get } from "../../utils";
 import { setSocket } from "../../socket";
+import { BACKEND, BACKEND_FOUND, CONNECTED } from "../../constants/actions";
+import { Context, DispatchCtx } from "../../Context";
 
-function Sidebar({
-  user,
-  setUser,
-  isConnected,
-  setIsConnected,
-  backend,
-  setBackend,
-}) {
+function Sidebar({ user, setUser }) {
   const inpRef = useRef(null);
+
+  const state = useContext(Context);
+  const dispatch = useContext(DispatchCtx);
+
   console.log("user", user);
   const signIn = () => {
     signInWithPopup(auth, provider)
@@ -58,10 +57,13 @@ function Sidebar({
   function connectionButtonHandler(e) {
     console.log(e);
 
-    get(backend, "/connectionStatus")
+    get(state.backend, "/connectionStatus")
       .then((res) => res.json())
       .then((res) => {
-        if (res.message === "printer connection found") setIsConnected(true);
+        if (res.message === "printer connection found") {
+          dispatch({ type: CONNECTED, payload: true });
+          // setIsConnected(true);
+        }
       });
   }
 
@@ -78,10 +80,18 @@ function Sidebar({
         .then((res) => res.json())
         .then((res) => {
           if (res.status !== 404) {
-            setSocket(backend);
+            setSocket(state.backend);
+            dispatch({
+              type: BACKEND_FOUND,
+              payload: true,
+            });
           }
           if (res.message === "printer connection found") {
-            setIsConnected(true);
+            dispatch({
+              type: CONNECTED,
+              payload: true,
+            });
+            // setIsConnected(true);
           }
         });
     }
@@ -168,7 +178,7 @@ function Sidebar({
                 }
                 onClick={connectionButtonHandler}
               >
-                {isConnected ? (
+                {state.isConnected ? (
                   <img
                     src={OnlineIcon}
                     style={{ borderRadius: "50%" }}
@@ -185,7 +195,7 @@ function Sidebar({
                 )}
               </button>
             </div>
-            {!isConnected && (
+            {!state.isConnected && (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -198,10 +208,14 @@ function Sidebar({
                       .then((res) => res.json())
                       .then((res) => {
                         if (res.status !== 404) {
-                          setSocket(backend);
+                          setSocket(state.backend);
                         }
                         if (res.message === "printer connection found") {
-                          setIsConnected(true);
+                          dispatch({
+                            type: CONNECTED,
+                            payload: true,
+                          });
+                          // setIsConnected(true);
                         }
                       });
                   } else {
@@ -210,10 +224,15 @@ function Sidebar({
                       .then((res) => res.json())
                       .then((res) => {
                         if (res.status !== 404) {
-                          setSocket(backend);
+                          setSocket(state.backend);
                         }
-                        if (res.message === "printer connection found")
-                          setIsConnected(true);
+                        if (res.message === "printer connection found") {
+                          dispatch({
+                            type: CONNECTED,
+                            payload: true,
+                          });
+                          // setIsConnected(true);
+                        }
                       });
                   }
                 }}
@@ -224,9 +243,17 @@ function Sidebar({
                     inpRef.current.value = e.target.value;
 
                     if (import.meta.env.VITE_NODE_ENV === "production") {
-                      setBackend("http://" + e.target.value + ".local:4000");
+                      dispatch({
+                        type: BACKEND,
+                        payload: "http://" + e.target.value + ".local:4000",
+                      });
+                      // setBackend("http://" + e.target.value + ".local:4000");
                     } else {
-                      setBackend("http://" + e.target.value);
+                      dispatch({
+                        type: BACKEND,
+                        payload: "http://" + e.target.value,
+                      });
+                      // setBackend("http://" + e.target.value);
                     }
                     console.log(
                       "🚀 ~ file: Sidebar.jsx:210 ~ inpRef.current.value:",

@@ -1,19 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import MainContentCSS from "./MainContent.module.css";
 import { Route, Routes } from "react-router-dom";
 import JobScreen from "../../pages/JobScreen/JobScreen";
 import HomeScreen from "../../pages/Homescreen/HomeScreen";
 import SlicerScreen from "../../pages/SlicerScreen/SlicerScreen";
 
-function MainContent({
-  user,
-  setUser,
-  setIsConnected,
-  backend,
-  setCurrentRes,
-}) {
-  const [partName, setPartName] = useState("cube.stl");
-
+function MainContent({ setIsConnected, backend }) {
   return (
     <div className={MainContentCSS.ContentParent}>
       <Routes>
@@ -30,23 +22,7 @@ function MainContent({
             <SlicerScreen setIsConnected={setIsConnected} backend={backend} />
           }
         />
-        <Route
-          path="/job"
-          element={
-            <JobScreen
-              setCurrentRes={setCurrentRes}
-              partName={partName}
-              setIsConnected={setIsConnected}
-              backend={backend}
-            />
-          }
-        />
-        <Route
-          path="/prepare"
-          element={
-            <SlicerScreen setIsConnected={setIsConnected} backend={backend} />
-          }
-        />
+        <Route path="/job" element={<JobScreen />} />
       </Routes>
     </div>
   );

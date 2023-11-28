@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomeScreen.module.css";
 import ImportIcon from "../../assets/Icons/import.png";
@@ -7,19 +7,38 @@ import ImportIcon from "../../assets/Icons/import.png";
 import { StlViewer } from "../../components/PartPreview/StlViewer.modern";
 import PartPreview from "../../components/PartPreview/PartPreview";
 import { get, post } from "../../utils";
+import { DispatchCtx } from "../../Context";
+import { CONNECTED } from "../../constants/actions";
 
 function HomeScreen({ user, setIsConnected, backend }) {
   const navigate = useNavigate();
+
+  const dispatch = createContext(DispatchCtx);
 
   useEffect(() => {
     get(backend, "/connectionStatus")
       .then((res) => res.json())
       .then((res) =>
         res.message === "printer connection found"
-          ? setIsConnected(true)
-          : setIsConnected(false)
+          ? dispatch({
+              type: CONNECTED,
+              payload: true,
+            })
+          : dispatch({
+              type: CONNECTED,
+              payload: false,
+            })
       );
   }, []);
+  // useEffect(() => {
+  //   get(backend, "/connectionStatus")
+  //     .then((res) => res.json())
+  //     .then((res) =>
+  //       res.message === "printer connection found"
+  //         ? setIsConnected(true)
+  //         : setIsConnected(false)
+  //     );
+  // }, []);
 
   return (
     <>

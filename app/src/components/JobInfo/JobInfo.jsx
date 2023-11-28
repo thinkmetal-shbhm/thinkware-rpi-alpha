@@ -1,36 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./JobInfo.module.css";
 import { pauseIcon, crossIcon, playIcon } from "../../assets/Icons";
 import { pausePrint, resumePrint, stopPrint } from "../../printerUtils";
 import { secondsToDDHHMM } from "../../utils";
+import { Context, DispatchCtx } from "../../Context";
+import {
+  BED_PERCENT,
+  CREATED_TIME,
+  ESTIMATED_END,
+  EXT_PERCENT,
+  FILE_NAME,
+  HEATING,
+  IS_PAUSED,
+  PERCENT,
+  REMAINING_TIME,
+} from "../../constants/actions";
 
-function JobInfo({
-  isPaused,
-  setIsPaused,
-  progress,
-  heating,
-  setHeating,
-  prog,
-  temp,
-  fileName,
-  setFileName,
-  setCreatedTime,
-  backend,
-}) {
-  const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
-  const [remainingTime, setRemainingTime] = useState("Unknown");
-  const [percent, setPercent] = useState("");
-  const [extPercent, setExtPercent] = useState("10%");
-  const [bedPercent, setBedPercent] = useState("20%");
+function JobInfo() {
+  // const [estimatedEnd, setEstimatedEnd] = useState("Unknown");
+  // const [remainingTime, setRemainingTime] = useState("Unknown");
+  // const [percent, setPercent] = useState("");
+  // const [extPercent, setExtPercent] = useState("10%");
+  // const [bedPercent, setBedPercent] = useState("20%");
+
+  const state = useContext(Context);
+  const dispatch = useContext(DispatchCtx);
 
   useEffect(() => {
-    console.log("🚀 ~ file: JobInfo.jsx:42 ~ useEffect ~ progress:", progress);
-    if (progress) {
-      if (!(Object.keys(progress).length === 0)) {
-        if (progress.currentTime && progress.running) {
+    console.log(
+      "🚀 ~ file: JobInfo.jsx:42 ~ useEffect ~ state.progress:",
+      state.progress
+    );
+    if (state.progress) {
+      if (!(Object.keys(state.progress).length === 0)) {
+        if (state.progress.currentTime && state.progress.running) {
           // setHeating(false);
-          const tt = +progress.totalETA;
-          const ct = progress.currentTime;
+          const tt = +state.progress.totalETA;
+          const ct = state.progress.currentTime;
           const minutes = +ct.split("m")[0] || 0;
           const seconds =
             +ct.slice(ct.indexOf("m") + 1, ct.indexOf("s")).trim() || 0;
@@ -38,13 +44,26 @@ function JobInfo({
           const value = ((minutes * 60 + seconds) / tt) * 100 || 0;
           const remaining = tt - (minutes * 60 + seconds);
 
-          setPercent(`${Math.floor(value)}%`);
-          setEstimatedEnd(
-            tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(tt)}`
-          );
-          setRemainingTime(
-            tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(remaining)}`
-          );
+          dispatch({ type: PERCENT, payload: `${Math.floor(value)}%` });
+          // setPercent(`${Math.floor(value)}%`);
+          dispatch({
+            type: ESTIMATED_END,
+            payload:
+              tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(tt)}`,
+          });
+          // setEstimatedEnd(
+          //   tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(tt)}`
+          // );
+          dispatch({
+            type: REMAINING_TIME,
+            payload:
+              tt == 0 && isNaN(tt)
+                ? "Unknown"
+                : `${secondsToDDHHMM(remaining)}`,
+          });
+          // setRemainingTime(
+          //   tt == 0 && isNaN(tt) ? "Unknown" : `${secondsToDDHHMM(remaining)}`
+          // );
           console.log(
             "🚀 ~ file: JobInfo.jsx:58 ~ useEffect ~ tt:",
             tt,
@@ -55,39 +74,48 @@ function JobInfo({
           );
         }
 
-        setIsPaused(progress.paused);
-        setHeating(progress.heating);
+        dispatch({ type: IS_PAUSED, payload: state.progress.paused });
+        dispatch({ type: HEATING, payload: state.progress.heating });
+
+        // setIsPaused(progress.paused);
+        // setHeating(progress.heating);
         console.log(
-          "🚀 ~ file: JobInfo.jsx:75 ~ useEffect ~ progress.heating:",
-          progress.heating
+          "🚀 ~ file: JobInfo.jsx:75 ~ useEffect ~ state.progress.heating:",
+          state.progress.heating
         );
 
-        if (progress.finished || progress.stopped) {
-          setFileName(null);
+        if (state.progress.finished || state.progress.stopped) {
+          dispatch({ type: FILE_NAME, payload: null });
+          // setFileName(null);
         }
         console.log(
-          "🚀 ~ file: JobInfo.jsx:71 ~ useEffect ~ progress:",
-          progress
+          "🚀 ~ file: JobInfo.jsx:71 ~ useEffect ~ state.progress:",
+          state.progress
         );
-        setCreatedTime(progress.createdTime);
-        console.log(progress.createdTime);
+        dispatch({ type: CREATED_TIME, payload: state.progress.createdTime });
+        // setCreatedTime(state.progress.createdTime);
+        console.log(state.progress.createdTime);
       } else {
-        setIsPaused(true);
+        dispatch({ type: IS_PAUSED, payload: true });
+        // setIsPaused(true);
       }
 
-      if (progress?.stopped) {
+      if (state.progress?.stopped) {
         localStorage.removeItem("current_files");
         localStorage.removeItem("plate_preview");
         localStorage.removeItem("tw__gcode");
       }
     } else {
-      setIsPaused(true);
+      dispatch({ type: IS_PAUSED, payload: true });
+
+      // setIsPaused(true);
+
       // setHeating(false);
       // localStorage.removeItem("current_files");
       // localStorage.removeItem("plate_preview");
       // localStorage.removeItem("gcode");
     }
-  }, [progress]);
+  }, [state.progress]);
 
   useEffect(() => {
     // if (temp) {
@@ -97,15 +125,17 @@ function JobInfo({
     //   setExtPercent((+ext[0].trim() / +ext[1].trim()) * 100 + "%");
     //   setBedPercent((+bed[0].trim() / +bed[1].trim()) * 100 + "%");
     // }
-    if (prog && !heating) {
-      setExtPercent("100%");
-      setBedPercent("100%");
+    if (state.prog && !state.heating) {
+      dispatch({ type: EXT_PERCENT, payload: "100%" });
+      dispatch({ type: BED_PERCENT, payload: "100%" });
+      // setExtPercent("100%");
+      // setBedPercent("100%");
     }
-  }, [temp, heating, prog]);
+  }, [state.temp, state.heating, state.prog]);
 
   return (
     <>
-      {heating || (!progress?.stopped && prog) ? (
+      {state.heating || (!state.progress?.stopped && state.prog) ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
@@ -116,10 +146,12 @@ function JobInfo({
                     style={{ display: "flex", justifyContent: "space-between" }}
                     className={`${styles.fileName} ${styles.heading4}`}
                   >
-                    <small style={{ marginRight: "0.5rem" }}>{fileName}</small>
+                    <small style={{ marginRight: "0.5rem" }}>
+                      {state.fileName}
+                    </small>
                     <span style={{ margin: "auto", textAlign: "end" }}>
                       <span style={{ marginLeft: "auto" }}>
-                        {heating ? "Heating..." : percent}
+                        {state.heating ? "Heating..." : state.percent}
                       </span>
                     </span>
                   </h4>
@@ -127,7 +159,7 @@ function JobInfo({
                 <progress
                   className={styles.progress}
                   max={100}
-                  value={percent.split("%")[0]}
+                  value={state.percent.split("%")[0]}
                 ></progress>
                 {/* <div className={styles.progress}>
                   <div
@@ -139,23 +171,23 @@ function JobInfo({
 
               <div className={styles.actions}>
                 <button
-                  disabled={!prog}
+                  disabled={!state.prog}
                   className={styles.btn}
                   onClick={async () => {
-                    if (isPaused) {
-                      const resp = await resumePrint(backend);
+                    if (state.isPaused) {
+                      const resp = await resumePrint(state.backend);
                       console.log(resp);
                     } else {
-                      const resp = await pausePrint(backend);
+                      const resp = await pausePrint(state.backend);
                       console.log(resp);
                     }
                   }}
                 >
-                  {!isPaused ? (
+                  {!state.isPaused ? (
                     <React.Fragment>
                       <img
                         style={{
-                          opacity: prog ? "1" : "0.4",
+                          opacity: state.prog ? "1" : "0.4",
                         }}
                         className={styles.pauseIcon}
                         src={pauseIcon}
@@ -167,7 +199,7 @@ function JobInfo({
                     <React.Fragment>
                       <img
                         style={{
-                          opacity: prog ? "1" : "0.4",
+                          opacity: state.prog ? "1" : "0.4",
                         }}
                         className={styles.pauseIcon}
                         src={playIcon}
@@ -178,22 +210,26 @@ function JobInfo({
                   )}
                 </button>
                 <button
-                  disabled={!prog}
+                  disabled={!state.prog}
                   className={styles.btn}
                   onClick={async () => {
-                    const res = await stopPrint(backend);
+                    const res = await stopPrint(state.backend);
 
                     if (res.status == 200) {
                       console.log(res);
-                      setPercent("");
-                      setRemainingTime("Unknown");
-                      setEstimatedEnd("Unknown");
+
+                      dispatch({ type: PERCENT, payload: null });
+                      dispatch({ type: REMAINING_TIME, payload: null });
+                      dispatch({ type: ESTIMATED_END, payload: null });
+                      // setPercent("");
+                      // setRemainingTime("Unknown");
+                      // setEstimatedEnd("Unknown");
                     }
                   }}
                 >
                   <img
                     style={{
-                      opacity: prog ? "1" : "0.4",
+                      opacity: state.prog ? "1" : "0.4",
                     }}
                     className={styles.crossIcon}
                     src={crossIcon}
@@ -209,9 +245,9 @@ function JobInfo({
             <div className={styles.time}>
               <h3 className={styles.heading3}>TIME</h3>
               <h4 className={styles.heading4}>
-                Remaining Time: {`${remainingTime}`}
+                Remaining Time: {`${state.remainingTime || "Unknown"}`}
               </h4>
-              <p>Estimated time: {estimatedEnd}</p>
+              <p>Estimated time: {state.estimatedEnd || "Unknown"}</p>
             </div>
 
             {/* <div className={styles.circleContainer}>
@@ -227,19 +263,22 @@ function JobInfo({
             // disabled={!prog}
             className={styles.btn}
             onClick={async () => {
-              const res = await stopPrint(backend);
+              const res = await stopPrint(state.backend);
 
               if (res.status == 200) {
                 console.log(res);
-                setPercent("");
-                setRemainingTime("Unknown");
-                setEstimatedEnd("Unknown");
+                dispatch({ type: PERCENT, payload: null });
+                dispatch({ type: REMAINING_TIME, payload: null });
+                dispatch({ type: ESTIMATED_END, payload: null });
+                // setPercent("");
+                // setRemainingTime("Unknown");
+                // setEstimatedEnd("Unknown");
               }
             }}
           >
             <img
               style={{
-                opacity: prog ? "1" : "0.4",
+                opacity: state.prog ? "1" : "0.4",
               }}
               className={styles.crossIcon}
               src={crossIcon}
@@ -282,7 +321,7 @@ function JobInfo({
                 <div className={styles.barcontainer}>
                   <div
                     className={styles.barPercent}
-                    style={{ height: extPercent }}
+                    style={{ height: state.extPercent }}
                   ></div>
                 </div>
               </div>
@@ -294,14 +333,14 @@ function JobInfo({
                 <div className={styles.barcontainer}>
                   <div
                     className={styles.barPercent}
-                    style={{ height: bedPercent }}
+                    style={{ height: state.bedPercent }}
                   ></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {!(heating || (!progress?.stopped && prog)) && (
+        {!(state.heating || (!state.progress?.stopped && state.prog)) && (
           <div className={styles.noJob}>
             <h3>No Job Running!</h3>
           </div>
