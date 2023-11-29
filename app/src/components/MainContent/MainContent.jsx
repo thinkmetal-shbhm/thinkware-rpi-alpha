@@ -39,41 +39,42 @@ function MainContent({ setIsConnected, backend }) {
     const progressSocket = (data) => {
       dispatch({ type: PROGRESS, payload: JSON.parse(data).data?.progress });
     };
+    if (state.backendFound) {
+      if (getSocket()) {
+        getSocket().on("tempReport", tempSocket);
+        getSocket().on("progress", progressSocket);
+        getSocket().on("printerResponse", printerResponseSocket);
+      }
 
-    if (state.backendFound && getSocket()) {
-      getSocket().on("tempReport", tempSocket);
-      getSocket().on("progress", progressSocket);
-      getSocket().on("printerResponse", printerResponseSocket);
-    }
+      get(state.backend, "/progress")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
+        });
 
-    get(state.backend, "/progress")
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("🚀 ~ file: JobScreen.jsx:63 ~ .then ~ res:", res);
-      });
+      get(state.backend, "/getPrintData/preview")
+        .then((res) => res.json())
+        .then((res) => {
+          dispatch({ type: PREVIEW, payload: res.data });
+        });
+      get(state.backend, "/getPrintData/name")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(
+            "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
+            res.data
+          );
+          dispatch({ type: FILE_NAME, payload: res.data });
+        });
 
-    get(state.backend, "/getPrintData/preview")
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch({ type: PREVIEW, payload: res.data });
-      });
-    get(state.backend, "/getPrintData/name")
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(
-          "🚀 ~ file: JobScreen.jsx:92 ~ .then ~ res.data: stetinngg-dfb-=bpodfb",
-          res.data
+      get(state.backend, "/connectionStatus")
+        .then((res) => res.json())
+        .then((res) =>
+          res.message === "printer connection found"
+            ? dispatch({ type: CONNECTED, payload: true })
+            : dispatch({ type: CONNECTED, payload: false })
         );
-        dispatch({ type: FILE_NAME, payload: res.data });
-      });
-
-    get(state.backend, "/connectionStatus")
-      .then((res) => res.json())
-      .then((res) =>
-        res.message === "printer connection found"
-          ? dispatch({ type: CONNECTED, payload: true })
-          : dispatch({ type: CONNECTED, payload: false })
-      );
+    }
 
     return () => {
       if (getSocket()) {
@@ -81,7 +82,7 @@ function MainContent({ setIsConnected, backend }) {
         getSocket().off("printerResponse", printerResponseSocket);
       }
     };
-  }, []);
+  }, [state.backend]);
 
   useEffect(() => {
     const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
