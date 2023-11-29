@@ -40,16 +40,22 @@ function CameraWindow() {
     }
 
     async function fetchVideoStream() {
-      getSocket().on("connection/connected", onConnect);
-      getSocket().on("disconnect", onDisconnect);
-      getSocket().on("video/frame", onFrame);
+      if (getSocket()) {
+        console.log(getSocket());
+        getSocket().on("connection/connected", onConnect);
+        getSocket().on("disconnect", onDisconnect);
+        getSocket().on("video/frame", onFrame);
+      }
     }
 
     fetchVideoStream();
     return () => {
-      getSocket().off("connect", onConnect);
-      getSocket().off("disconnect", onDisconnect);
-      getSocket().off("video/frame", onFrame);
+      if (getSocket()) {
+        console.log(getSocket());
+        getSocket().off("connect", onConnect);
+        getSocket().off("disconnect", onDisconnect);
+        getSocket().off("video/frame", onFrame);
+      }
     };
   }, []);
 
