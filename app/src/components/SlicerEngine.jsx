@@ -7,6 +7,7 @@ import { resolveDefinition } from "cura-wasm-definitions";
 // Pass an ref as prop for file input, so that file can be accessed outside too.(using ref.current.files[0])
 function SlicerEngine({ fileRef }) {
   const [init, setInit] = React.useState(false);
+  const [fileName, setFileName] = React.useState(null);
   const [percent, setPercent] = React.useState(null);
   const [gcode, setGcode] = React.useState(null);
   const [elapsed, setElasped] = React.useState(null);
@@ -86,43 +87,81 @@ function SlicerEngine({ fileRef }) {
   }
 
   return (
-    <div>
-      <input id="upload" type="file" ref={fileRef} />
-      <button onClick={fileSubmit}>Slice </button>
-      <br />
-      <span>
-        <progress value={percent || "0"} max="100"></progress>
-        <span>{percent || "0"}%</span>
-      </span>
-      <div>
-        <h4>Metadata: </h4>
-
-        {gcode?.metadata && elapsed && estimatedTime ? (
-          <>
-            <div>{`Elapsed time: ${elapsed.valueOf()}ms`}</div>
-            <div>{`GCODE flavor: ${gcode.metadata.flavor}`}</div>
-            <div>{`Estimated print time: ${estimatedTime}`}</div>
-            <div>{`Nozzle Size: ${gcode.metadata.nozzleSize}mm `}</div>
-            <div>{`Filament Usage: ${gcode.metadata.filamentUsage}mm³ `}</div>
-            <div>{`Material 1 usage: ${gcode.metadata.material1Usage}mm³`}</div>
-            <div>{`Material 2 usage: ${gcode.metadata.material2Usage}mm³`}</div>
-          </>
-        ) : (
-          "N/A"
-        )}
+    <div style={{ width: "400px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          style={{ padding: "0.25rem 0.5rem", margin: "0.25rem 1rem" }}
+          onClick={(e) => upload.click()}
+        >
+          Import
+          <input
+            id="upload"
+            type="file"
+            ref={fileRef}
+            onChange={(e) => {
+              if (fileRef?.current?.files[0]) {
+                setFileName(fileRef?.current?.files[0].name);
+                setGcode(null);
+              }
+            }}
+          />
+        </button>
+        <span>
+          <button
+            onClick={fileSubmit}
+            style={{ padding: "0.25rem 0.5rem", margin: "0.25rem 1rem" }}
+            disabled={!fileName}
+          >
+            Slice
+          </button>
+          <button
+            style={{ padding: "0.25rem 0.5rem", margin: "0.25rem 1rem" }}
+            onClick={() => handleFinish(gcode?.gcode, gcode?.metadata)}
+            disabled={!gcode?.gcode}
+          >
+            download
+          </button>
+        </span>
       </div>
+      <br />
+      <div>
+        <progress
+          value={percent || "0"}
+          max="100"
+          style={{ overflow: "hidden" }}
+        ></progress>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {/* <span>{fileRef.current?.files[0]}</span> */}
+          <span style={{ margin: "0.25rem 0.5rem" }}>{fileName || ""}</span>
+          <span style={{ margin: "0.25rem 0.5rem" }}>{percent || "0"}%</span>
+        </div>
+      </div>
+
+      {gcode?.metadata && (
+        <div>
+          <h4>Metadata: </h4>
+
+          {gcode?.metadata && elapsed && estimatedTime ? (
+            <>
+              <div>{`Elapsed time: ${elapsed.valueOf()}ms`}</div>
+              <div>{`GCODE flavor: ${gcode.metadata.flavor}`}</div>
+              <div>{`Estimated print time: ${estimatedTime}`}</div>
+              <div>{`Nozzle Size: ${gcode.metadata.nozzleSize}mm `}</div>
+              <div>{`Filament Usage: ${gcode.metadata.filamentUsage}mm³ `}</div>
+              <div>{`Material 1 usage: ${gcode.metadata.material1Usage}mm³`}</div>
+              <div>{`Material 2 usage: ${gcode.metadata.material2Usage}mm³`}</div>
+            </>
+          ) : (
+            "N/A"
+          )}
+        </div>
+      )}
       {/* <input
               disabled
               id="download"
               value="Download GCODE"
               type="button"
             /> */}
-      <button
-        onClick={() => handleFinish(gcode?.gcode, gcode?.metadata)}
-        disabled={!gcode?.gcode}
-      >
-        download
-      </button>
     </div>
   );
 }

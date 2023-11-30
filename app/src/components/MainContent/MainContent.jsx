@@ -25,6 +25,7 @@ import {
   REMAINING_TIME,
   TEMP,
 } from "../../constants/actions";
+import SlicerEnginePage from "../../pages/SlicerEnginePage/SlicerEnginePage";
 
 function MainContent({ setIsConnected, backend }) {
   const state = useContext(Context);
@@ -216,6 +217,7 @@ function MainContent({ setIsConnected, backend }) {
           }
         />
         <Route path="/job" element={<JobScreen />} />
+        <Route path="/engine" element={<SlicerEnginePage />} />
       </Routes>
     </div>
   );

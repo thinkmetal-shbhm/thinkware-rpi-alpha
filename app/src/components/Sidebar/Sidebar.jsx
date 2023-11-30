@@ -143,6 +143,15 @@ function Sidebar({ user, setUser }) {
             <img src={JobImage} alt="job" className={SidebarCSS.MenuImage} />
             <span className={SidebarCSS.MenuText}>Job</span>
           </NavLink>
+          <NavLink
+            to="/engine"
+            className={({ isActive }) =>
+              isActive ? SidebarCSS.activeList : SidebarCSS.pageItem
+            }
+          >
+            <img src={JobImage} alt="engine" className={SidebarCSS.MenuImage} />
+            <span className={SidebarCSS.MenuText}>Engine</span>
+          </NavLink>
         </div>
       </div>
 
