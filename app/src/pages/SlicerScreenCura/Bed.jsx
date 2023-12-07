@@ -4,14 +4,6 @@ import React from 'react'
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 function Bed({url}) {
-    const matcap=useTexture("./matcaps/matcap.png");
-    // const obj = useLoader(OBJLoader, "../../Bed Assembly/Bed assembly v16.obj",(loader) => {
-    //     materials.preload();
-    //     loader.setMaterials(materials)});
-    // return (<mesh>
-    //  <primitive object={obj} attach="geometry"/>
-    //     <meshMatcapMaterial matcap={matcap}/>
-    //  </mesh>);
     const materials = useLoader(MTLLoader, "../../Bed Assembly/Bed assembly v16.mtl");
     const obj = useLoader(OBJLoader, '../../Bed Assembly/Bed assembly v16.obj',(loader) => {
         materials.preload();

@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import React, {  useEffect, useState } from "react";
 import * as THREE from "three";
 import Bed from "./Bed";
+import Gcode from "./Gcode";
 
 import { Model } from "./Model";
 import PlaneGeom from "./Plane";
@@ -89,7 +90,7 @@ function SlicerScreenCura({fileRef}) {
   
   /> */}
         <Bed url={"../../Bed Assembly/Bed assembly v16.obj"}/>
-
+        <Gcode url={'../../gcode/3DBenchy-002.gcode'}/>
         <PlaneGeom />
         <lineSegments position={[0, 80, 20]}>
           <edgesGeometry attach="geometry" args={[new THREE.BoxGeometry(200, 160, 160)]} />
