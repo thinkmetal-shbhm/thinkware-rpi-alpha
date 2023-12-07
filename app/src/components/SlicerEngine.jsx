@@ -3,15 +3,21 @@ import React from "react";
 import { FileFormats } from "unified-3d-loader";
 import { CuraWASM } from "cura-wasm-tkml";
 import { resolveDefinition } from "cura-wasm-definitions";
+import { post } from "../utils";
+import { Context } from "../Context";
+import { useNavigate } from "react-router-dom";
 
 // Pass an ref as prop for file input, so that file can be accessed outside too.(using ref.current.files[0])
-function SlicerEngine({ fileRef }) {
+function SlicerEngine({ fileRef, pos }) {
   const [init, setInit] = React.useState(false);
   const [fileName, setFileName] = React.useState(null);
   const [percent, setPercent] = React.useState(null);
   const [gcode, setGcode] = React.useState(null);
   const [elapsed, setElasped] = React.useState(null);
   const [estimatedTime, setEstimatedTime] = React.useState(null);
+
+  const state = React.useContext(Context);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (!init) {
@@ -27,12 +33,10 @@ function SlicerEngine({ fileRef }) {
 
       extensions.push(".stl");
       document.getElementById("upload").accept = extensions;
-
-      window.transferFile = true;
     }
   }, []);
 
-  async function handleFinish(gcode) {
+  async function handleDownload(gcode) {
     //Create the download link and download the file
     const blob = new Blob([gcode], {
       type: "text/plain",
@@ -54,9 +58,60 @@ function SlicerEngine({ fileRef }) {
     //Create a slicer
     const slicer = new CuraWASM({
       command: window.command,
-      definition: resolveDefinition("ultimaker2"),
-      overrides: window.overrides,
-      transfer: window.transferFile,
+      definition: resolveDefinition("creality_ender3"),
+      overrides: [
+        {
+          key: "mesh_position_x",
+          value: 0,
+        },
+        {
+          key: "mesh_position_y",
+          value: 0,
+        },
+
+        // {
+        //   key: "mesh_position_x",
+        //   value: pos?.x ? pos.x : 0,
+        // },
+        // {
+        //   key: "mesh_position_y",
+        //   value: pos?.y ? pos.y : 0,
+        // },
+
+        {
+          key: "default_material_print_temperature",
+          value: 245.0,
+        },
+        {
+          key: "default_material_bed_temperature",
+          value: 100.0,
+        },
+        {
+          key: "material_print_temperature_layer_0",
+          value: 245.0,
+        },
+        {
+          key: "material_print_temperature",
+          value: 245.0,
+        },
+        {
+          key: "material_initial_print_temperature",
+          value: 245.0,
+        },
+        {
+          key: "material_final_print_temperature",
+          value: 245.0,
+        },
+        {
+          key: "material_bed_temperature_layer_0",
+          value: 100.0,
+        },
+        {
+          key: "material_bed_temperature",
+          value: 100.0,
+        },
+      ],
+      transfer: true,
     });
 
     //Add progress handler
@@ -116,10 +171,49 @@ function SlicerEngine({ fileRef }) {
           </button>
           <button
             style={{ padding: "0.25rem 0.5rem", margin: "0.25rem 1rem" }}
-            onClick={() => handleFinish(gcode?.gcode, gcode?.metadata)}
+            onClick={() => {
+              handleDownload(gcode?.gcode, gcode?.metadata);
+
+              console.log(state.backend, state.backendFound);
+
+              const enc = new TextDecoder("utf-8");
+              const gcodeStr = enc.decode(gcode?.gcode);
+              console.log(gcodeStr);
+              const gcodeArr = gcodeStr.split("\n");
+              console.log(
+                "🚀 ~ file: SlicerEngine.jsx:132 ~ SlicerEngine ~ gcodeArr:",
+                gcodeArr
+              );
+              if (state.backendFound) {
+                post(state.backend, "/fileUpload/uploadGcodeArray", {
+                  data: {
+                    name: "name",
+                    gcode: gcodeArr,
+                  },
+                })
+                  .then((res) => res.json())
+                  .then((resp) => {
+                    if (resp.message === "ok") {
+                      navigate("/job", {
+                        state: {
+                          id: 1,
+                          message: "fileUploaded",
+                          createdTime: resp.createdTime,
+                        },
+                      });
+                    } else {
+                      alert(`Error: ${resp.message}`);
+                      // setError(resp);
+                      setTimeout(() => {
+                        // setError(null);
+                      }, 3000);
+                    }
+                  });
+              }
+            }}
             disabled={!gcode?.gcode}
           >
-            download
+            Download
           </button>
         </span>
       </div>
