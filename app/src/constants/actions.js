@@ -16,6 +16,7 @@ export const PERCENT = "PERCENT";
 export const EXT_PERCENT = "EXT_PERCENT";
 export const BED_PERCENT = "BED_PERCENT";
 export const PART_NAME = "PART_NAME";
+export const SOCKET_CONNECTED = "SOCKET_CONNECTED";
 
 export default {
   BACKEND_FOUND,
@@ -36,6 +37,7 @@ export default {
   EXT_PERCENT,
   BED_PERCENT,
   PART_NAME,
+  SOCKET_CONNECTED,
 };
 
 export const mapping = {
@@ -57,4 +59,5 @@ export const mapping = {
   [EXT_PERCENT]: "extPercent",
   [BED_PERCENT]: "bedPercent",
   [PART_NAME]: "partName",
+  [SOCKET_CONNECTED]: "socketConnected",
 };
