@@ -9,6 +9,8 @@ import { getSocket } from "../../socket";
 import { get, secondsToDDHHMM } from "../../utils";
 import { Context, DispatchCtx } from "../../Context";
 import {
+  BACKEND,
+  BACKEND_FOUND,
   BED_PERCENT,
   CONNECTED,
   CREATED_TIME,
@@ -23,6 +25,7 @@ import {
   PROG,
   PROGRESS,
   REMAINING_TIME,
+  SOCKET_CONNECTED,
   TEMP,
 } from "../../constants/actions";
 import SlicerEnginePage from "../../pages/SlicerEnginePage/SlicerEnginePage";
@@ -34,14 +37,33 @@ function MainContent({ setIsConnected, backend }) {
   const location = useLocation();
 
   useEffect(() => {
+    const onConnect = () => {
+      dispatch({ type: SOCKET_CONNECTED, payload: true });
+      dispatch({
+        type: BACKEND,
+        payload: `${import.meta.env.VITE_BACKEND_URL}`,
+      });
+    };
+    const onDisconnect = () => {
+      dispatch({ type: SOCKET_CONNECTED, payload: false });
+      dispatch({
+        type: BACKEND_FOUND,
+        payload: false,
+      });
+    };
+
     const tempSocket = (data) => dispatch({ type: TEMP, payload: data });
     const printerResponseSocket = (data) =>
       dispatch({ type: CURRENT_RES, payload: data });
     const progressSocket = (data) => {
       dispatch({ type: PROGRESS, payload: JSON.parse(data).data?.progress });
     };
+
     if (state.backendFound) {
-      if (getSocket()) {
+      getSocket().on("connect", onConnect);
+      getSocket().on("disconnect", onDisconnect);
+
+      if (getSocket()?.connected) {
         getSocket().on("tempReport", tempSocket);
         getSocket().on("progress", progressSocket);
         getSocket().on("printerResponse", printerResponseSocket);
@@ -78,7 +100,9 @@ function MainContent({ setIsConnected, backend }) {
     }
 
     return () => {
-      if (getSocket()) {
+      if (getSocket()?.connected && state.socketConnected) {
+        getSocket().off("connect", onConnect);
+        getSocket().off("disconnect", onDisconnect);
         getSocket().off("progress", progressSocket);
         getSocket().off("printerResponse", printerResponseSocket);
       }
@@ -91,7 +115,9 @@ function MainContent({ setIsConnected, backend }) {
       console.log("printingStarted");
     };
     if (location.state?.message === "fileUploaded") {
-      getSocket().on("printingStarted", printingStartedSocket);
+      if (getSocket()?.connected && state.socketConnected) {
+        getSocket().on("printingStarted", printingStartedSocket);
+      }
 
       dispatch({ type: IS_PAUSED, payload: false });
       get(backend, "/getPrintData/preview")
@@ -107,7 +133,9 @@ function MainContent({ setIsConnected, backend }) {
     }
     return () => {
       setTimeout(() => {
-        getSocket().off("printingStarted", printingStartedSocket);
+        if (getSocket()?.connected && state.socketConnected) {
+          getSocket().off("printingStarted", printingStartedSocket);
+        }
       }, 30000);
     };
   }, [location.state?.message]);

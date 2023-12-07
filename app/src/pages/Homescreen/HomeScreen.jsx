@@ -16,19 +16,21 @@ function HomeScreen({ user, setIsConnected, backend }) {
   const dispatch = createContext(DispatchCtx);
 
   useEffect(() => {
-    get(backend, "/connectionStatus")
+    get(backend, "/connectionStatus/backend")
       .then((res) => res.json())
-      .then((res) =>
-        res.message === "printer connection found"
-          ? dispatch({
-              type: CONNECTED,
-              payload: true,
-            })
-          : dispatch({
-              type: CONNECTED,
-              payload: false,
-            })
-      );
+      .then((res) => {
+        if (res.status != 404 && res?.data?.connected == true) {
+          res.message === "printer connection found"
+            ? dispatch({
+                type: CONNECTED,
+                payload: true,
+              })
+            : dispatch({
+                type: CONNECTED,
+                payload: false,
+              });
+        }
+      });
   }, []);
   // useEffect(() => {
   //   get(backend, "/connectionStatus")

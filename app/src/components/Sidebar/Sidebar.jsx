@@ -76,23 +76,31 @@ function Sidebar({ user, setUser }) {
   useEffect(() => {
     if (import.meta.env.VITE_NODE_ENV === "production") {
       localStorage.setItem("backend", import.meta.env.VITE_BACKEND_URL);
-      get(`${import.meta.env.VITE_BACKEND_URL}`, "/connectionStatus")
+      get(`${import.meta.env.VITE_BACKEND_URL}`, "/connectionStatus/backend")
         .then((res) => res.json())
         .then((res) => {
-          if (res.status !== 404) {
+          if (res.status !== 404 && res.data.connected == true) {
             setSocket(state.backend);
             dispatch({
               type: BACKEND_FOUND,
               payload: true,
             });
-          }
-          if (res.message === "printer connection found") {
             dispatch({
-              type: CONNECTED,
-              payload: true,
+              type: BACKEND,
+              payload: `${import.meta.env.VITE_BACKEND_URL}`,
             });
-            // setIsConnected(true);
           }
+          get(`${import.meta.env.VITE_BACKEND_URL}`, "/connectionStatus")
+            .then((res) => res.json())
+            .then((res) => {
+              if (res.message === "printer connection found") {
+                dispatch({
+                  type: CONNECTED,
+                  payload: true,
+                });
+                // setIsConnected(true);
+              }
+            });
         });
     }
   }, []);
@@ -212,36 +220,70 @@ function Sidebar({ user, setUser }) {
                     localStorage.setItem("backend", inpRef.current.value);
                     get(
                       "http://" + inpRef.current.value + ".local:4000",
-                      "/connectionStatus"
+                      "/connectionStatus/backend"
                     )
                       .then((res) => res.json())
                       .then((res) => {
-                        if (res.status !== 404) {
+                        if (res.status !== 404 && res.data.connected == true) {
                           setSocket(state.backend);
-                        }
-                        if (res.message === "printer connection found") {
                           dispatch({
-                            type: CONNECTED,
+                            type: BACKEND_FOUND,
                             payload: true,
                           });
-                          // setIsConnected(true);
+                          dispatch({
+                            type: BACKEND,
+                            payload:
+                              "http://" + inpRef.current.value + ".local:4000",
+                          });
                         }
+                        get(
+                          "http://" + inpRef.current.value + ".local:4000",
+                          "/connectionStatus"
+                        )
+                          .then((res) => res.json())
+                          .then((res) => {
+                            if (res.message === "printer connection found") {
+                              dispatch({
+                                type: CONNECTED,
+                                payload: true,
+                              });
+                              // setIsConnected(true);
+                            }
+                          });
                       });
                   } else {
                     localStorage.setItem("backend", inpRef.current.value);
-                    get("http://" + inpRef.current.value, "/connectionStatus")
+                    get(
+                      "http://" + inpRef.current.value,
+                      "/connectionStatus/backend"
+                    )
                       .then((res) => res.json())
                       .then((res) => {
-                        if (res.status !== 404) {
+                        if (res.status !== 404 && res.data.connected == true) {
                           setSocket(state.backend);
-                        }
-                        if (res.message === "printer connection found") {
                           dispatch({
-                            type: CONNECTED,
+                            type: BACKEND_FOUND,
                             payload: true,
                           });
-                          // setIsConnected(true);
+                          dispatch({
+                            type: BACKEND,
+                            payload: "http://" + inpRef.current.value,
+                          });
                         }
+                        get(
+                          "http://" + inpRef.current.value,
+                          "/connectionStatus"
+                        )
+                          .then((res) => res.json())
+                          .then((res) => {
+                            if (res.message === "printer connection found") {
+                              dispatch({
+                                type: CONNECTED,
+                                payload: true,
+                              });
+                              // setIsConnected(true);
+                            }
+                          });
                       });
                   }
                 }}
