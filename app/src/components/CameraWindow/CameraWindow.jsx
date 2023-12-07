@@ -1,12 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "./CameraWindow.module.css";
 import { getSocket } from "../../socket";
 import { cameraIcon } from "../../assets/Icons";
 import fullScreenIcon from "../../assets/Icons/fullscreen.png";
+import { Context } from "../../Context";
 function CameraWindow() {
   const [video, setVideo] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const videoRef = useRef(null);
+
+  const state = useContext(Context);
 
   useEffect(() => {
     if (!video)
@@ -14,12 +17,6 @@ function CameraWindow() {
   }, [video]);
 
   useEffect(() => {
-    function onConnect() {
-      console.log("connected");
-    }
-    function onDisconnect() {
-      console.log("disconnected");
-    }
     function onFrame(frame) {
       displayFrame(frame);
     }
@@ -40,20 +37,18 @@ function CameraWindow() {
     }
 
     async function fetchVideoStream() {
-      if (getSocket()) {
+      if (getSocket()?.connected && state.socketConnected) {
         console.log(getSocket());
-        getSocket().on("connection/connected", onConnect);
-        getSocket().on("disconnect", onDisconnect);
+
         getSocket().on("video/frame", onFrame);
       }
     }
 
     fetchVideoStream();
     return () => {
-      if (getSocket()) {
+      if (getSocket()?.connected) {
         console.log(getSocket());
-        getSocket().off("connect", onConnect);
-        getSocket().off("disconnect", onDisconnect);
+
         getSocket().off("video/frame", onFrame);
       }
     };
