@@ -8,7 +8,7 @@ function SlicerEnginePage() {
   return (
     <React.Fragment>
       <SlicerEngine fileRef={fileRef} />
-      <SlicerScreenCura/>
+      <SlicerScreenCura fileRef={fileRef}/>
     </React.Fragment>
   );
 }

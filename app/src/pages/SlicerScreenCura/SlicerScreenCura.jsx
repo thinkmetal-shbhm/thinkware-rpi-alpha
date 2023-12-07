@@ -1,6 +1,6 @@
 import { OrthographicCamera, OrbitControls, Plane, Box } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import * as THREE from "three";
 import Bed from "./Bed";
 
@@ -9,12 +9,17 @@ import PlaneGeom from "./Plane";
 
 
 
-function SlicerScreenCura() {
+function SlicerScreenCura({fileRef}) {
   const [isDragging, setIsDragging] = useState
   (false);
 
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
+  useEffect(() => {
+    console.log("fileref",fileRef?.current?.files);
+  
+   
+  }, [fileRef?.current?.files])
   
  
   
@@ -61,13 +66,28 @@ function SlicerScreenCura() {
         <gridHelper args={[160, 8]} position={[-20, 0, 20]} />
 <gridHelper args={[160, 8]} position={[20, 0, 20]} />
 
-        <Model
+        {/* <Model
       
           url={"../../STL/cube.stl"}
           setIsDragging={setIsDragging}
           floorPlane={floorPlane}
         
-        />
+        /> */}
+        {fileRef?.current?.files[0]&&
+         <Model
+      
+      url={fileRef?.current?.files[0]}
+      setIsDragging={setIsDragging}
+      floorPlane={floorPlane}
+    
+    />}
+    {/* <Model
+      
+    url={"../../STL/cube.stl"}
+    setIsDragging={setIsDragging}
+    floorPlane={floorPlane}
+  
+  /> */}
         <Bed url={"../../Bed Assembly/Bed assembly v16.obj"}/>
 
         <PlaneGeom />
