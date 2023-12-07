@@ -1,19 +1,28 @@
-import { OrthographicCamera, OrbitControls, Plane } from "@react-three/drei";
-import { Canvas, useThree } from "@react-three/fiber";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import { OrthographicCamera, OrbitControls, Plane, Box } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import React, {  useState } from "react";
 import * as THREE from "three";
-import { BoxHelper, Camera } from "three";
+import Bed from "./Bed";
 
 import { Model } from "./Model";
 import PlaneGeom from "./Plane";
+
+
+
 function SlicerScreenCura() {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState
+  (false);
+
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+  
+ 
+  
   
 
   const Axis = ({ color, rotation, position }) => (
     <mesh rotation={rotation} position={position}>
-      <cylinderGeometry args={[0.7, 0.7, 100]} />
+      <cylinderGeometry args={[0.7, 0.7, 30]} />
       <meshBasicMaterial color={color} />
     </mesh>
   );
@@ -22,10 +31,10 @@ function SlicerScreenCura() {
   return (
     <div
       className="content-div"
-      style={{ height: "70vh", border: "1px solid yellow" }}
+      style={{ height: "90vh", border: "1px solid yellow" }}
     >
-      <Canvas style={{ background: "white" }} shadows dpr={[1, 2]}  camera={{ position: [0, 180, 180], near: 0.1, far: 1000 }}>
-        <ambientLight intensity={0.5} />
+      <Canvas style={{ background: "white" }} shadows dpr={[1, 2]}  camera={{ position: [0, 80, 250], near: 0.1, far: 10000,minZoom:1,maxZoom:5 }}>
+        {/* <ambientLight intensity={0.5} />
         <pointLight position={[5, 5, 5]} intensity={1} />
         <pointLight position={[-3, -3, 2]} />
         <directionalLight
@@ -33,41 +42,44 @@ function SlicerScreenCura() {
           castShadow
           shadow-mapSize-height={1512}
           shadow-mapSize-width={1512}
-        />
-
-        {/* New: Axes Helper */}
-        {/* <axesHelper args={[100]} position={[-100,0,100]} rotation={[ 0,Math.PI / 2, 0]}/> */}
+        /> */}
 
 
-        <Axis color="red" rotation={[0, 0, 0]} position={[-100, 50, 100]} /> 
+
+        <Axis color="blue" rotation={[0, 0, 0]} position={[-100, 15, 100]} /> 
         {/* X-axis */}
-        <Axis color="green" rotation={[0, 0, Math.PI / 2]} position={[-50, 0, 100]} /> 
+        <Axis color="red" rotation={[0, 0, Math.PI / 2]} position={[-85, 0, 100]} /> 
         {/* Y-axis */}
-        <Axis color="blue" rotation={[Math.PI / 2, 0, 0]} position={[-100, 0, 50]} /> 
+        <Axis color="green" rotation={[Math.PI / 2, 0, 0]} position={[-100, 0, 85]} /> 
         
         {/* Z-axis */}
 
 
 
 
-        <gridHelper args={[200, 40]} />
+        {/* <gridHelper args={[200, 160]} /> */}
+        <gridHelper args={[160, 8]} position={[-20, 0, 20]} />
+<gridHelper args={[160, 8]} position={[20, 0, 20]} />
 
         <Model
+      
           url={"../../STL/cube.stl"}
           setIsDragging={setIsDragging}
           floorPlane={floorPlane}
-       
+        
         />
+        <Bed url={"../../Bed Assembly/Bed assembly v16.obj"}/>
 
-        {/* <Plane scale={200} rotation-x={-Math.PI / 2} position={[0, 0, 0]} /> */}
-        <PlaneGeom/>
-        {/* <OrthographicCamera makeDefault position={[0, 50, 80]} near= {0.1} far= {1000}
-        zoom={2}
-        /> */}
-
+        <PlaneGeom />
+        <lineSegments position={[0, 80, 20]}>
+          <edgesGeometry attach="geometry" args={[new THREE.BoxGeometry(200, 160, 160)]} />
+          <lineBasicMaterial attach="material" color="blue" />
+        </lineSegments>
+      
         <OrbitControls 
         minZoom={1} maxZoom={5} 
         enabled={!isDragging} />
+     
       </Canvas>
     </div>
   );

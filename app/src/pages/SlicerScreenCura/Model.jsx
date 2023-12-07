@@ -27,6 +27,7 @@ const meshRef = useRef();
 const [pos, setPos] = useState([0, 0.1, 0]);
 const [modelSize,setModelSize]=useState([0,0,0]);
 const [modelPos,setModelPos]=useState([0,0,0])
+const [defaultScale,setDefaultScale]=useState([1.2,1.2,1.26])
 const { size, viewport } = useThree();
 const aspect = size.width / viewport.width;
 
@@ -63,8 +64,8 @@ const [spring, api] = useSpring(() => ({
 }));
 // console.log("size",modelSize);
 const minX = -100;
-  const maxX = 100-+modelSize[0];
-  const minZ = -100+modelSize[1];
+  const maxX = 100-modelSize[0]*defaultScale[0];
+  const minZ =  -100+modelSize[1]*defaultScale[1];
   const maxZ = 100;
 
   const bind = useDrag(
@@ -102,7 +103,7 @@ const minX = -100;
 
     <animated.mesh {...spring} {...bind()} castShadow ref={meshRef}
         rotation={[-Math.PI / 2, 0, 0]} 
-       scale={[1.2,1.2,1.26]}
+        scale={defaultScale}
 
        >
         <primitive object={geom} attach="geometry" ref={dragObjectRef}/>
