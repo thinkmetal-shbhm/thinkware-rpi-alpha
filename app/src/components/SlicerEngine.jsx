@@ -8,11 +8,10 @@ import { Context } from "../Context";
 import { useNavigate } from "react-router-dom";
 
 // Pass an ref as prop for file input, so that file can be accessed outside too.(using ref.current.files[0])
-function SlicerEngine({ fileRef, pos }) {
+function SlicerEngine({ fileRef, pos, gcode, setGcode, setFileChoosen }) {
   const [init, setInit] = React.useState(false);
   const [fileName, setFileName] = React.useState(null);
   const [percent, setPercent] = React.useState(null);
-  const [gcode, setGcode] = React.useState(null);
   const [elapsed, setElasped] = React.useState(null);
   const [estimatedTime, setEstimatedTime] = React.useState(null);
 
@@ -157,6 +156,8 @@ function SlicerEngine({ fileRef, pos }) {
               if (fileRef?.current?.files[0]) {
                 setFileName(fileRef?.current?.files[0].name);
                 setGcode(null);
+
+                setFileChoosen((prev) => !prev);
               }
             }}
           />
