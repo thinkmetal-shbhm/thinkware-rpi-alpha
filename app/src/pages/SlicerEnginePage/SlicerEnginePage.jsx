@@ -4,12 +4,29 @@ import SlicerScreenCura from "../SlicerScreenCura/SlicerScreenCura";
 
 function SlicerEnginePage() {
   const fileRef = useRef(null);
+
+  const [fileChoosen, setFileChoosen] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+
+  const [gcode, setGcode] = useState(null);
 
   return (
     <React.Fragment>
-      <SlicerEngine fileRef={fileRef} pos={pos} setPos={setPos} />
-      <SlicerScreenCura fileRef={fileRef} />
+      <SlicerEngine
+        fileRef={fileRef}
+        setFileChoosen={setFileChoosen}
+        pos={pos}
+        setPos={setPos}
+        gcode={gcode}
+        setGcode={setGcode}
+      />
+      <SlicerScreenCura
+        fileRef={fileRef}
+        fileChoosen={fileChoosen}
+        setFileChoosen={setFileChoosen}
+        gcode={gcode}
+        setGcode={setGcode}
+      />
     </React.Fragment>
   );
 }
