@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import SlicerEngine from "../../components/SlicerEngine";
+import SlicerScreenCura from "../SlicerScreenCura/SlicerScreenCura";
 
 function SlicerEnginePage() {
   const fileRef = useRef(null);
@@ -8,6 +9,7 @@ function SlicerEnginePage() {
   return (
     <React.Fragment>
       <SlicerEngine fileRef={fileRef} pos={pos} setPos={setPos} />
+      <SlicerScreenCura fileRef={fileRef} />
     </React.Fragment>
   );
 }
