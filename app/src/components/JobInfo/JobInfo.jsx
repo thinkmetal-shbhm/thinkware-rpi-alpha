@@ -19,7 +19,7 @@ function JobInfo() {
 
   return (
     <>
-      {state.heating || (!state.progress?.stopped && state.prog) ? (
+      {!(state.heating || (!state.progress?.stopped && state.prog)) ? (
         <section className={styles.mainJobInfo}>
           <div className={styles.job}>
             <h3 className={styles.heading3}>JOB INFO</h3>
@@ -177,11 +177,12 @@ function JobInfo() {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          // margin: "0.5rem auto",
+          width:"96%",
+           margin: "0.5rem auto",
           height: "70vh",
         }}
       >
-        <section className={styles.materialInfo} style={{}}>
+        <section className={styles.materialInfo} >
           <div className={styles.presetChild}>
             <div className={` ${styles.presetItem}`}>
               <span>LAYER HEIGHT</span>
@@ -261,10 +262,10 @@ function PreviewSection() {
         />
       </div>
       <div className={jobstyles.jobPreviewInfo}>
-        <h3 style={{ textAlign: "center" }}>
-          {state.fileName ? state.fileName.split(".")[0] : `Something...?`}
+        <h3 style={{ textAlign: "center",fontSize:"3rem" }}>
+          {state.fileName ? state.fileName.split(".")[0] : `dummy.stl`}
         </h3>
-        <span>Created at: {state.createdTime}</span>
+       
       </div>
     </div>
   );

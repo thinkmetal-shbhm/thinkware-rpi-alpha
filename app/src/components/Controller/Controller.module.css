@@ -1,17 +1,31 @@
+.parentController {
+  display: flex;
+}
 .mainControllerContainer {
   background-color: var(--highlight);
   padding: 1rem;
   padding-top: 0;
   border-radius: 1rem;
-  width: 45%;
-  /* height: 40vh; */
+  width: 80%;
+  height: 80vh;
+  /* min-width: 350px; */
+  /* box-shadow: 0 0 10px black inset; */
+  margin: 0 1rem;
+
+  --translateXY: -40px;
+  --translateXYNe: 100px;
+}
+.switchContainer {
+  background-color: var(--highlight);
+  padding: 1rem;
+  padding-top: 0;
+  border-radius: 1rem;
+  width: 20%;
+  height: 80vh;
   /* min-width: 350px; */
   /* box-shadow: 0 0 10px black inset; */
   margin: 0 1rem;
   min-width: 390px;
-
-  --translateXY: -40px;
-  --translateXYNe: 100px;
 }
 .heading2 {
   font-weight: 500;
@@ -23,8 +37,8 @@
 }
 .controllerButtons {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 25vh;
+  left: 5vw;
 }
 .xy {
   position: relative;
@@ -64,7 +78,9 @@
   justify-content: space-around;
   border-right: 2px solid rgb(144, 144, 144);
   padding-right: 2rem;
-  position: relative;
+  position: absolute;
+  top: 30vh;
+  left: 50vw;
 }
 .z > button {
   width: 50px;
@@ -83,7 +99,7 @@
   font-size: var(--fs-medium-small);
   vertical-align: baseline;
   background-color: #ffffff10;
-  border: 1px solid #fff10;
+  /* border: 1px solid #fff10; */
 }
 .z > button > span {
   /* font-size: var(--fs-large); */
@@ -101,7 +117,9 @@
   justify-content: space-between;
   margin: 0.25rem;
   margin-left: 1.25rem;
-  position: relative;
+  position: absolute;
+  top: 30vh;
+  left: 65vw;
 }
 .extrude,
 .retract {
@@ -205,3 +223,6 @@
 .btnXY:nth-child(8) > span {
   transform: translateX(-42px);
 }
+
+/* switch */
+

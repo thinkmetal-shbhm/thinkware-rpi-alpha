@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.25rem 0.1rem;
-  width: 96%;
+  width: 90%;
   margin: 0.5rem auto;
   min-width: 500px;
   padding: 0.5rem;
@@ -23,8 +23,8 @@
   margin: 0 auto;
 }
 .heading3 {
-  font-size: 1rem;
-  font-weight: 400;
+  font-size: 2rem;
+  font-weight: 800;
   letter-spacing: 1px;
 }
 .child_JobInfo {
@@ -34,9 +34,12 @@
   display: flex;
 }
 .heading4 {
-  font-size: var(--fs-medium);
+  font-size: 1.5rem;
   margin: 0;
   margin-bottom: 0.5rem;
+}
+.time p{
+  font-size: 1.2rem;
 }
 .fileName {
   margin: 0.5rem 0;
@@ -78,14 +81,12 @@ p {
   border: none;
   margin: auto 0.25rem;
   padding: 0.5rem 0 0;
+font-size: 1.2rem;
 }
 .btn:hover.btn > p {
   text-shadow: 0 0 2px #fff;
 }
-/* .btn > p {
-  margin: auto 0.25rem;
-  padding: 0.5rem 0 0;
-} */
+
 
 .circleContainer {
   width: 70px;
@@ -123,6 +124,7 @@ p {
 }
 .noJobRunning h3 {
   font-weight: 400;
+  font-size: 2rem;
 }
 
 /* module 2 */
@@ -130,10 +132,8 @@ p {
   display: flex;
   width: 45vw;
   background-color: var(--highlight);
-  justify-content: space-between;
   border-radius: 0.5rem;
   flex-direction: column;
-  position: relative;
   margin: 0 auto;
 }
 .noJob {
@@ -160,11 +160,19 @@ p {
 }
 .presetItem h3 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 3rem;
   margin: 1rem;
 }
 .presetItem span {
-  color: var(--true-gray);
+  color: var(--true-gray);font-size: 2rem;
+
+}
+.presetChild:nth-child(1) {
+  margin:3rem 0.25rem ;
+  text-align: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .presetChild:nth-child(2) {
   background-color: var(--highlight-black);
@@ -173,29 +181,37 @@ p {
   display: flex;
   justify-content: space-around;
   box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.25);
-  padding-top: 0.5rem;
+  padding: 1rem 0;
 }
+
 .materialName {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .presetChild:nth-child(2) span {
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: #808080;
   width: 100%;
 }
 .presetChild:nth-child(2) h3 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   letter-spacing: 2px;
   font-weight: 600;
   margin: 1rem;
 }
+.presetChild:nth-child(3) {
+  height: 30vh;
+
+  margin: auto 0;
+
+}
 .presetChild:nth-child(3) h3 {
   text-align: center;
   margin: 0;
-  font-weight: 400;
-  color: var(--true-gray);
+  font-weight:800;
+  font-size: 2rem;
+
 }
 
 /* vertical progress bar */
@@ -206,24 +222,27 @@ p {
   align-items: center;
 }
 .barParent2 {
+
   display: flex;
+  width: 30%;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   margin-top: 0.5rem;
+  text-align: center;
 }
-.barParent2 {
-  letter-spacing: 1px;
-}
+
 .barParent2 span {
   color: var(--true-gray);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 .container {
-  width: 4vw;
+  /* width: 4vw; */
   height: 17vh;
   overflow: hidden;
   position: relative;
-  /* margin:3rem auto; */
   margin-top: 0.55rem;
   border-radius: 0.25rem;
 }

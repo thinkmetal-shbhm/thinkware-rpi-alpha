@@ -5,6 +5,7 @@ import { extruderSvg, homeIcon, xyWebp } from "../../assets/Icons";
 
 function Controller({ backend }) {
   return (
+    <div className={styles.parentController}>
     <div className={styles.mainControllerContainer}>
       <h2 className={styles.heading2} style={{ opacity: 0.7 }}>
         CONTROLS
@@ -13,7 +14,7 @@ function Controller({ backend }) {
         <div className={styles.xy}>
           <div
             className={styles.controllerButtons}
-            // style={{ transform: "scale(1.2)" }}
+            style={{ transform: "scale(3)" }}
           >
             <XYBtns onClick={() => move("G1 Y1", backend)} src={"InnerSector"}>
               +1
@@ -86,7 +87,7 @@ function Controller({ backend }) {
             paddingBottom: "8px",
           }}
         >
-          <div className={styles.z}>
+          <div className={styles.z} style={{ transform: "scale(2.5)" }}>
             {/* <img
               src={bed}
               style={{
@@ -131,7 +132,7 @@ function Controller({ backend }) {
               10
             </button>
           </div>
-          <div className={styles.extruder}>
+          <div className={styles.extruder}style={{ transform: "scale(3)" }}>
             <div className={styles.extruderBar}></div>
             <button
               onClick={() => move("G1 E10", backend)}
@@ -153,6 +154,20 @@ function Controller({ backend }) {
           </div>
         </div>
       </div>
+    </div>
+    <div className={styles.switchContainer}>
+      <h3>Heating Switches</h3>
+      <div className={styles.switchParent}>
+        <h3>Bed </h3>
+        <div className={styles.switches}>
+      
+        </div>
+      </div>
+      <div>
+        <h3>Printhead </h3>
+      </div> 
+    </div>
+
     </div>
   );
 }

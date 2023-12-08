@@ -17,10 +17,10 @@ function JobScreen() {
             <Controller backend={state.backend} />
             {state.isPaused && (
               <button
-                style={{ maxHeight: "30px" }}
+                style={{ maxHeight: "5rem" ,fontSize:"2rem",width:"20%",margin:"0 auto", padding:"0.5rem",borderRadius:"0.5rem",fontWeight:"500"}}
                 disabled={!state.progress?.running}
               >
-                Play
+               Resume Job
               </button>
             )}
           </>
