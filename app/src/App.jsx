@@ -2,7 +2,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import "./App.css";
 import MainContent from "./components/MainContent/MainContent";
-import Sidebar from "./components/Sidebar/Sidebar";
 // import { signInwithGoogle } from "./firebase";
 import { createPortal } from "react-dom";
 import InfoPortal from "./components/InfoPortal";
@@ -40,7 +39,6 @@ function App() {
     <Context.Provider value={state}>
       <DispatchCtx.Provider value={dispatch}>
         <div className="App">
-          <Sidebar user={user} setUser={setUser} />
           <MainContent backend={backend} setIsConnected={setIsConnected} />
           {modal &&
             createPortal(

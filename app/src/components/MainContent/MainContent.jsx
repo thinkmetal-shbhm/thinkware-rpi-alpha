@@ -1,9 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import MainContentCSS from "./MainContent.module.css";
-import { Route, Routes, useLocation } from "react-router-dom";
 import JobScreen from "../../pages/JobScreen/JobScreen";
-import HomeScreen from "../../pages/Homescreen/HomeScreen";
-import SlicerScreen from "../../pages/SlicerScreen/SlicerScreen";
 
 import { getSocket } from "../../socket";
 import { get, secondsToDDHHMM } from "../../utils";
@@ -28,13 +25,10 @@ import {
   SOCKET_CONNECTED,
   TEMP,
 } from "../../constants/actions";
-import SlicerEnginePage from "../../pages/SlicerEnginePage/SlicerEnginePage";
 
 function MainContent({ setIsConnected, backend }) {
   const state = useContext(Context);
   const dispatch = useContext(DispatchCtx);
-
-  const location = useLocation();
 
   useEffect(() => {
     const onConnect = () => {
@@ -113,12 +107,6 @@ function MainContent({ setIsConnected, backend }) {
     const backend = "http://" + localStorage.getItem("backend") + ".local:4000";
     const printingStartedSocket = () => {
       console.log("printingStarted");
-    };
-    if (location.state?.message === "fileUploaded") {
-      if (getSocket()?.connected && state.socketConnected) {
-        getSocket().on("printingStarted", printingStartedSocket);
-      }
-
       dispatch({ type: IS_PAUSED, payload: false });
       get(backend, "/getPrintData/preview")
         .then((res) => res.json())
@@ -130,7 +118,12 @@ function MainContent({ setIsConnected, backend }) {
         .then((res) => {
           dispatch({ type: FILE_NAME, payload: res.data });
         });
+    };
+
+    if (getSocket()?.connected && state.socketConnected) {
+      getSocket().on("printingStarted", printingStartedSocket);
     }
+
     return () => {
       setTimeout(() => {
         if (getSocket()?.connected && state.socketConnected) {
@@ -138,7 +131,7 @@ function MainContent({ setIsConnected, backend }) {
         }
       }, 30000);
     };
-  }, [location.state?.message]);
+  }, []);
 
   useEffect(() => {
     dispatch({
@@ -230,23 +223,7 @@ function MainContent({ setIsConnected, backend }) {
 
   return (
     <div className={MainContentCSS.ContentParent}>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            // <HomeScreen
-            //   backend={backend}
-            //   setPartName={setPartName}
-            //   user={user}
-            //   setUser={setUser}
-            //   setIsConnected={setIsConnected}
-            // />
-            <SlicerScreen setIsConnected={setIsConnected} backend={backend} />
-          }
-        />
-        <Route path="/job" element={<JobScreen />} />
-        <Route path="/engine" element={<SlicerEnginePage />} />
-      </Routes>
+      <JobScreen />
     </div>
   );
 }
